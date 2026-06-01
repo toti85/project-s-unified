@@ -1,0 +1,17 @@
+﻿{
+    "Git_Version":  "git version 2.47.1.windows.1",
+    "Python_Version":  "Python 3.12.9",
+    "Pip_Version":  [
+                        "pip 24.3.1 from C:\\Program Files\\Python312\\Lib\\site-packages\\pip (python 3.12)",
+                        ""
+                    ],
+    "Python_Exe_Path":  "C:\\Program Files\\Python312\\python.exe",
+    "Git_Exe_Path":  "C:\\Program Files\\Git\\cmd\\git.exe",
+    "PythonInPath":  "C:\\Program Files\\Python312\\Scripts\\;C:\\Program Files\\Python312\\",
+    "GitInPath":  "C:\\Program Files\\Git\\cmd",
+    "Python312Dir":  true,
+    "GitInstallDir":  true,
+    "PSComputerName":  "192.168.1.180",
+    "RunspaceId":  "f292aeb0-3979-4222-a525-ab5882967f52",
+    "PSShowComputerName":  true
+}

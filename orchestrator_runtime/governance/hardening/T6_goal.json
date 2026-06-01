@@ -1,0 +1,10 @@
+{
+    "id": "AO3_HARD_T6_KILL",
+    "title": "Kill switch mid-run test",
+    "source": "hardening_test",
+    "risk": "LOW",
+    "auto_approve": true,
+    "sandbox_only": true,
+    "priority": 1,
+    "rationale": "LOW risk goal for kill switch mid-run test"
+}

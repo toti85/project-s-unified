@@ -1,0 +1,60 @@
+﻿MS-OQ1-D: Re-evaluating 20 prompts...
+======================================================================
+DL_01: MATCH | score=8/15 | polished=False | 0.0s
+  rubric: R=3 S=1 T=3 St=0 A=1
+DL_02: MATCH | score=9/15 | polished=False | 0.0s
+  rubric: R=3 S=2 T=3 St=0 A=1
+DL_03: MATCH | score=11/15 | polished=False | 0.0s
+  rubric: R=3 S=2 T=3 St=2 A=1
+DL_04: MATCH | score=8/15 | polished=False | 0.0s
+  rubric: R=3 S=1 T=3 St=0 A=1
+TU_01: MATCH | score=14/15 | polished=False | 0.0s
+  rubric: R=3 S=2 T=3 St=3 A=3
+TU_02: MATCH | score=13/15 | polished=True | 0.0s
+  rubric: R=3 S=2 T=3 St=2 A=3
+TU_03: MATCH | score=14/15 | polished=True | 0.0s
+  rubric: R=3 S=2 T=3 St=3 A=3
+TU_04: MISMATCH | score=12/15 | polished=True | 11.6s
+  rubric: R=3 S=2 T=1 St=3 A=3
+ID_01: MATCH | score=15/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=3 A=3
+ID_02: MATCH | score=15/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=3 A=3
+ID_03: MATCH | score=15/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=3 A=3
+ID_04: MATCH | score=15/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=3 A=3
+ER_01: MATCH | score=12/15 | polished=False | 1.0s
+  rubric: R=3 S=1 T=3 St=2 A=3
+ER_02: MATCH | score=12/15 | polished=False | 1.2s
+  rubric: R=3 S=1 T=3 St=2 A=3
+ER_03: MATCH | score=12/15 | polished=False | 1.1s
+  rubric: R=3 S=1 T=3 St=2 A=3
+ER_04: MISMATCH | score=8/15 | polished=False | 0.0s
+  rubric: R=3 S=1 T=3 St=0 A=1
+FA_01: MATCH | score=14/15 | polished=True | 0.1s
+  rubric: R=3 S=3 T=3 St=2 A=3
+FA_02: MATCH | score=14/15 | polished=True | 0.1s
+  rubric: R=3 S=3 T=3 St=2 A=3
+FA_03: MATCH | score=14/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=2 A=3
+FA_04: MISMATCH | score=9/15 | polished=False | 0.0s
+  rubric: R=3 S=1 T=3 St=1 A=1
+======================================================================
+RESULTS: 20 prompts
+Average score: 12.2/15
+Prompts >= 12/15: 14/20 (70%)
+
+Per-route averages:
+  DIRECT: 9.0/15 (4 prompts)
+  EXTERNAL: 11.0/15 (4 prompts)
+  FULL: 12.8/15 (4 prompts)
+  INTERNAL: 15.0/15 (4 prompts)
+  TRUTHFUL: 13.2/15 (4 prompts)
+
+Lowest scoring:
+  DL_01: 8/15 (DIRECT_LIGHTWEIGHT_RESPONSE -> DIRECT_LIGHTWEIGHT_RESPONSE)
+  DL_04: 8/15 (DIRECT_LIGHTWEIGHT_RESPONSE -> DIRECT_LIGHTWEIGHT_RESPONSE)
+  ER_04: 8/15 (EXTERNAL_RESEARCH_SYNTHESIS -> DIRECT_LIGHTWEIGHT_RESPONSE)
+
+Results saved to reports/MS_OQ1_EVAL_RESULTS.json

@@ -1,0 +1,284 @@
+UNIFIED DIFF: target_dims PoC Implementation
+==============================================
+
+--- a/avail/e2e/Cargo.toml
++++ b/avail/e2e/Cargo.toml
+@@ -12,3 +12,6 @@ edition = "2021"
+ serde = { version = "1.0.195", default-features = false, features = [ "derive", "alloc" ] }
++serde_json = "1.0"
++sha2 = "0.10"
++hex = "0.4"
+ tokio = { version = "1.43.0", features = ["sync", "fs", "macros", "rt-multi-thread"] }
+
+--- /dev/null
++++ b/avail/e2e/tests/test_target_dims_poc.rs
+@@ -0,0 +1,272 @@
++// PoC test for target_dims mismatch in avail/runtime/src/kate/native.rs
++// The multiproof() function hard-codes target_dims = Dimensions::new(16, 64)
++// with a TODO comment: "This isn't correct, need to put in the correct mp grid dim"
++// 
++// This test compares multiproof generation using hard-coded (16,64) vs actual computed dims
++// and records whether the proofs differ (mismatch detected) or are identical (no observable effect).
++
++use avail_core::{AppExtrinsic, AppId};
++use avail_rust::avail::runtime_types::frame_system::limits::BlockLength;
++use kate::gridgen::{AsBytes as _, EvaluationGrid};
++use kate_recovery::matrix::Dimensions;
++use kate::com::Cell as KateCell;
++use std::num::NonZeroU16;
++use sha2::{Sha256, Digest};
++use std::fs;
++use std::time::{SystemTime, UNIX_EPOCH};
++use serde_json::json;
++
++const MIN_WIDTH: usize = 4;
++
++// Create a small deterministic test grid similar to runtime construction.
++fn create_test_grid(
++    rows: u16,
++    cols: u16,
++) -> Result<(EvaluationGrid, Dimensions), Box<dyn std::error::Error>> {
++    // Create minimal deterministic data
++    let mut data = Vec::new();
++    data.extend_from_slice(b"TargetDimsPoCTestData");
++    while data.len() < 512 {
++        data.extend_from_slice(b"X");
++    }
++
++    let app_extrinsics = vec![AppExtrinsic {
++        app_id: AppId(1),
++        data,
++    }];
++
++    // Construct grid using the same logic as runtime's multiproof()
++    let max_width = cols as usize;
++    let max_height = rows as usize;
++    let seed = [0u8; 32]; // Fixed seed for determinism
++
++    let grid = EvaluationGrid::from_extrinsics(
++        app_extrinsics,
++        MIN_WIDTH,
++        max_width,
++        max_height,
++        seed,
++    )?;
++
++    let extended_grid = grid
++        .extend_columns(NonZeroU16::new(2).expect("2>0"))
++        .map_err(|_| "Column extension failed")?;
++
++    let real_dims = extended_grid.dims();
++    eprintln!("Created grid with real_dims: {}x{}", real_dims.rows().get(), real_dims.cols().get());
++
++    Ok((extended_grid, real_dims))
++}
++
++fn sha256_hash(data: &[u8]) -> String {
++    let mut hasher = Sha256::new();
++    hasher.update(data);
++    let digest = hasher.finalize();
++    // Return first 32 hex chars (16 bytes) for brevity
++    hex::encode(&digest[..16])
++}
++
++fn write_proof_artifact(
++    real_dims: &Dimensions,
++    hardcoded_dims: &Dimensions,
++    proof1_bytes: Option<&[u8]>,
++    proof2_bytes: Option<&[u8]>,
++    error_msg: Option<&str>,
++) -> Result<(), Box<dyn std::error::Error>> {
++    let timestamp = SystemTime::now()
++        .duration_since(UNIX_EPOCH)
++        .unwrap_or_default()
++        .as_secs();
++
++    let (proof1_len, proof1_hash) = if let Some(p) = proof1_bytes {
++        (p.len() as u32, sha256_hash(p))
++    } else {
++        (0, "null".to_string())
++    };
++
++    let (proof2_len, proof2_hash) = if let Some(p) = proof2_bytes {
++        (p.len() as u32, sha256_hash(p))
++    } else {
++        (0, "null".to_string())
++    };
++
++    let proofs_differ = proof1_bytes != proof2_bytes;
++    let result = if error_msg.is_some() {
++        "ERROR"
++    } else if proofs_differ {
++        "MISMATCH_OBSERVED"
++    } else {
++        "NO_OBSERVABLE_EFFECT"
++    };
++
++    let artifact = json!({
++        "timestamp": timestamp,
++        "real_dims": {
++            "rows": real_dims.rows().get(),
++            "cols": real_dims.cols().get(),
++        },
++        "hardcoded_dims": {
++            "rows": hardcoded_dims.rows().get(),
++            "cols": hardcoded_dims.cols().get(),
++        },
++        "proof1": {
++            "label": "hardcoded_16x64",
++            "len": proof1_len,
++            "hash": proof1_hash,
++        },
++        "proof2": {
++            "label": "real_dims",
++            "len": proof2_len,
++            "hash": proof2_hash,
++        },
++        "proofs_differ": proofs_differ,
++        "result": result,
++        "error": error_msg.unwrap_or("none"),
++    });
++
++    fs::create_dir_all("memory/output")?;
++    let output_path = "memory/output/target_dims_poc_proof.json";
++    fs::write(output_path, serde_json::to_string_pretty(&artifact)?)?;
++
++    eprintln!("PoC artifact written to: {}", output_path);
++    eprintln!("Result: {}", result);
++    if let Some(err) = error_msg {
++        eprintln!("Error: {}", err);
++    }
++
++    Ok(())
++}
++
++#[test]
++fn test_target_dims_mismatch() {
++    // Test with a small grid: 4x8
++    let test_rows: u16 = 4;
++    let test_cols: u16 = 8;
++
++    eprintln!("Starting PoC test_target_dims_mismatch");
++    eprintln!("Creating test grid with input dims: {}x{}", test_rows, test_cols);
++
++    let result = create_test_grid(test_rows, test_cols).and_then(|(grid, real_dims)| {
++        eprintln!("Grid created. Extended dims: {}x{}", real_dims.rows().get(), real_dims.cols().get());
++
++        // Build polynomial grid for multiproof
++        let poly_grid = grid
++            .make_polynomial_grid()
++            .map_err(|e| format!("make_polynomial_grid failed: {:?}", e))?;
++
++        eprintln!("Polynomial grid built");
++
++        // Get SRS params (multiproof parameters)
++        let srs = kate::couscous::multiproof_params();
++        eprintln!("SRS loaded");
++
++        // Hard-coded target dims as used in native.rs
++        let hardcoded_dims = Dimensions::new(16, 64)
++            .map_err(|e| format!("Failed to create hardcoded dims: {:?}", e))?;
++        eprintln!("Hardcoded dims: 16x64");
++
++        // Create a cell at (0, 0)
++        let cell = KateCell {
++            row: avail_core::BlockLengthRows(0),
++            col: avail_core::BlockLengthColumns(0),
++        };
++        eprintln!("Using cell at (0, 0)");
++
++        // Generate proof using hardcoded target_dims
++        eprintln!("Generating proof1 with hardcoded target_dims (16, 64)...");
++        let proof1_bytes = match poly_grid.multiproof(&srs, &cell, &grid, hardcoded_dims) {
++            Ok(mp) => {
++                match mp.proof.to_bytes() {
++                    Ok(bytes) => {
++                        eprintln!("Proof1 generated: {} bytes", bytes.len());
++                        eprintln!("Proof1 hash: {}", sha256_hash(&bytes));
++                        Some(bytes)
++                    }
++                    Err(e) => {
++                        eprintln!("ERROR: proof1.to_bytes() failed: {:?}", e);
++                        return Err(format!("proof1 to_bytes failed: {:?}", e));
++                    }
++                }
++            }
++            Err(e) => {
++                eprintln!("ERROR: proof1 multiproof call failed: {:?}", e);
++                return Err(format!("proof1 multiproof failed: {:?}", e));
++            }
++        };
++
++        // Generate proof using real grid dims
++        eprintln!(
++            "Generating proof2 with real target_dims ({}x{})...",
++            real_dims.rows().get(),
++            real_dims.cols().get()
++        );
++        let proof2_bytes = match poly_grid.multiproof(&srs, &cell, &grid, real_dims) {
++            Ok(mp) => {
++                match mp.proof.to_bytes() {
++                    Ok(bytes) => {
++                        eprintln!("Proof2 generated: {} bytes", bytes.len());
++                        eprintln!("Proof2 hash: {}", sha256_hash(&bytes));
++                        Some(bytes)
++                    }
++                    Err(e) => {
++                        eprintln!("ERROR: proof2.to_bytes() failed: {:?}", e);
++                        return Err(format!("proof2 to_bytes failed: {:?}", e));
++                    }
++                }
++            }
++            Err(e) => {
++                eprintln!("ERROR: proof2 multiproof call failed: {:?}", e);
++                return Err(format!("proof2 multiproof failed: {:?}", e));
++            }
++        };
++
++        // Compare proofs
++        eprintln!("");
++        if proof1_bytes == proof2_bytes {
++            eprintln!("NO_DIFF: Both proofs are identical (no observable effect from target_dims change)");
++        } else {
++            eprintln!("MISMATCH: Proofs differ!");
++            if let (Some(p1), Some(p2)) = (&proof1_bytes, &proof2_bytes) {
++                eprintln!("  Proof1 len: {}, Proof2 len: {}", p1.len(), p2.len());
++                eprintln!("  Proof1 hash: {}", sha256_hash(p1));
++                eprintln!("  Proof2 hash: {}", sha256_hash(p2));
++            }
++        }
++
++        // Write artifact
++        eprintln!("");
++        eprintln!("Writing artifact...");
++        write_proof_artifact(
++            &real_dims,
++            &hardcoded_dims,
++            proof1_bytes.as_deref(),
++            proof2_bytes.as_deref(),
++            None,
++        )
++        .map_err(|e| format!("Failed to write artifact: {}", e))?;
++
++        eprintln!("Test completed successfully");
++        Ok(())
++    });
++
++    // Handle any errors
++    if let Err(e) = &result {
++        eprintln!("TEST ERROR: {}", e);
++        // Write artifact with error status
++        let dummy_dims = Dimensions::new(4, 8).unwrap_or_else(|_| {
++            Dimensions::new(2, 2).expect("fallback dims must work")
++        });
++        let hardcoded_dims = Dimensions::new(16, 64).expect("hardcoded dims");
++        let _ = write_proof_artifact(
++            &dummy_dims,
++            &hardcoded_dims,
++            None,
++            None,
++            Some(&e),
++        );
++        panic!("PoC test failed: {}", e);
++    }
++}

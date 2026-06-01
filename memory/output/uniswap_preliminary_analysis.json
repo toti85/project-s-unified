@@ -1,0 +1,687 @@
+{
+  "timestamp": "2025-12-26T23:37:10.358055",
+  "audit_target": "Uniswap V3 Core",
+  "bounty_url": "https://immunefi.com/bounty/uniswap/",
+  "status": "PRELIMINARY ANALYSIS",
+  "summary": {
+    "total_files_scanned": 10,
+    "vulnerability_patterns_found": 31,
+    "critical_functions_analyzed": 4
+  },
+  "findings": {
+    "pattern_matches": {
+      "contracts\\interfaces\\callback\\IUniswapV3FlashCallback.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 2,
+          "sample_matches": [
+            {
+              "line": 14,
+              "content": "uint256 fee0,",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            },
+            {
+              "line": 15,
+              "content": "uint256 fee1,",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            }
+          ]
+        },
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 1,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 8,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 4,
+              "content": "/// @title Callback for IUniswapV3PoolActions#flash",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 5,
+              "content": "/// @notice Any contract that calls IUniswapV3PoolActions#flash must implement this interface",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        },
+        {
+          "type": "flash_loan",
+          "severity": "HIGH",
+          "cwe": "CWE-1104",
+          "count": 3,
+          "sample_matches": [
+            {
+              "line": 4,
+              "content": "/// @title Callback for IUniswapV3PoolActions#flash",
+              "pattern": "callback|onFlash"
+            },
+            {
+              "line": 6,
+              "content": "interface IUniswapV3FlashCallback {",
+              "pattern": "callback|onFlash"
+            },
+            {
+              "line": 13,
+              "content": "function uniswapV3FlashCallback(",
+              "pattern": "callback|onFlash"
+            }
+          ]
+        }
+      ],
+      "contracts\\interfaces\\callback\\IUniswapV3MintCallback.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 2,
+          "sample_matches": [
+            {
+              "line": 14,
+              "content": "uint256 amount0Owed,",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            },
+            {
+              "line": 15,
+              "content": "uint256 amount1Owed,",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            }
+          ]
+        },
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 1,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 8,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 4,
+              "content": "/// @title Callback for IUniswapV3PoolActions#mint",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 5,
+              "content": "/// @notice Any contract that calls IUniswapV3PoolActions#mint must implement this interface",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        },
+        {
+          "type": "flash_loan",
+          "severity": "HIGH",
+          "cwe": "CWE-1104",
+          "count": 3,
+          "sample_matches": [
+            {
+              "line": 4,
+              "content": "/// @title Callback for IUniswapV3PoolActions#mint",
+              "pattern": "callback|onFlash"
+            },
+            {
+              "line": 6,
+              "content": "interface IUniswapV3MintCallback {",
+              "pattern": "callback|onFlash"
+            },
+            {
+              "line": 13,
+              "content": "function uniswapV3MintCallback(",
+              "pattern": "callback|onFlash"
+            }
+          ]
+        }
+      ],
+      "contracts\\interfaces\\callback\\IUniswapV3SwapCallback.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 1,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 11,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 4,
+              "content": "/// @title Callback for IUniswapV3PoolActions#swap",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 5,
+              "content": "/// @notice Any contract that calls IUniswapV3PoolActions#swap must implement this interface",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        },
+        {
+          "type": "flash_loan",
+          "severity": "HIGH",
+          "cwe": "CWE-1104",
+          "count": 5,
+          "sample_matches": [
+            {
+              "line": 4,
+              "content": "/// @title Callback for IUniswapV3PoolActions#swap",
+              "pattern": "callback|onFlash"
+            },
+            {
+              "line": 6,
+              "content": "interface IUniswapV3SwapCallback {",
+              "pattern": "callback|onFlash"
+            },
+            {
+              "line": 12,
+              "content": "/// the end of the swap. If positive, the callback must send that amount of token0 to the pool.",
+              "pattern": "callback|onFlash"
+            }
+          ]
+        }
+      ],
+      "contracts\\interfaces\\IERC20Minimal.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 7,
+          "sample_matches": [
+            {
+              "line": 10,
+              "content": "function balanceOf(address account) external view returns (uint256);",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            },
+            {
+              "line": 16,
+              "content": "function transfer(address recipient, uint256 amount) external returns (bool);",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            },
+            {
+              "line": 22,
+              "content": "function allowance(address owner, address spender) external view returns (uint256);",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            }
+          ]
+        },
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 1,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 3,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 4,
+              "content": "/// @title Minimal ERC20 interface for Uniswap",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 5,
+              "content": "/// @notice Contains a subset of the full ERC20 interface that is used in Uniswap V3",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        },
+        {
+          "type": "flash_loan",
+          "severity": "HIGH",
+          "cwe": "CWE-1104",
+          "count": 1,
+          "sample_matches": [
+            {
+              "line": 10,
+              "content": "function balanceOf(address account) external view returns (uint256);",
+              "pattern": "(balance|balanceOf).*external"
+            }
+          ]
+        }
+      ],
+      "contracts\\interfaces\\IUniswapV3Factory.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 2,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            },
+            {
+              "line": 75,
+              "content": "/// @param fee The fee amount to enable, denominated in hundredths of a bip (i.e. 1e-6)",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 12,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 4,
+              "content": "/// @title The interface for the Uniswap V3 Factory",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 5,
+              "content": "/// @notice The Uniswap V3 Factory facilitates creation of Uniswap V3 pools and control over the pro",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        }
+      ],
+      "contracts\\interfaces\\IUniswapV3Pool.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 1,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 9,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 4,
+              "content": "import './pool/IUniswapV3PoolImmutables.sol';",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 5,
+              "content": "import './pool/IUniswapV3PoolState.sol';",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        }
+      ],
+      "contracts\\interfaces\\IUniswapV3PoolDeployer.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 2,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            },
+            {
+              "line": 7,
+              "content": "/// of the pool being constant allowing the CREATE2 address of the pool to be cheaply computed on-ch",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 5,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 4,
+              "content": "/// @title An interface for a contract that is capable of deploying Uniswap V3 Pools",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 7,
+              "content": "/// of the pool being constant allowing the CREATE2 address of the pool to be cheaply computed on-ch",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        }
+      ],
+      "contracts\\interfaces\\pool\\IUniswapV3PoolActions.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 10,
+          "sample_matches": [
+            {
+              "line": 27,
+              "content": "uint128 amount,",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            },
+            {
+              "line": 29,
+              "content": ") external returns (uint256 amount0, uint256 amount1);",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            },
+            {
+              "line": 35,
+              "content": "/// actual tokens owed, e.g. type(uint128).max. Tokens owed may be from accumulated swap fees or bur",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            }
+          ]
+        },
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 3,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            },
+            {
+              "line": 85,
+              "content": "/// @dev Can be used to donate underlying tokens pro-rata to currently in-range liquidity providers ",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            },
+            {
+              "line": 99,
+              "content": "/// @dev This method is no-op if the pool already has an observationCardinalityNext greater than or ",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 29,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 8,
+              "content": "/// @dev Price is represented as a sqrt(amountToken1/amountToken0) Q64.96 value",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 9,
+              "content": "/// @param sqrtPriceX96 the initial sqrt price of the pool as a Q64.96",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        },
+        {
+          "type": "flash_loan",
+          "severity": "HIGH",
+          "cwe": "CWE-1104",
+          "count": 10,
+          "sample_matches": [
+            {
+              "line": 13,
+              "content": "/// @dev The caller of this method receives a callback in the form of IUniswapV3MintCallback#uniswap",
+              "pattern": "callback|onFlash"
+            },
+            {
+              "line": 20,
+              "content": "/// @param data Any data that should be passed through to the callback",
+              "pattern": "callback|onFlash"
+            },
+            {
+              "line": 21,
+              "content": "/// @return amount0 The amount of token0 that was paid to mint the given amount of liquidity. Matche",
+              "pattern": "callback|onFlash"
+            }
+          ]
+        }
+      ],
+      "contracts\\interfaces\\pool\\IUniswapV3PoolDerivedState.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 4,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            },
+            {
+              "line": 9,
+              "content": "/// @dev To get a time weighted average tick or liquidity-in-range, you must call this with two valu",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            },
+            {
+              "line": 10,
+              "content": "/// the beginning of the period and another for the end of the period. E.g., to get the last hour ti",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 5,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 11,
+              "content": "/// you must call it with secondsAgos = [3600, 0].",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 13,
+              "content": "/// log base sqrt(1.0001) of token1 / token0. The TickMath library can be used to go from a tick val",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        }
+      ],
+      "contracts\\interfaces\\pool\\IUniswapV3PoolEvents.sol": [
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 14,
+          "sample_matches": [
+            {
+              "line": 26,
+              "content": "uint128 amount,",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            },
+            {
+              "line": 27,
+              "content": "uint256 amount0,",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            },
+            {
+              "line": 28,
+              "content": "uint256 amount1",
+              "pattern": "overflow|underflow|uint256|uint128|uint96"
+            }
+          ]
+        },
+        {
+          "type": "overflow",
+          "severity": "HIGH",
+          "cwe": "CWE-190",
+          "count": 1,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\+|\\-|\\*)\\s*"
+            }
+          ]
+        },
+        {
+          "type": "precision_loss",
+          "severity": "HIGH",
+          "cwe": "CWE-1025",
+          "count": 26,
+          "sample_matches": [
+            {
+              "line": 1,
+              "content": "// SPDX-License-Identifier: GPL-2.0-or-later",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 9,
+              "content": "/// @param sqrtPriceX96 The initial sqrt price of the pool, as a Q64.96",
+              "pattern": "(\\/).*[0-9]"
+            },
+            {
+              "line": 10,
+              "content": "/// @param tick The initial tick of the pool, i.e. log base 1.0001 of the starting price of the pool",
+              "pattern": "(\\/).*[0-9]"
+            }
+          ]
+        },
+        {
+          "type": "flash_loan",
+          "severity": "HIGH",
+          "cwe": "CWE-1104",
+          "count": 2,
+          "sample_matches": [
+            {
+              "line": 65,
+              "content": "/// @param sender The address that initiated the swap call, and that received the callback",
+              "pattern": "callback|onFlash"
+            },
+            {
+              "line": 83,
+              "content": "/// @param sender The address that initiated the swap call, and that received the callback",
+              "pattern": "callback|onFlash"
+            }
+          ]
+        }
+      ]
+    },
+    "critical_functions": {
+      "swap": {
+        "description": "Main token exchange function - reentrancy risk",
+        "signature": "function swap(\n        address recipient,\n        bool zeroForOne,\n        int25",
+        "found": true
+      },
+      "mint": {
+        "description": "Add liquidity function - precision issues",
+        "signature": "function mint(\n        address recipient,\n        int24 tickLower,\n        int24",
+        "found": true
+      },
+      "burn": {
+        "description": "Remove liquidity function - callback attacks",
+        "signature": "function burn(\n        int24 tickLower,\n        int24 tickUpper,\n        uint128",
+        "found": true
+      },
+      "collect": {
+        "description": "Fee collection - reentrancy with external calls",
+        "signature": "function collect(\n        address recipient,\n        int24 tickLower,\n        in",
+        "found": true
+      }
+    }
+  },
+  "next_steps": [
+    "1. Manual code review of UniswapV3Pool.sol (swap, mint, burn)",
+    "2. Search for external calls followed by state mutations (reentrancy)",
+    "3. Analyze liquidity math for precision issues with small amounts",
+    "4. Check tick bitmap for integer overflow in position management",
+    "5. Test with Hardhat on Sepolia testnet",
+    "6. Create proof-of-concept for confirmed vulnerabilities",
+    "7. Document findings and submit to Immunefi"
+  ],
+  "estimated_effort": "40-60 hours",
+  "estimated_reward": "$5,000 - $100,000",
+  "recommendation": "Proceed with detailed code review"
+}

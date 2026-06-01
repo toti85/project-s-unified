@@ -1,0 +1,47 @@
+{
+  "timestamp": "2025-12-27T00:00:00Z",
+  "poc_type": "MOCK_VALIDATION",
+  "target": "mock",
+  "target_contract": "MockUniswapV3Pool",
+  "target_description": "Simplified mock contract with basic reentrancy guard",
+  "tests_executed": 3,
+  "tests_passed": 3,
+  "test_results": [
+    {
+      "test_name": "Should test swap callback reentrancy",
+      "status": "PASS",
+      "reentrancy_blocked": true,
+      "error_message": "No reentrancy",
+      "vulnerability_found": false,
+      "evidence": "Guard prevented nested swap call in callback"
+    },
+    {
+      "test_name": "Should test flash callback reentrancy",
+      "status": "PASS",
+      "reentrancy_blocked": true,
+      "error_message": "No reentrancy",
+      "vulnerability_found": false,
+      "evidence": "Guard prevented nested flash call in callback"
+    },
+    {
+      "test_name": "Should verify reentrancy guard is active",
+      "status": "PASS",
+      "guard_active": true,
+      "evidence": "Guard flag confirmed locked during execution"
+    }
+  ],
+  "reentrancy_executed": false,
+  "reentrancy_blocked": true,
+  "funds_extracted": false,
+  "exploit_successful": false,
+  "vulnerability_detected": false,
+  "tx_simulated": true,
+  "findings": {
+    "guard_type": "mutex-based lock",
+    "guard_behavior": "BLOCKS reentrancy",
+    "protection_status": "ACTIVE"
+  },
+  "conclusion": "MOCK VALIDATION ONLY - NOT VULNERABILITY PROOF",
+  "next_phase": "Gate B - Network Forking Test (requires RPC endpoint and forking configuration)",
+  "gate_b_status": "PENDING"
+}

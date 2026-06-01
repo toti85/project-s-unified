@@ -1,0 +1,25 @@
+{
+  "run_id": "FA1_007",
+  "current_state": "IN_PROGRESS",
+  "history": [
+    {
+      "from": null,
+      "to": "NEW_GOAL",
+      "timestamp": "2026-05-26T06:14:57.583123Z",
+      "reason": "Run created"
+    },
+    {
+      "from": "NEW_GOAL",
+      "to": "PROMPT_DRAFTED",
+      "timestamp": "2026-05-26T06:14:57.602192Z",
+      "reason": "Prompt drafted (ai)"
+    },
+    {
+      "from": "PROMPT_DRAFTED",
+      "to": "IN_PROGRESS",
+      "timestamp": "2026-05-26T06:14:57.608201Z",
+      "reason": "Auto mode: sandbox task, skipping human review"
+    }
+  ],
+  "updated_at": "2026-05-26T06:14:57.608201Z"
+}

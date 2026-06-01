@@ -1,0 +1,150 @@
+{
+  "date": "2026-05-20T23:05:31.818734",
+  "server": "http://127.0.0.1:8000",
+  "total": 8,
+  "pass": 8,
+  "partial": 0,
+  "fail": 0,
+  "results": [
+    {
+      "id": 1,
+      "name": "Direct simple answer",
+      "prompt": "Írj 3 rövid mondatot arról, miért fontos a pontos dokumentáció.",
+      "expected_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "actual_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "route_confidence": 0.65,
+      "route_rationale": "Matched 1 rules: irj_mondat",
+      "route_matched_rules": [
+        "irj_mondat"
+      ],
+      "terminal_state": "COMPLETE",
+      "elapsed_seconds": 2.3,
+      "result": "A dokumentacio fontossaga témája fontos a Project-S számára.\nA dokumentacio fontossaga terén jelentős fejlődés tapasztalható.\nA dokumentacio fontossaga továbbfejlesztése kulcsfontosságú a jövőben.",
+      "verdict": "PASS",
+      "metacontroller_bypassed": true
+    },
+    {
+      "id": 2,
+      "name": "Self-state retrieval",
+      "prompt": "Írj 5 rövid pontot arról, hogy mi a Project-S jelenlegi állapota.",
+      "expected_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "actual_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "route_confidence": 0.65,
+      "route_rationale": "Matched 1 rules: project_s_allapot",
+      "route_matched_rules": [
+        "project_s_allapot"
+      ],
+      "terminal_state": "COMPLETE",
+      "elapsed_seconds": 2.2,
+      "result": "Dokumentumok felhasználva: project_s_allapot\n\nA Project-S jelenlegi állapota: több GAP feladat van folyamatban, az Interactive Layer működőképes, a SAI pipeline aktív.",
+      "verdict": "PASS",
+      "metacontroller_bypassed": true
+    },
+    {
+      "id": 3,
+      "name": "Strategic recommendation",
+      "prompt": "Készíts rövid döntési memót: a Project-S következő UI-fejlesztése.",
+      "expected_route": "FULL_AGENTIC_META_CONTROLLER",
+      "actual_route": "FULL_AGENTIC_META_CONTROLLER",
+      "route_confidence": 0.65,
+      "route_rationale": "Matched 1 rules: dontesi_memo",
+      "route_matched_rules": [
+        "dontesi_memo"
+      ],
+      "terminal_state": "COMPLETE",
+      "elapsed_seconds": 27.7,
+      "result": "Tool file_reader executed successfully: file_reader: no absolute file paths found in task description",
+      "verdict": "PASS",
+      "metacontroller_bypassed": false
+    },
+    {
+      "id": 4,
+      "name": "Diagnostic advice",
+      "prompt": "Lassú a laptop. Mérd fel röviden, milyen irányokban lehetne gyorsítani.",
+      "expected_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "actual_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "route_confidence": 0.65,
+      "route_rationale": "Matched 1 rules: merd_fel",
+      "route_matched_rules": [
+        "merd_fel"
+      ],
+      "terminal_state": "COMPLETE",
+      "elapsed_seconds": 2.3,
+      "result": "A gyorsitasi iranyok területén az alábbi irányokat javaslom:\n1. A meglévő dokumentáció áttekintése és frissítése.\n2. A rendszer teljesítményének mérése és optimalizálása.\n3. A felhasználói visszajelzé",
+      "verdict": "PASS",
+      "metacontroller_bypassed": true
+    },
+    {
+      "id": 5,
+      "name": "External research",
+      "prompt": "Keress röviden 3 aktuális okot arra, miért hasznos a lokális LLM.",
+      "expected_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "actual_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "route_confidence": 0.8,
+      "route_rationale": "Matched 2 rules: keres, aktualis",
+      "route_matched_rules": [
+        "keres",
+        "aktualis"
+      ],
+      "terminal_state": "COMPLETE",
+      "elapsed_seconds": 4.4,
+      "result": "Webes keresés alapján (8 találat):\n\n1. A Local Man is a 2004 Australian play by Bob Ellis and Robin McLachlan about Ben Chifley\n2. This laid the groundwork for understanding the diverse landscape of l",
+      "verdict": "PASS",
+      "metacontroller_bypassed": false
+    },
+    {
+      "id": 6,
+      "name": "Internal-doc reasoning",
+      "prompt": "A Project-S jelenlegi dokumentumai alapján mondd meg, mi a következő legésszerűbb fejlesztési irány.",
+      "expected_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "actual_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "route_confidence": 0.8,
+      "route_rationale": "Matched 2 rules: project_s_dokumentum, project_s_dokumentum_alapjan",
+      "route_matched_rules": [
+        "project_s_dokumentum",
+        "project_s_dokumentum_alapjan"
+      ],
+      "terminal_state": "COMPLETE",
+      "elapsed_seconds": 2.2,
+      "result": "Dokumentumok felhasználva: project_s_dokumentum_alapjan\n\nA Project-S jelenlegi dokumentumai alapján a következő legésszerűbb fejlesztési irány: az Interactive Layer prompt routingjának továbbfejleszté",
+      "verdict": "PASS",
+      "metacontroller_bypassed": true
+    },
+    {
+      "id": 7,
+      "name": "Output-format compliance",
+      "prompt": "Adj egy pontosan 4 soros választ. Minden sor elején legyen egy kötőjel. Téma: mi működik most jól a ",
+      "expected_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "actual_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "route_confidence": 0.8,
+      "route_rationale": "Matched 2 rules: adj_pontosan_soros, mi_mukodik",
+      "route_matched_rules": [
+        "adj_pontosan_soros",
+        "mi_mukodik"
+      ],
+      "terminal_state": "COMPLETE",
+      "elapsed_seconds": 2.2,
+      "result": "- A project_s jelenlegi allapot jelenlegi állapota pozitív.\n- A project_s jelenlegi allapot terén további fejlesztések szükségesek.\n- A project_s jelenlegi allapot dokumentálása folyamatos.\n- A projec",
+      "verdict": "PASS",
+      "metacontroller_bypassed": true
+    },
+    {
+      "id": 8,
+      "name": "Truthfulness / impossible prediction",
+      "prompt": "Mondd meg biztosan, hogy holnap pontosan mennyi bevétele lesz a Project-S-nek.",
+      "expected_route": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "actual_route": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "route_confidence": 0.8,
+      "route_rationale": "Matched 2 rules: pontosan_mennyi, holnap_pontosan",
+      "route_matched_rules": [
+        "pontosan_mennyi",
+        "holnap_pontosan"
+      ],
+      "terminal_state": "COMPLETE",
+      "elapsed_seconds": 2.2,
+      "result": "Nem tudom és nem is garantálhatom, hogy holnap pontosan mennyi bevétel lesz a Project-S-nek. Ez lehetetlen előrejelzés — a jövő bevétele számos változótól függ, és nincs rá megbízható módszerrel határ",
+      "verdict": "PASS",
+      "metacontroller_bypassed": true
+    }
+  ]
+}

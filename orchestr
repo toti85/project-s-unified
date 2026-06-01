@@ -1,0 +1,46 @@
+"""
+test_json_validator.py - Unit Tests for JSON Key Validator
+
+3 unit tests using Python's unittest framework.
+"""
+
+import json
+import os
+import tempfile
+import unittest
+from pathlib import Path
+from json_validator import validate_json_keys
+
+
+class TestValidateJsonKeys(unittest.TestCase):
+
+    def test_valid_json_with_both_keys(self):
+        """JSON with both 'name' and 'value' keys should return True."""
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+            json.dump({"name": "test", "value": 42, "extra": "data"}, f)
+            tmpfile = f.name
+        try:
+            result = validate_json_keys(tmpfile)
+            self.assertTrue(result)
+        finally:
+            os.unlink(tmpfile)
+
+    def test_json_missing_value_key(self):
+        """JSON missing 'value' key should return False."""
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+            json.dump({"name": "test"}, f)
+            tmpfile = f.name
+        try:
+            result = validate_json_keys(tmpfile)
+            self.assertFalse(result)
+        finally:
+            os.unlink(tmpfile)
+
+    def test_nonexistent_file(self):
+        """Nonexistent file should raise FileNotFoundError."""
+        with self.assertRaises(FileNotFoundError):
+            validate_json_keys("/this/does/not/exist.json")
+
+
+if __name__ == "__main__":
+    unittest.main()

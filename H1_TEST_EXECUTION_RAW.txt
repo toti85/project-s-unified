@@ -1,0 +1,11 @@
+No files changed, compilation skipped
+
+Ran 5 tests for test/H1_StateConsistency.t.sol:H1_StateConsistencyTest
+[PASS] test_H1_ClaimedStatePreventsDoubleClaim() (gas: 39712)
+[PASS] test_H1_LeafSensitivityToParameters() (gas: 13033)
+[PASS] test_H1_LeafValueDeterminism() (gas: 8915)
+[PASS] test_H1_MessageLifecycleConsistency() (gas: 57472)
+[PASS] test_H1_MetadataHashUniqueness() (gas: 11808)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 1.75ms (715.69µs CPU time)
+
+Ran 1 test suite in 27.74ms (1.75ms CPU time): 5 tests passed, 0 failed, 0 skipped (5 total tests)

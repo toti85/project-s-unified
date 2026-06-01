@@ -1,0 +1,129 @@
+{
+  "bounty_id": "bounty_003",
+  "title": "DeFi Protocol Analytics Tool",
+  "generated_at": "2025-12-26T23:27:36.467730",
+  "phases": [
+    {
+      "phase": 1,
+      "name": "Research & Planning",
+      "duration": "2-3 days",
+      "tasks": [
+        "DeFi protokollok tanulmányozása (Uniswap, Aave, Curve)",
+        "API-k felderítése és dokumentálása",
+        "Technikai stack kiválasztása",
+        "Adatbázis design"
+      ],
+      "deliverables": [
+        "Technical specification document",
+        "API integration guide",
+        "Database schema"
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Backend Development",
+      "duration": "5-7 days",
+      "tasks": [
+        "Python backend setup (FastAPI/Flask)",
+        "API integrációk implementálása",
+        "Database layer implementálása",
+        "Data aggregation pipeline",
+        "Unit tests"
+      ],
+      "deliverables": [
+        "API endpoints",
+        "Data collection service",
+        "Test coverage >80%"
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Frontend Development",
+      "duration": "5-7 days",
+      "tasks": [
+        "React dashboard setup",
+        "Components createion",
+        "Data visualization (charts)",
+        "Real-time updates (WebSocket)",
+        "Responsive design",
+        "Integration tests"
+      ],
+      "deliverables": [
+        "Working dashboard",
+        "Responsive on mobile/desktop",
+        "Real-time data display"
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "Testing & Optimization",
+      "duration": "3-4 days",
+      "tasks": [
+        "End-to-end testing",
+        "Performance optimization",
+        "Security audit",
+        "Load testing",
+        "User acceptance testing"
+      ],
+      "deliverables": [
+        "Test report",
+        "Performance metrics",
+        "Security checklist"
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "Deployment & Submission",
+      "duration": "1-2 days",
+      "tasks": [
+        "Deploy to staging",
+        "Final verification",
+        "Documentation completion",
+        "Bounty submission",
+        "Live deployment"
+      ],
+      "deliverables": [
+        "Live dashboard URL",
+        "Complete documentation",
+        "Github repo (no push for now)"
+      ]
+    }
+  ],
+  "tech_stack": {
+    "backend": [
+      "Python 3.11",
+      "FastAPI",
+      "PostgreSQL",
+      "Redis"
+    ],
+    "frontend": [
+      "React 18",
+      "TypeScript",
+      "Chart.js",
+      "Tailwind CSS"
+    ],
+    "apis": [
+      "CoinGecko API",
+      "Uniswap Subgraph",
+      "Etherscan API"
+    ],
+    "deployment": [
+      "Docker",
+      "GitHub Actions",
+      "Vercel/Railway"
+    ]
+  },
+  "risks": [
+    "API rate limiting on free tiers",
+    "Data synchronization delays",
+    "Real-time update latency",
+    "Blockchain network congestion"
+  ],
+  "success_criteria": [
+    "Dashboard displays real DeFi data",
+    "Updates within 5 minutes",
+    "<2 second page load time",
+    "Mobile responsive design",
+    "All bounty requirements met"
+  ]
+}

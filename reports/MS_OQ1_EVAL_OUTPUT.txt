@@ -1,0 +1,53 @@
+﻿MS-OQ1-C: Evaluating 20 prompts...
+======================================================================
+DL_01: MATCH | score=6/15 | polished=False | 0.0s
+  rubric: R=3 S=0 T=3 St=0 A=0
+DL_02: MISMATCH | score=14/15 | polished=True | 12.6s
+  rubric: R=3 S=3 T=3 St=2 A=3
+DL_03: MATCH | score=10/15 | polished=False | 0.0s
+  rubric: R=3 S=0 T=3 St=1 A=3
+DL_04: MISMATCH | score=14/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=2 A=3
+TU_01: MATCH | score=7/15 | polished=False | 0.0s
+  rubric: R=3 S=0 T=3 St=0 A=1
+TU_02: MISMATCH | score=12/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=1 St=2 A=3
+TU_03: MATCH | score=6/15 | polished=False | 0.0s
+  rubric: R=3 S=1 T=1 St=0 A=1
+TU_04: MISMATCH | score=12/15 | polished=True | 0.0s
+  rubric: R=3 S=2 T=1 St=3 A=3
+ID_01: MATCH | score=15/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=3 A=3
+ID_02: MATCH | score=15/15 | polished=True | 0.1s
+  rubric: R=3 S=3 T=3 St=3 A=3
+ID_03: MATCH | score=15/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=3 A=3
+ID_04: MATCH | score=15/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=3 A=3
+ER_01: MATCH | score=12/15 | polished=False | 3.4s
+  rubric: R=3 S=1 T=3 St=2 A=3
+ER_02: MATCH | score=12/15 | polished=False | 1.2s
+  rubric: R=3 S=1 T=3 St=2 A=3
+ER_03: MATCH | score=12/15 | polished=False | 1.4s
+  rubric: R=3 S=1 T=3 St=2 A=3
+ER_04: MATCH | score=12/15 | polished=False | 3.4s
+  rubric: R=3 S=1 T=3 St=2 A=3
+FA_01: MATCH | score=14/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=2 A=3
+FA_02: MATCH | score=14/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=2 A=3
+FA_03: MATCH | score=14/15 | polished=True | 0.0s
+  rubric: R=3 S=3 T=3 St=2 A=3
+FA_04: MISMATCH | score=9/15 | polished=False | 0.0s
+  rubric: R=3 S=1 T=3 St=1 A=1
+======================================================================
+RESULTS: 20 prompts
+Average score: 12.0/15
+Prompts >= 12/15: 15/20 (75%)
+
+Lowest scoring:
+  DL_01: 6/15 (DIRECT_LIGHTWEIGHT_RESPONSE -> DIRECT_LIGHTWEIGHT_RESPONSE)
+  TU_03: 6/15 (TRUTHFUL_UNCERTAINTY_RESPONSE -> TRUTHFUL_UNCERTAINTY_RESPONSE)
+  TU_01: 7/15 (TRUTHFUL_UNCERTAINTY_RESPONSE -> TRUTHFUL_UNCERTAINTY_RESPONSE)
+
+Results saved to reports/MS_OQ1_EVAL_RESULTS.json

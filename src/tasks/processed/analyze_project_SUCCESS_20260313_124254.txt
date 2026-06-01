@@ -1,0 +1,6 @@
+Analyze the project structure and create a report with:
+1. Directory tree of src/
+2. Python file count
+3. Main architecture components
+
+Make it detailed and technical.

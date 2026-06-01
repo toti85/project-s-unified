@@ -1,0 +1,234 @@
+
+
+============================================================
+system_resource: /system resource print
+============================================================
+uptime: 4d19h34m46s
+                  version: 6.42.5 (stable)
+               build-time: Jun/26/2018 12:12:08
+              free-memory: 103.2MiB
+             total-memory: 128.0MiB
+                      cpu: MIPS 74Kc V4.12
+                cpu-count: 1
+            cpu-frequency: 600MHz
+                 cpu-load: 15%
+           free-hdd-space: 101.4MiB
+          total-hdd-space: 128.0MiB
+  write-sect-since-reboot: 25873
+         write-sect-total: 66188
+               bad-blocks: 0%
+        architecture-name: mipsbe
+               board-name: RB951G-2HnD
+                 platform: MikroTik
+
+
+============================================================
+system_routerboard: /system routerboard print
+============================================================
+routerboard: yes
+             model: 951G-2HnD
+     serial-number: 418402B28C0C
+     firmware-type: ar9344
+  factory-firmware: 3.08
+  current-firmware: 3.33
+  upgrade-firmware: 6.42.5
+
+
+============================================================
+interface_print: /interface print detail
+============================================================
+Flags: D - dynamic, X - disabled, R - running, S - slave 
+ 0  R  name="ether1" default-name="ether1" type="ether" mtu=1500 
+       actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 
+       mac-address=D4:CA:6D:BE:39:7E last-link-down-time=may/11/2026 14:42:39 
+       last-link-up-time=may/11/2026 14:42:40 link-downs=7 
+
+ 1   S name="ether2" default-name="ether2" type="ether" mtu=1500 
+       actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 
+       mac-address=D4:CA:6D:BE:39:7F link-downs=0 
+
+ 2   S name="ether3" default-name="ether3" type="ether" mtu=1500 
+       actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 
+       mac-address=D4:CA:6D:BE:39:80 link-downs=0 
+
+ 3   S name="ether4" default-name="ether4" type="ether" mtu=1500 
+       actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 
+       mac-address=D4:CA:6D:BE:39:81 link-downs=0 
+
+ 4   S name="ether5" default-name="ether5" type="ether" mtu=1500 
+       actual-mtu=1500 l2mtu=1598 max-l2mtu=4074 
+       mac-address=D4:CA:6D:BE:39:82 link-downs=0 
+
+ 5  RS name="wlan1" default-name="wlan1" type="wlan" mtu=1500 actual-mtu=1500 
+       l2mtu=1600 max-l2mtu=2290 mac-address=D4:CA:6D:BE:39:83 
+       last-link-up-time=may/11/2026 04:00:14 link-downs=0 
+
+ 6  R  ;;; defconf
+       name="bridge" type="bridge" mtu=auto actual-mtu=1500 l2mtu=1598 
+       mac-address=D4:CA:6D:BE:39:7F last-link-up-time=may/11/2026 04:00:06 
+       link-downs=0 
+
+ 7  R  name="pppoe-out1" type="pppoe-out" mtu=1480 actual-mtu=1480 
+       last-link-down-time=may/12/2026 04:47:29 
+       last-link-up-time=may/12/2026 04:55:45 link-downs=7
+
+
+============================================================
+interface_wireless: /interface wireless print detail
+============================================================
+Flags: X - disabled, R - running 
+ 0  R name="wlan1" mtu=1500 l2mtu=1600 mac-address=D4:CA:6D:BE:39:83 
+      arp=enabled interface-type=Atheros AR9300 mode=ap-bridge 
+      ssid="MikroTik-BE3983" frequency=auto band=2ghz-b/g/n 
+      channel-width=20/40mhz-Ce secondary-channel="" scan-list=default 
+      wireless-protocol=802.11 vlan-mode=no-tag vlan-id=1 wds-mode=disabled 
+      wds-default-bridge=none wds-ignore-ssid=no bridge-mode=enabled 
+      default-authentication=yes default-forwarding=yes default-ap-tx-limit=0 
+      default-client-tx-limit=0 hide-ssid=no security-profile=default 
+      compression=no
+
+
+============================================================
+interface_wifi: /interface wifi print detail
+============================================================
+bad command name wifi (line 1 column 12)
+
+
+============================================================
+ip_address: /ip address print
+============================================================
+Flags: X - disabled, I - invalid, D - dynamic 
+ #   ADDRESS            NETWORK         INTERFACE                              
+ 0   ;;; defconf
+     192.168.88.1/24    192.168.88.0    ether2                                 
+ 1 D 172.16.0.63/32     46.253.140.2    pppoe-out1
+
+
+============================================================
+ip_route: /ip route print
+============================================================
+Flags: X - disabled, A - active, D - dynamic, 
+C - connect, S - static, r - rip, b - bgp, o - ospf, m - mme, 
+B - blackhole, U - unreachable, P - prohibit 
+ #      DST-ADDRESS        PREF-SRC        GATEWAY            DISTANCE
+ 0 ADS  0.0.0.0/0                          pppoe-out1                1
+ 1 ADC  46.253.140.2/32    172.16.0.63     pppoe-out1                0
+ 2 ADC  192.168.88.0/24    192.168.88.1    bridge                    0
+
+
+============================================================
+dhcp_server: /ip dhcp-server print
+============================================================
+Flags: D - dynamic, X - disabled, I - invalid 
+ #    NAME      INTERFACE    RELAY           ADDRESS-POOL    LEASE-TIME ADD-ARP
+ 0    defconf   bridge                       dhcp            10m
+
+
+============================================================
+dhcp_network: /ip dhcp-server network print
+============================================================
+Flags: D - dynamic 
+ #   ADDRESS            GATEWAY         DNS-SERVER          WINS-SERVER     DOM
+ 0   ;;; defconf
+     192.168.88.0/24    192.168.88.1
+
+
+============================================================
+dhcp_lease: /ip dhcp-server lease print
+============================================================
+Flags: X - disabled, R - radius, D - dynamic, B - blocked 
+ #   ADDRESS                                      MAC-ADDRESS       HO SER.. RA
+ 0 D 192.168.88.14                                40:A5:EF:DC:8E:3F    def..
+ 1 D 192.168.88.17                                D0:AB:D5:73:22:6A DE def..
+ 2 D 192.168.88.13                                72:64:75:3C:41:08 Xi def..
+
+
+============================================================
+ip_dns: /ip dns print
+============================================================
+servers: 
+              dynamic-servers: 8.8.8.8
+        allow-remote-requests: yes
+          max-udp-packet-size: 4096
+         query-server-timeout: 2s
+          query-total-timeout: 10s
+       max-concurrent-queries: 100
+  max-concurrent-tcp-sessions: 20
+                   cache-size: 2048KiB
+                cache-max-ttl: 1w
+                   cache-used: 64KiB
+
+
+============================================================
+firewall_nat: /ip firewall nat print
+============================================================
+Flags: X - disabled, I - invalid, D - dynamic 
+ 0    ;;; defconf: masquerade
+      chain=srcnat action=masquerade out-interface-list=WAN 
+      ipsec-policy=out,none
+
+
+============================================================
+firewall_filter: /ip firewall filter print
+============================================================
+Flags: X - disabled, I - invalid, D - dynamic 
+ 0  D ;;; special dummy rule to show fasttrack counters
+      chain=forward action=passthrough 
+
+ 1    ;;; defconf: accept established,related,untracked
+      chain=input action=accept 
+      connection-state=established,related,untracked 
+
+ 2    ;;; defconf: drop invalid
+      chain=input action=drop connection-state=invalid 
+
+ 3    ;;; defconf: accept ICMP
+      chain=input action=accept protocol=icmp 
+
+ 4    ;;; defconf: drop all not coming from LAN
+      chain=input action=drop in-interface-list=!LAN 
+
+ 5    ;;; defconf: accept in ipsec policy
+      chain=forward action=accept ipsec-policy=in,ipsec 
+
+ 6    ;;; defconf: accept out ipsec policy
+      chain=forward action=accept ipsec-policy=out,ipsec 
+
+ 7    ;;; defconf: fasttrack
+      chain=forward action=fasttrack-connection 
+      connection-state=established,related 
+
+ 8    ;;; defconf: accept established,related, untracked
+      chain=forward action=accept 
+      connection-state=established,related,untracked 
+
+ 9    ;;; defconf: drop invalid
+      chain=forward action=drop connection-state=invalid 
+
+10    ;;; defconf:  drop all from WAN not DSTNATed
+      chain=forward action=drop connection-state=new 
+      connection-nat-state=!dstnat in-interface-list=WAN
+
+
+============================================================
+ip_service: /ip service print
+============================================================
+Flags: X - disabled, I - invalid 
+ #   NAME      PORT ADDRESS                                       CERTIFICATE  
+ 0   telnet      23
+ 1   ftp         21
+ 2   www         80
+ 3   ssh         22
+ 4 XI www-ssl    443                                               none         
+ 5   api       8728
+ 6   winbox    8291
+ 7   api-ssl   8729                                               none
+
+
+============================================================
+user_print: /user print
+============================================================
+Flags: X - disabled 
+ #   NAME             GROUP             ADDRESS            LAST-LOGGED-IN      
+ 0   ;;; system default user
+     admin            full                                 may/15/2026 23:34:45

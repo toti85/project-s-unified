@@ -1,0 +1,62 @@
+{
+  "audit_id": "UNISWAP-V3-20260120-083812",
+  "timestamp": "2026-01-20T08:38:12.902136",
+  "status": "IN_PROGRESS",
+  "summary": {
+    "project": "Uniswap V3 Core",
+    "contracts_count": 5,
+    "total_lines_analyzed": "~3000+ lines of Solidity",
+    "estimated_audit_time": "14-21 days"
+  },
+  "preliminary_findings": [
+    {
+      "severity": "CRITICAL",
+      "title": "Reentrancy in Pool Swap Function",
+      "status": "INVESTIGATING",
+      "details": "External calls (transfers) before state updates - potential reentrancy vector",
+      "affected_contract": "UniswapV3Pool.sol",
+      "cve_reference": "Similar to historical DeFi exploits",
+      "estimated_reward": "$50,000-100,000 if valid"
+    },
+    {
+      "severity": "HIGH",
+      "title": "LiquidityMath Precision Loss",
+      "status": "INVESTIGATING",
+      "details": "Rounding errors in liquidity calculations with dust amounts",
+      "affected_contract": "LiquidityMath.sol",
+      "poc_needed": "Test with amounts like 1 wei",
+      "estimated_reward": "$5,000-20,000 if valid"
+    },
+    {
+      "severity": "HIGH",
+      "title": "Flash Loan Manipulation Vector",
+      "status": "INVESTIGATING",
+      "details": "Potential oracle manipulation via flash loans + large swaps",
+      "affected_contract": "UniswapV3Pool.sol",
+      "poc_needed": "Flash loan + swap combo test on testnet",
+      "estimated_reward": "$10,000-50,000 if valid"
+    }
+  ],
+  "next_actions": [
+    "Setup Hardhat environment on testnet",
+    "Create minimal POC contracts for each finding",
+    "Execute exploit scenarios on Sepolia/Goerli",
+    "Document all findings with reproducible steps",
+    "Submit to Uniswap bug bounty program"
+  ],
+  "submission_requirements": {
+    "platform": "Immunefi (https://immunefi.com/bounty/uniswap/)",
+    "required_info": [
+      "Detailed vulnerability description",
+      "Proof of concept code",
+      "Impact assessment",
+      "Steps to reproduce",
+      "Recommended remediation"
+    ],
+    "responsible_disclosure": [
+      "NEM public disclosure amíg nem javítva",
+      "30 napos embargo period előtt submission",
+      "Direct communication Uniswap security team-mel"
+    ]
+  }
+}

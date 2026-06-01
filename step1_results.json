@@ -1,0 +1,12 @@
+﻿{
+    "RemoteHostname":  {
+                           "value":  "SHAYANSKA-DL380",
+                           "PSComputerName":  "192.168.1.180",
+                           "RunspaceId":  "729f493f-b16f-4a9f-b3df-9c2fa93bee5e",
+                           "PSShowComputerName":  true
+                       },
+    "Timestamp":  "2026-05-18 14:51:25",
+    "HostnameConfirmed":  true,
+    "TcpTestSucceeded":  true,
+    "WinRMVerified":  true
+}

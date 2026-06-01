@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-01-20T08:38:12.901141",
+  "analysis": "Pattern-based vulnerability search",
+  "patterns": [
+    {
+      "pattern": "External calls before state update",
+      "grep": "transfer.*before.*update",
+      "risk": "CRITICAL",
+      "example": "contract.call{} (unsafe_variable)",
+      "mitigation": "Checks-Effects-Interactions pattern"
+    },
+    {
+      "pattern": "Unchecked math operations",
+      "grep": "\\+ \\* \\-",
+      "risk": "HIGH",
+      "example": "amount = amount + fee",
+      "mitigation": "SafeMath library or overflow checks"
+    },
+    {
+      "pattern": "Public functions with private logic",
+      "grep": "public function reading state",
+      "risk": "MEDIUM",
+      "example": "function update() public { ... }",
+      "mitigation": "Access control modifiers"
+    },
+    {
+      "pattern": "Flash loan entry points",
+      "grep": "uniswapV3FlashCallback",
+      "risk": "CRITICAL",
+      "example": "Allows arbitrary code execution mid-transaction",
+      "mitigation": "Strict callback validation"
+    },
+    {
+      "pattern": "Tick manipulation via initialize",
+      "grep": "tick.*initialize",
+      "risk": "HIGH",
+      "example": "Attacker sets extreme tick values",
+      "mitigation": "Tick range bounds checking"
+    }
+  ]
+}

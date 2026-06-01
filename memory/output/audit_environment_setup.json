@@ -1,0 +1,34 @@
+{
+  "prerequisites": [
+    "Node.js (18+)",
+    "Hardhat",
+    "Foundry (cast, forge)",
+    "Python 3.11+",
+    "Git"
+  ],
+  "installation_commands": [
+    "npm install -g hardhat",
+    "curl -L https://foundry.paradigm.xyz | bash",
+    "pip install web3 slither-analyzer mythril echidna",
+    "npm install ethers"
+  ],
+  "repository_setup": [
+    "git clone https://github.com/Uniswap/v3-core uniswap-audit",
+    "cd uniswap-audit",
+    "npm install",
+    "npm run test"
+  ],
+  "account_setup": [
+    "Create HackerOne account",
+    "Create Testnet wallet (with testnet ETH)",
+    "Set up RPC endpoints (Infura, Alchemy)",
+    "Join Uniswap Discord for updates"
+  ],
+  "daily_checklist": [
+    "[] Run Slither on latest code",
+    "[] Check GitHub security advisories",
+    "[] Review new Uniswap commits",
+    "[] Update known vulnerabilities list",
+    "[] Test one specific contract function deeply"
+  ]
+}

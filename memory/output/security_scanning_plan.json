@@ -1,0 +1,46 @@
+{
+  "phase": "RECONNAISSANCE",
+  "tools": [
+    {
+      "tool": "Slither",
+      "command": "slither . --json-types constructors,functions,statements",
+      "purpose": "Static analysis - automated vulnerability detection",
+      "time": "5-10 minutes"
+    },
+    {
+      "tool": "Mythril",
+      "command": "myth analyze UniswapV3Pool.sol",
+      "purpose": "Symbolic execution - find execution paths",
+      "time": "15-30 minutes"
+    },
+    {
+      "tool": "grep + manual review",
+      "command": "grep -r 'transfer\\|call\\|delegatecall' contracts/",
+      "purpose": "Find dangerous patterns",
+      "time": "30 minutes"
+    },
+    {
+      "tool": "Contract size analysis",
+      "command": "Find functions >10k lines or complex logic",
+      "purpose": "Identify audit-heavy areas",
+      "time": "20 minutes"
+    }
+  ],
+  "detailed_analysis": {
+    "step1_code_review": {
+      "focus": "UniswapV3Pool.sol main functions",
+      "time": "4-6 hours",
+      "deliverable": "Detailed code comments + vulnerability notes"
+    },
+    "step2_math_verification": {
+      "focus": "All mathematical operations",
+      "time": "6-8 hours",
+      "deliverable": "Math safety report + edge case analysis"
+    },
+    "step3_testnet_poc": {
+      "focus": "Proof of concept exploitation",
+      "time": "8-12 hours",
+      "deliverable": "Working exploit (if vulnerability found)"
+    }
+  }
+}

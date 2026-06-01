@@ -1,0 +1,163 @@
+{
+  "search_timestamp": "2025-12-26T23:29:59.560117",
+  "total_found": 12,
+  "sources": {
+    "github": 0,
+    "defi": 8,
+    "hackerone": 4
+  },
+  "bounties": [
+    {
+      "source": "ethereum.org",
+      "title": "Ethereum Smart Contract Audit",
+      "url": "https://ethereum.org/en/bug-bounty/",
+      "reward_estimate": "5-50 ETH",
+      "difficulty": "Expert",
+      "description": "Security vulnerabilities in Ethereum protocol, client implementations, or dapps",
+      "skills": [
+        "Solidity",
+        "Cryptography",
+        "Blockchain Architecture"
+      ],
+      "active": true
+    },
+    {
+      "source": "uniswap.org",
+      "title": "Uniswap Protocol Bug Bounty",
+      "url": "https://immunefi.com/bounty/uniswap/",
+      "reward_estimate": "$500-100,000",
+      "difficulty": "Hard",
+      "description": "Find vulnerabilities in Uniswap V3/V4 smart contracts",
+      "skills": [
+        "Solidity",
+        "Smart Contracts",
+        "DeFi"
+      ],
+      "active": true
+    },
+    {
+      "source": "aave.com",
+      "title": "Aave Protocol Security Bounty",
+      "url": "https://immunefi.com/bounty/aave/",
+      "reward_estimate": "$1,000-250,000",
+      "difficulty": "Expert",
+      "description": "Critical vulnerabilities in Aave lending protocol",
+      "skills": [
+        "Solidity",
+        "Financial Math",
+        "Smart Contracts"
+      ],
+      "active": true
+    },
+    {
+      "source": "curve.fi",
+      "title": "Curve Finance Bug Bounty",
+      "url": "https://immunefi.com/bounty/curve/",
+      "reward_estimate": "$500-500,000",
+      "difficulty": "Expert",
+      "description": "Smart contract vulnerabilities in Curve AMM",
+      "skills": [
+        "Solidity",
+        "Yul",
+        "Cryptography"
+      ],
+      "active": true
+    },
+    {
+      "source": "chainlink.com",
+      "title": "Chainlink Oracle Security",
+      "url": "https://immunefi.com/bounty/chainlink/",
+      "reward_estimate": "$2,500-250,000",
+      "difficulty": "Expert",
+      "description": "Security issues in Chainlink protocol and contracts",
+      "skills": [
+        "Rust",
+        "Solidity",
+        "Cryptography"
+      ],
+      "active": true
+    },
+    {
+      "source": "maker.com",
+      "title": "MakerDAO Protocol Audit",
+      "url": "https://immunefi.com/bounty/makerdao/",
+      "reward_estimate": "$5,000-500,000",
+      "difficulty": "Expert",
+      "description": "Critical vulnerabilities in DAI protocol",
+      "skills": [
+        "Solidity",
+        "Financial Systems",
+        "Smart Contracts"
+      ],
+      "active": true
+    },
+    {
+      "source": "lido.fi",
+      "title": "Lido Staking Protocol",
+      "url": "https://immunefi.com/bounty/lido/",
+      "reward_estimate": "$1,000-100,000",
+      "difficulty": "Hard",
+      "description": "Liquid staking smart contract vulnerabilities",
+      "skills": [
+        "Solidity",
+        "Staking",
+        "Smart Contracts"
+      ],
+      "active": true
+    },
+    {
+      "source": "arbitrum.io",
+      "title": "Arbitrum Layer 2 Security",
+      "url": "https://immunefi.com/bounty/arbitrum/",
+      "reward_estimate": "$1,000-250,000",
+      "difficulty": "Expert",
+      "description": "Bridge, sequencer, or rollup vulnerabilities",
+      "skills": [
+        "Rust",
+        "Solidity",
+        "Layer 2 Architecture"
+      ],
+      "active": true
+    },
+    {
+      "source": "HackerOne",
+      "program": "Ethereum Foundation",
+      "title": "Client Implementation Security",
+      "reward_estimate": "5-50 ETH",
+      "difficulty": "Expert",
+      "description": "Find vulnerabilities in go-ethereum, rust-ethereum, or other clients",
+      "url": "https://hackerone.com/ethereum-foundation",
+      "active": true
+    },
+    {
+      "source": "HackerOne",
+      "program": "Bitcoin",
+      "title": "Bitcoin Core Security",
+      "reward_estimate": "Substantial",
+      "difficulty": "Expert",
+      "description": "Critical security issues in Bitcoin Core implementation",
+      "url": "https://www.bitcoinbug.org/",
+      "active": true
+    },
+    {
+      "source": "HackerOne",
+      "program": "Solana",
+      "title": "Solana Network Security",
+      "reward_estimate": "$5,000-1,000,000",
+      "difficulty": "Expert",
+      "description": "Vulnerabilities in Solana validator, smart contracts, or bridges",
+      "url": "https://hackerone.com/solana",
+      "active": true
+    },
+    {
+      "source": "HackerOne",
+      "program": "Polkadot",
+      "title": "Polkadot Protocol Security",
+      "reward_estimate": "Competitive",
+      "difficulty": "Expert",
+      "description": "Smart contract and protocol vulnerabilities",
+      "url": "https://hackerone.com/polkadot",
+      "active": true
+    }
+  ]
+}

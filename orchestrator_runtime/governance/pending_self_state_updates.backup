@@ -1,0 +1,17 @@
+{
+  "updates": [
+    {
+      "type": "milestone_update",
+      "milestone_id": 35,
+      "fields": {
+        "status": "verified",
+        "note": "MS-AO1 infrastructure complete"
+      },
+      "prepared_at": "2026-05-26T22:46:14.557634+00:00",
+      "approved": false,
+      "applied": false
+    }
+  ],
+  "last_updated": "2026-05-26T22:46:14.557634+00:00",
+  "requires_human_approval": true
+}

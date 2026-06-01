@@ -1,0 +1,10 @@
+{
+    "id": "AO3_HARD_T4_FAIL",
+    "title": "Deliberately failing task for SCL escalation test",
+    "source": "hardening_test",
+    "risk": "LOW",
+    "auto_approve": true,
+    "sandbox_only": true,
+    "priority": 1,
+    "rationale": "LOW risk goal that will fail — tests SCL escalation path"
+}

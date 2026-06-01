@@ -1,0 +1,10 @@
+{
+    "id": "AO3_HARD_T4_FAIL_R2",
+    "title": "Second retry of deliberately failing task for escalation test",
+    "source": "hardening_test",
+    "risk": "LOW",
+    "auto_approve": true,
+    "sandbox_only": true,
+    "priority": 1,
+    "rationale": "LOW risk goal second retry — should trigger escalation after max_retries"
+}

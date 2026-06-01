@@ -1,0 +1,90 @@
+{
+  "setup": [
+    {
+      "task": "Install Hardhat",
+      "status": "pending",
+      "time": "10 min"
+    },
+    {
+      "task": "Install Uniswap V3 packages",
+      "status": "pending",
+      "time": "5 min"
+    },
+    {
+      "task": "Create .env with RPC URL",
+      "status": "pending",
+      "time": "5 min"
+    },
+    {
+      "task": "Create hardhat.config.js",
+      "status": "pending",
+      "time": "10 min"
+    }
+  ],
+  "poc_development": [
+    {
+      "task": "Create attacker contract template",
+      "status": "pending",
+      "time": "30 min"
+    },
+    {
+      "task": "Implement reentrancy test",
+      "status": "pending",
+      "time": "2 hours"
+    },
+    {
+      "task": "Implement precision test",
+      "status": "pending",
+      "time": "1 hour"
+    },
+    {
+      "task": "Implement flash loan test",
+      "status": "pending",
+      "time": "2 hours"
+    },
+    {
+      "task": "Test on Sepolia testnet",
+      "status": "pending",
+      "time": "2 hours"
+    }
+  ],
+  "verification": [
+    {
+      "task": "Confirm vulnerability exists",
+      "status": "pending",
+      "time": "1 hour"
+    },
+    {
+      "task": "Measure financial impact",
+      "status": "pending",
+      "time": "30 min"
+    },
+    {
+      "task": "Verify guard conditions",
+      "status": "pending",
+      "time": "1 hour"
+    }
+  ],
+  "documentation": [
+    {
+      "task": "Write vulnerability description",
+      "status": "pending",
+      "time": "1 hour"
+    },
+    {
+      "task": "Document POC code",
+      "status": "pending",
+      "time": "1 hour"
+    },
+    {
+      "task": "Create impact analysis",
+      "status": "pending",
+      "time": "1 hour"
+    },
+    {
+      "task": "Prepare submission package",
+      "status": "pending",
+      "time": "1 hour"
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+---
+# SERVER HUNT CONFIGURATION
+# HP DL380 / Dell R730/R740 szerver vadászat
+
+SEARCH_SPECS:
+  models:
+    - "HP ProLiant DL380 G8"
+    - "HP ProLiant DL380 G9"
+    - "Dell PowerEdge R730"
+    - "Dell PowerEdge R740"
+    - "HP DL380"
+    - "Dell R730"
+    - "Dell R740"
+  
+  cpu_cores_min: 20
+  cpu_cores_ideal: 24
+  
+  ram_gb_min: 64
+  ram_gb_ideal: 128
+  
+  price_uah_max: 40000
+  price_uah_target: 35000
+  
+  form_factor: "2U"
+  
+  condition: ["Used", "Refurbished", "New"]  # Any OK
+  warranty: "any"  # Warranty not required
+
+PLATFORMS:
+  ukraine:
+    - platform: "OLX.ua"
+      url: "https://olx.ua/d/uk/search/"
+      search_pattern: "HP DL380|Dell R730|Dell R740"
+      selectors:
+        listing: ".offerbox"
+        title: "[data-testid='listing-title']"
+        price: "[data-testid='ad-price']"
+        specs: "[class*='spec']"
+      enabled: true
+      
+    - platform: "Prom.ua"
+      url: "https://prom.ua/uk/search"
+      search_pattern: "HP ProLiant|Dell PowerEdge"
+      selectors:
+        listing: ".product-item"
+        title: "h2.product-name"
+        price: ".product-price"
+      enabled: true
+      
+    - platform: "serverparts.com.ua"
+      url: "https://serverparts.com.ua/server2u/"
+      search_pattern: "DL380|R730|R740"
+      selectors:
+        listing: "[data-product]"
+        title: ".product-title"
+        price: ".product-price"
+        specs: ".product-specs"
+      enabled: true
+      
+    - platform: "server.ua"
+      url: "https://server.ua/ua/servers"
+      search_pattern: "HP|Dell|server"
+      enabled: true
+      
+    - platform: "it-komplekt.com.ua"
+      url: "https://it-komplekt.com.ua/"
+      search_pattern: "сервер|HP|Dell"
+      enabled: true
+      
+    - platform: "Rozetka marketplace"
+      url: "https://rozetka.ua/c/2121395/filter/"
+      search_pattern: "сервер"
+      enabled: true
+      
+    - platform: "Facebook Marketplace UA"
+      url: "https://www.facebook.com/marketplace/category/computers"
+      notes: "JavaScript-heavy, requires full browser"
+      enabled: false  # Requires special handling
+
+  international:
+    - platform: "eBay Europe sellers"
+      url: "https://www.ebay.com/sch/Servers-/179"
+      search_pattern: "DL380|R730|R740"
+      location_filter: "Europe|Germany|Poland"
+      enabled: true
+      
+    - platform: "ServerMonkey.com"
+      url: "https://www.servermonkey.com/search?q=HP+DL380"
+      enabled: true
+      
+    - platform: "Hetzner Action"
+      url: "https://www.hetzner.com/hardware_pricing"
+      notes: "German server auctions"
+      enabled: false  # Requires special parsing
+
+EXTRACT_FIELDS:
+  - server_model
+  - cpu_model
+  - cpu_cores
+  - ram_gb
+  - ram_type
+  - storage
+  - price_value
+  - price_currency
+  - price_uah_estimated
+  - seller_name
+  - seller_rating
+  - condition
+  - warranty_info
+  - product_url
+  - listing_date
+  - location
+  - shipping
+
+FILTERING_RULES:
+  # Only show relevant options
+  core_filter: ">= 20"  # At least 20 cores
+  ram_filter: ">= 64"   # At least 64 GB
+  price_max_uah: 50000  # Maximum price threshold
+  
+  # Prefer these configs
+  preferred_cpu: ["Xeon E5-2600", "Xeon E5-2600 v2", "EPYC"]
+  preferred_ram: ["DDR3", "DDR4"]
+  preferred_condition: ["Used", "Refurbished"]
+
+SCORING_RULES:
+  # Higher score = better deal
+  cpu_cores_multiplier: 100
+  # More cores = better (worth up to 2800 UAH per core)
+  
+  ram_gb_multiplier: 30
+  # More RAM = better (worth ~30 UAH per GB)
+  
+  price_discount_multiplier: -1
+  # Lower price = better score
+  
+  warranty_bonus: 500
+  # Has warranty = +500 points
+  
+  condition_factor:
+    new: 0      # No bonus (expected for new)
+    refurbished: 300  # Good condition
+    used: 200   # Acceptable
+    unknown: 100
+
+REPORTING:
+  format: "markdown"
+  sort_by: "best_value"  # Options: best_value, lowest_price, highest_specs, newest
+  
+  sections:
+    - "Top 5 Best Deals"
+    - "Price Trends by Platform"
+    - "Specifications Availability"
+    - "Immediate Action Items"
+    - "Negotiation Recommendations"
+    - "International Options"
+
+ALERTS:
+  - trigger: "price < 30000"
+    action: "URGENT - Excellent deal!"
+    
+  - trigger: "cpu_cores >= 28"
+    action: "Premium specs found"
+    
+  - trigger: "ram_gb >= 256"
+    action: "High memory variant"
+    
+  - trigger: "condition == new AND price < 50000"
+    action: "New condition at good price"
+
+EXECUTION:
+  headless: false           # Show browser for transparency
+  timeout_seconds: 300      # 5 minutes per platform
+  retry_failed: 2          # Retry if platform fails
+  cache_results: true      # Cache scraped data
+  cache_ttl_minutes: 60    # Keep cache for 1 hour

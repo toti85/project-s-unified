@@ -1,0 +1,10 @@
+{
+    "id": "AO3_HARD_T2_GOV",
+    "title": "Generate sandbox test summary report",
+    "source": "hardening_test",
+    "risk": "MEDIUM",
+    "sandbox_only": true,
+    "auto_approve": false,
+    "priority": 1,
+    "rationale": "MEDIUM risk goal touching only sandbox and reports directories"
+}

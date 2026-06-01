@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-01-20T08:47:47.107Z",
+  "rpc_set": false,
+  "blockNumber": null,
+  "factory_code_len": null,
+  "error": "FORK_RPC_URL not set"
+}

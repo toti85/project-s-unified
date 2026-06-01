@@ -1,0 +1,9 @@
+{"event_type": "goal_started", "timestamp": "2026-01-02T00:27:37.000Z", "data": {"goal": "Test integration: complete a task"}}
+{"event_type": "plan_selected", "timestamp": "2026-01-02T00:27:37.100Z", "data": {"plan": "Execute task with tools", "consensus_type": "unanimous", "confidence": 0.95}}
+{"event_type": "execution_done", "timestamp": "2026-01-02T00:27:38.000Z", "data": {"status": "success", "output": "Task execution started", "iteration": 1}}
+{"event_type": "validation_done", "timestamp": "2026-01-02T00:27:39.000Z", "data": {"status": "failed", "issues": ["Task incomplete"], "iteration": 1}}
+{"event_type": "replan_triggered", "timestamp": "2026-01-02T00:27:39.500Z", "data": {"reason": "validation_failed", "iteration": 1}}
+{"event_type": "plan_selected", "timestamp": "2026-01-02T00:27:40.000Z", "data": {"plan": "Re-execute with adjusted constraints", "consensus_type": "majority", "confidence": 0.85}}
+{"event_type": "execution_done", "timestamp": "2026-01-02T00:27:41.000Z", "data": {"status": "success", "output": "Task execution completed", "iteration": 2}}
+{"event_type": "validation_done", "timestamp": "2026-01-02T00:27:42.000Z", "data": {"status": "passed", "issues": [], "iteration": 2}}
+{"event_type": "goal_completed", "timestamp": "2026-01-02T00:27:43.000Z", "data": {"status": "success", "iterations": 2, "total_time_ms": 6000}}

@@ -1,0 +1,21 @@
+﻿{
+    "Hostname":  "SHAYANSKA-DL380",
+    "OS_Caption":  "Microsoft Windows Server 2019 Datacenter",
+    "OS_Version":  "10.0.17763",
+    "OS_Build":  "17763",
+    "OS_Architecture":  "64-bit",
+    "CPU_Description":  "Intel64 Family 6 Model 63 Stepping 2, Intel64 Family 6 Model 63 Stepping 2",
+    "CPU_Count":  2,
+    "CPU_MaxClock":  "2297 / 2297",
+    "TotalRAM_GB":  127.87,
+    "LogicalDisks":  "C:: 1459.47 GB free | F:: 446.97 GB free",
+    "PATH":  "C:\\Program Files\\Python312\\Scripts\\;C:\\Program Files\\Python312\\;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd",
+    "Git_Exists":  true,
+    "Python_Exists":  true,
+    "winget_Exists":  false,
+    "Chocolatey_Exists":  false,
+    "PowerShellCore_Exists":  false,
+    "PSComputerName":  "192.168.1.180",
+    "RunspaceId":  "f0ff3e8a-dfbe-4afc-88a6-5d40f6a1c3e2",
+    "PSShowComputerName":  true
+}

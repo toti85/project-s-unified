@@ -1,0 +1,19 @@
+{
+  "draft_id": "DRAFT_002_TEXT_SUMM",
+  "domain": "Text Summarization",
+  "created_at": "2026-05-29T00:00:00Z",
+  "version": "1.0",
+  "prompt": "You are a professional technical writer specializing in creating concise, accurate summaries. Your task is to summarize the following technical document while preserving all critical information.\n\n## Input Document\n{document_text}\n\n## Summary Requirements\n- Length: {target_length} words (±10% tolerance)\n- Style: Technical but accessible\n- Include: Key findings, methodology, results, and recommendations\n- Exclude: Repetitive content, tangential details\n- Format: Structured sections with clear headings\n- Tone: Neutral, objective, professional\n\n## Quality Metrics\n- Clarity score (1-10)\n- Completeness score (1-10)\n- Conciseness score (1-10)\n\nProvide the summary followed by self-assessed quality metrics.",
+  "parameters": {
+    "document_text": "string",
+    "target_length": "integer (50-300)"
+  },
+  "success_criteria": [
+    "Prompt defines clear summary requirements",
+    "Length constraints are quantified",
+    "Quality metrics are defined",
+    "Output format is explicit"
+  ],
+  "safety_level": "LOW",
+  "notes": "Text summarization prompt with explicit quality evaluation"
+}

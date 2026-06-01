@@ -1,0 +1,16 @@
+{
+  "mode": "quality_first",
+  "prompt_drafter": {
+    "enabled": true,
+    "provider": "openrouter",
+    "model": "qwen/qwen3.6-35b-a3b"
+  },
+  "verdict_evaluator": {
+    "enabled": true,
+    "provider": "openrouter",
+    "model": "qwen/qwen3.6-35b-a3b"
+  },
+  "fallback_on_error": true,
+  "max_iterations": 2,
+  "sandbox_only": true
+}

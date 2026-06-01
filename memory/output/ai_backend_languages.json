@@ -1,0 +1,35 @@
+Itt van egy JSON forma, amely a legjobb 5 backend programozási nyelvet tartalmazza:
+
+```json
+{
+  "languages": [
+    {
+      "name": "Java",
+      "rating": 9,
+      "reason": "Wide adoption in enterprise applications, strong community support, and robust performance."
+    },
+    {
+      "name": "Python",
+      "rating": 8,
+      "reason": "Ease of use, extensive libraries, and great for rapid development and prototyping."
+    },
+    {
+      "name": "JavaScript (Node.js)",
+      "rating": 8,
+      "reason": "Asynchronous event-driven architecture, extensive package ecosystem, and full-stack development capabilities."
+    },
+    {
+      "name": "Ruby",
+      "rating": 7,
+      "reason": "Elegant syntax, strong community, and powerful web frameworks like Ruby on Rails."
+    },
+    {
+      "name": "Go",
+      "rating": 8,
+      "reason": "Strong performance, simplicity, and built-in support for concurrency."
+    }
+  ]
+}
+```
+
+Ez a JSON formátum tartalmazza a nyelvek nevét, értékelését és a választott nyelv előnyeit.

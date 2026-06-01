@@ -1,0 +1,32 @@
+=== Creating target directory on DL380 ===
+Created: C:\ProjectS-Snapshot-20260601
+Directory created successfully
+=== Copying ZIP file to DL380 ===
+ZIP size: 4.39 MB
+SMB copy failed: The FileSystem provider supports credentials only on the New-PSDrive cmdlet. Perform the operation again without specifying credentials.
+Trying WinRM copy...
+=== Verifying ZIP on DL380 ===
+ZIP exists on DL380: False
+ZIP size on DL380: 0 MB
+=== Extracting ZIP on DL380 ===
+ZIP extracted
+Top-level directories: 
+Total files extracted: 0
+No credential files found (OK)
+self_state.json: NOT FOUND
+=== Transfer complete ===
+Sending data to a remote command failed with the following error message: The current deserialized object size of the d
+ata received from the remote client computer exceeded the allowed maximum object size. The current deserialized object 
+size is 10572800. The allowed maximum object size is 10485760. For more information, see the about_Remote_Troubleshooti
+ng Help topic.
+    + CategoryInfo          : OperationStopped: (192.168.1.180:String) [], PSRemotingTransportException
+    + FullyQualifiedErrorId : JobFailure
+    + PSComputerName        : 192.168.1.180
+ 
+The path 'C:\ProjectS-Snapshot-20260601\ProjectS-Snapshot-20260601.zip' either does not exist or is not a valid file sy
+stem path.
+    + CategoryInfo          : InvalidArgument: (C:\ProjectS-Sna...ot-20260601.zip:String) [Expand-Archive], InvalidOpe 
+   rationException
+    + FullyQualifiedErrorId : ArchiveCmdletPathNotFound,Expand-Archive
+    + PSComputerName        : 192.168.1.180
+ 

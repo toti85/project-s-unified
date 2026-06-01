@@ -1,0 +1,39 @@
+{
+  "apis": [
+    {
+      "name": "GitHub REST API",
+      "url": "https://api.github.com",
+      "auth": "Token",
+      "ratelimit": "60 req/hour (public)",
+      "docs": "https://docs.github.com/en/rest"
+    },
+    {
+      "name": "OpenWeatherMap API",
+      "url": "https://openweathermap.org/api",
+      "auth": "API Key",
+      "ratelimit": "1000 calls/day (free)",
+      "docs": "https://openweathermap.org/api"
+    },
+    {
+      "name": "JSONPlaceholder",
+      "url": "https://jsonplaceholder.typicode.com",
+      "auth": "None",
+      "ratelimit": "No limits",
+      "docs": "https://jsonplaceholder.typicode.com"
+    },
+    {
+      "name": "Open-Meteo Weather",
+      "url": "https://open-meteo.com",
+      "auth": "None",
+      "ratelimit": "No limits",
+      "docs": "https://open-meteo.com"
+    },
+    {
+      "name": "REST Countries",
+      "url": "https://restcountries.com",
+      "auth": "None",
+      "ratelimit": "No limits",
+      "docs": "https://restcountries.com"
+    }
+  ]
+}

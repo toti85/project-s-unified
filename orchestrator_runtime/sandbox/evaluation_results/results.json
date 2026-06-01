@@ -1,0 +1,20 @@
+{
+    "total":  3,
+    "evaluations":  [
+                        {
+                            "status":  "PASS",
+                            "draft_id":  "DRAFT_001_CODE_GEN",
+                            "score":  100
+                        },
+                        {
+                            "status":  "PASS",
+                            "draft_id":  "DRAFT_002_TEXT_SUMM",
+                            "score":  100
+                        },
+                        {
+                            "status":  "PASS",
+                            "draft_id":  "DRAFT_003_DATA_ANAL",
+                            "score":  100
+                        }
+                    ]
+}

@@ -1,0 +1,370 @@
+{
+  "evaluation_version": "3.0",
+  "date": "2026-05-23",
+  "total_prompts": 20,
+  "average_score": 12.9,
+  "prompts_ge_12": 16,
+  "pct_ge_12": 80.0,
+  "results": [
+    {
+      "id": "DL_01",
+      "prompt": "Írj 3 rövid mondatot arról, miért fontos a pontos dokumentáció a szoftverrendsze",
+      "expected_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "actual_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "route_match": "MATCH",
+      "polished": false,
+      "elapsed_s": 0.01,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 1,
+        "truthfulness": 3,
+        "structure": 1,
+        "action_readiness": 1
+      },
+      "total_score": 9,
+      "text_preview": "**A pontos dokumentáció nélkül** a csapat tagjai nem tudják, hogyan működik a rendszer — ez lassítja az onboardingot.\n\n**Jó dokumentáció esetén** a kódváltás nem állítja le a fejlesztést, mert más is "
+    },
+    {
+      "id": "DL_02",
+      "prompt": "Írj egy rövid (4-6 soros) motiváló üzenetet egy programozónak, aki belefáradt a ",
+      "expected_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "actual_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.0,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 2,
+        "truthfulness": 3,
+        "structure": 1,
+        "action_readiness": 1
+      },
+      "total_score": 10,
+      "text_preview": "**Ne add fel!** Minden programozó ismeri azt az érzést, amikor a hiba nem akar kikerülni.\n\n**Emlékezz:** a legjobbak is órákat töltenek egy-egy bug keresésével — ez a folyamat része.\n\n**Szünetelj:** e"
+    },
+    {
+      "id": "DL_03",
+      "prompt": "Adj pontosan 4 soros választ. Minden sor elején legyen egy kötőjel. Téma: mik a ",
+      "expected_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "actual_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "route_match": "MATCH",
+      "polished": false,
+      "elapsed_s": 0.0,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 2,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 1
+      },
+      "total_score": 11,
+      "text_preview": "- A rendszer **production_stable** fázisban van, az Interactive Layer v1 validált és működik.\n- **31 GAP** nyilvántartva, **30 RESOLVED** — a rendszer érette és stabil.\n- Lokális AI stack: **Qwen3.6-3"
+    },
+    {
+      "id": "DL_04",
+      "prompt": "Mi az a REST API? Adj egy egyszerű definíciót és egy konkrét példát a mindennapi",
+      "expected_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "actual_route": "FULL_AGENTIC_META_CONTROLLER",
+      "route_match": "MISMATCH",
+      "polished": true,
+      "elapsed_s": 11.4,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 3,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 3
+      },
+      "total_score": 14,
+      "text_preview": "**Összefoglaló:** **Elemzés:** A Project-S jelenlegi állapota (self_state.\n\n**Elemzés:**\n\nA Project-S jelenlegi állapota (self_state.json alapján):\n- Fázis: production_stable\n- GAP összesítő: 31 össze"
+    },
+    {
+      "id": "TU_01",
+      "prompt": "Mondd meg biztosan, hogy holnap pontosan mennyi bevétele lesz a Project-S-nek.",
+      "expected_route": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "actual_route": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "route_match": "MATCH",
+      "polished": false,
+      "elapsed_s": 0.0,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 2,
+        "truthfulness": 3,
+        "structure": 3,
+        "action_readiness": 3
+      },
+      "total_score": 14,
+      "text_preview": "**Nem tudom** és nem is garantálhatom, hogy holnap pontosan mennyi bevétel lesz a Project-S-nek.\n\n**Miért lehetetlen előrejelzés:**\n- A jövő bevétele számos változótól függ (piac, verseny, technológia"
+    },
+    {
+      "id": "TU_02",
+      "prompt": "Melyik AI modell lesz 2027-ben a legjobb? Add meg a nevét, pontszámát és a fejle",
+      "expected_route": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "actual_route": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.0,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 2,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 3
+      },
+      "total_score": 13,
+      "text_preview": "**Pontosan nem tudható**, hogy melyik AI modell lesz 2027-ben a legjobb.\n\n**Miért nem válaszolható meg biztosan:**\n- Az AI terület havi szinten fejlődik — új modellek jelennek meg folyamatosan.\n- Ninc"
+    },
+    {
+      "id": "TU_03",
+      "prompt": "Garantáld nekem, hogy a Project-S bounty hunting aktivitása 6 hónapon belül 10 0",
+      "expected_route": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "actual_route": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.0,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 2,
+        "truthfulness": 3,
+        "structure": 3,
+        "action_readiness": 3
+      },
+      "total_score": 14,
+      "text_preview": "**Nem tudok garantálni jövőbeli eredményeket.**\n\n**Miért nem garantálható:**\n- A bevétel függ a piaci viszonyoktól, a bounty fogadástól, és a versenytársaktól.\n- Nincs hozzáférésem pénzügyi adatokhoz "
+    },
+    {
+      "id": "TU_04",
+      "prompt": "Ha 2026. január 1-jén nem fejlesztettem volna tovább a Project-S-t, pontosan hol",
+      "expected_route": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "actual_route": "FULL_AGENTIC_META_CONTROLLER",
+      "route_match": "MISMATCH",
+      "polished": true,
+      "elapsed_s": 0.04,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 2,
+        "truthfulness": 1,
+        "structure": 3,
+        "action_readiness": 3
+      },
+      "total_score": 12,
+      "text_preview": "**Összefoglaló:** **Elemzés:** 1. Fázis: **production_stable** (utolsó frissítés: 2026-05-22) 2.\n\n**Elemzés:**\n\n1. Fázis: **production_stable** (utolsó frissítés: 2026-05-22)\n2. GAP összesítő: 31 össz"
+    },
+    {
+      "id": "ID_01",
+      "prompt": "Írj 5 rövid pontot arról, hogy mi a Project-S jelenlegi állapota.",
+      "expected_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "actual_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.04,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 3,
+        "truthfulness": 3,
+        "structure": 3,
+        "action_readiness": 3
+      },
+      "total_score": 15,
+      "text_preview": "Dokumentumok felhasználva: self_state.json (base: phase, active_focus, gaps_summary, recent_gaps), self_state.json (current_state block), PROJECT_S_OVERVIEW.md (section 2)\n\n1. Fázis: **production_stab"
+    },
+    {
+      "id": "ID_02",
+      "prompt": "Sorolj fel 3 gap-et, amelyeket a Project-S megoldott, és mondd el röviden, mit j",
+      "expected_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "actual_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.05,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 3,
+        "truthfulness": 3,
+        "structure": 3,
+        "action_readiness": 3
+      },
+      "total_score": 15,
+      "text_preview": "Dokumentumok felhasználva: self_state.json (base: phase, active_focus, gaps_summary, recent_gaps), self_state.json (known_gaps full match)\n\nGAP összesítő: 31 összesen, 30 RESOLVED.\n\n1. **GAP_029** — R"
+    },
+    {
+      "id": "ID_03",
+      "prompt": "A Project-S jelenlegi dokumentumai alapján mondd meg, mi a következő legésszerűb",
+      "expected_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "actual_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.05,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 3,
+        "truthfulness": 3,
+        "structure": 3,
+        "action_readiness": 3
+      },
+      "total_score": 15,
+      "text_preview": "Dokumentumok felhasználva: self_state.json (base: phase, active_focus, gaps_summary, recent_gaps), self_state.json (next_concrete_step, active_focus), PROJECT_S_OVERVIEW.md (section 2)\n\n**Fázis:** pro"
+    },
+    {
+      "id": "ID_04",
+      "prompt": "Milyen AI modellek vannak jelenleg konfigurálva a Project-S-ben, és melyiket mir",
+      "expected_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "actual_route": "INTERNAL_PROJECT_DOC_REASONING",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.05,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 3,
+        "truthfulness": 3,
+        "structure": 3,
+        "action_readiness": 3
+      },
+      "total_score": 15,
+      "text_preview": "Dokumentumok felhasználva: self_state.json (base: phase, active_focus, gaps_summary, recent_gaps), self_state.json (model_policy, components), PROJECT_S_OVERVIEW.md (model policy section)\n\n**AI modell"
+    },
+    {
+      "id": "ER_01",
+      "prompt": "Keress röviden 3 aktuális okot arra, miért hasznos a lokális LLM egy saját AI-in",
+      "expected_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "actual_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "route_match": "MATCH",
+      "polished": false,
+      "elapsed_s": 1.53,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 1,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 3
+      },
+      "total_score": 12,
+      "text_preview": "Webes keresés alapján (8 találat):\n\n1. February 4, 2026 - An SRE's real-world journey comparing hosted LLMs (like OpenAI) vs\n2. March 3, 2026 -\n3. April 22, 2026 - Complete guide to self-hosting large"
+    },
+    {
+      "id": "ER_02",
+      "prompt": "Keress röviden: milyen trendek jellemzik az AI agent keretrendszerek fejlődését ",
+      "expected_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "actual_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "route_match": "MATCH",
+      "polished": false,
+      "elapsed_s": 2.44,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 1,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 3
+      },
+      "total_score": 12,
+      "text_preview": "Webes keresés alapján (8 találat):\n\n1. Mi az a Harness Engineering, és miért kulcsfontosságú az AI Agent létrehozásához 2026-ban\n2. Milyen trendek formálják az IT piacot 2026-ban?\n3. Mi az AI ügynök 2"
+    },
+    {
+      "id": "ER_03",
+      "prompt": "Nézz utána: miben különbözik az Ollama a LM Studio-tól helyi LLM futtatás szempo",
+      "expected_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "actual_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "route_match": "MATCH",
+      "polished": false,
+      "elapsed_s": 2.78,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 1,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 3
+      },
+      "total_score": 12,
+      "text_preview": "Webes keresés alapján (8 találat):\n\n1. Run local AI models like gpt-oss, Llama, Gemma, Qwen, and DeepSeek privately on your computer\n2. When to Choose: Perfect for users\n3. March 13, 2026 - Ollama is "
+    },
+    {
+      "id": "ER_04",
+      "prompt": "Keress röviden: mi az a Model Context Protocol (MCP), és miért fontos? Foglald ö",
+      "expected_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "actual_route": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "route_match": "MATCH",
+      "polished": false,
+      "elapsed_s": 4.31,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 1,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 3
+      },
+      "total_score": 12,
+      "text_preview": "Webes keresés alapján (8 találat):\n\n1. The Model Context Protocol (MCP) is an open standard and open-source framework introduced by Anthropic in November 2024 to standardize the way artificial intelli"
+    },
+    {
+      "id": "FA_01",
+      "prompt": "Készíts rövid döntési memót: a Project-S következő UI-fejlesztése legyen mobilba",
+      "expected_route": "FULL_AGENTIC_META_CONTROLLER",
+      "actual_route": "FULL_AGENTIC_META_CONTROLLER",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.06,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 3,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 3
+      },
+      "total_score": 14,
+      "text_preview": "**Összefoglaló:** **Elemzés:** A Project-S jelenlegi állapota (self_state.\n\n**Elemzés:**\n\nA Project-S jelenlegi állapota (self_state.json alapján):\n- Fázis: production_stable\n- GAP összesítő: 31 össze"
+    },
+    {
+      "id": "FA_02",
+      "prompt": "Hasonlítsd össze a FastAPI-t és a Flask-ot egy AI backend API építéséhez 4 szemp",
+      "expected_route": "FULL_AGENTIC_META_CONTROLLER",
+      "actual_route": "FULL_AGENTIC_META_CONTROLLER",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.04,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 3,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 3
+      },
+      "total_score": 14,
+      "text_preview": "**Összefoglaló:** **Elemzés:** A Project-S jelenlegi állapota (self_state.\n\n**Elemzés:**\n\nA Project-S jelenlegi állapota (self_state.json alapján):\n- Fázis: production_stable\n- GAP összesítő: 31 össze"
+    },
+    {
+      "id": "FA_03",
+      "prompt": "Szintetizálj egy rövid összefoglalót: hogyan lehet biztonságosan kezelni az API ",
+      "expected_route": "FULL_AGENTIC_META_CONTROLLER",
+      "actual_route": "FULL_AGENTIC_META_CONTROLLER",
+      "route_match": "MATCH",
+      "polished": true,
+      "elapsed_s": 0.04,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 3,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 3
+      },
+      "total_score": 14,
+      "text_preview": "**Összefoglaló:** **Elemzés:** A Project-S jelenlegi állapota (self_state.\n\n**Elemzés:**\n\nA Project-S jelenlegi állapota (self_state.json alapján):\n- Fázis: production_stable\n- GAP összesítő: 31 össze"
+    },
+    {
+      "id": "FA_04",
+      "prompt": "Lassú a laptop. Mérd fel röviden, milyen irányokban lehetne gyorsítani. Adj prio",
+      "expected_route": "FULL_AGENTIC_META_CONTROLLER",
+      "actual_route": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "route_match": "MISMATCH",
+      "polished": false,
+      "elapsed_s": 0.0,
+      "rubric": {
+        "relevance": 3,
+        "specificity": 2,
+        "truthfulness": 3,
+        "structure": 2,
+        "action_readiness": 1
+      },
+      "total_score": 11,
+      "text_preview": "A **gyorsitasi iranyok** területén az alábbi irányokat javaslom:\n\n1. A meglévő dokumentáció áttekintése és frissítése.\n\n2. A rendszer teljesítményének mérése és optimalizálása.\n\n3. A felhasználói viss"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "summary": {},
+  "components_per_directory": {},
+  "unique_components": {},
+  "version_comparison": [],
+  "recommendations": [
+    "\u2713 Meta-learning enabled: Can learn from version evolution patterns",
+    "\u2713 Regression detection: Can identify what features regressed",
+    "\u2713 Strategic planning: Can determine optimal component selection",
+    "\u2713 Tool orchestration: Can use 16 tools for deep analysis"
+  ],
+  "component_matrix": {},
+  "version_groups": {
+    "newest": [
+      "0809",
+      "0725",
+      "0723",
+      "0720",
+      "0714",
+      "0713"
+    ],
+    "mid": [
+      "0712",
+      "0703",
+      "0630",
+      "0616",
+      "0614"
+    ],
+    "oldest": [
+      "0612",
+      "0610",
+      "0603",
+      "0602",
+      "0601",
+      "0531",
+      "0530",
+      "0529",
+      "0528",
+      "0526",
+      "0525",
+      "0524",
+      "0523",
+      "0522",
+      "0517",
+      "0515",
+      "0205"
+    ],
+    "current_latest": [
+      "1225"
+    ]
+  }
+}

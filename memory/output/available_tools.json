@@ -1,0 +1,55 @@
+{
+  "tools": [
+    {
+      "name": "file_reader",
+      "category": "File I/O",
+      "purpose": "Read file contents"
+    },
+    {
+      "name": "file_writer",
+      "category": "File I/O",
+      "purpose": "Write data to files"
+    },
+    {
+      "name": "file_search",
+      "category": "File I/O",
+      "purpose": "Search files in directory"
+    },
+    {
+      "name": "web_api_call",
+      "category": "Web",
+      "purpose": "Call REST APIs"
+    },
+    {
+      "name": "web_scraper",
+      "category": "Web",
+      "purpose": "Scrape web pages"
+    },
+    {
+      "name": "web_analyzer",
+      "category": "Web",
+      "purpose": "Analyze web content"
+    },
+    {
+      "name": "pdf_generator",
+      "category": "Generation",
+      "purpose": "Create PDF reports"
+    },
+    {
+      "name": "system_command",
+      "category": "System",
+      "purpose": "Run system commands"
+    },
+    {
+      "name": "general_assistant",
+      "category": "AI",
+      "purpose": "General AI assistance"
+    },
+    {
+      "name": "tech_news_aggregator",
+      "category": "Web",
+      "purpose": "Aggregate tech news"
+    }
+  ],
+  "total_tools": 16
+}

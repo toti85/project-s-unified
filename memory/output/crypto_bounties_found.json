@@ -1,0 +1,93 @@
+{
+  "search_timestamp": "2025-12-26T23:26:54.928969",
+  "total_found": 5,
+  "selected": {
+    "id": "bounty_003",
+    "title": "DeFi Protocol Analytics Tool",
+    "source": "gitcoin.co",
+    "reward": "2000 USDC",
+    "difficulty": "Medium",
+    "description": "Build analytics dashboard for DeFi token swaps",
+    "skills_required": [
+      "Python",
+      "Web3",
+      "React",
+      "APIs"
+    ],
+    "estimated_time": "15-25 hours"
+  },
+  "all_options": [
+    {
+      "id": "bounty_001",
+      "title": "Ethereum Smart Contract Security Audit",
+      "source": "ethereum.org",
+      "reward": "5-20 ETH",
+      "difficulty": "Hard",
+      "description": "Audit a new ERC-20 token implementation for vulnerabilities",
+      "skills_required": [
+        "Solidity",
+        "Smart Contracts",
+        "Web3.py"
+      ],
+      "estimated_time": "20-40 hours"
+    },
+    {
+      "id": "bounty_002",
+      "title": "Bitcoin Lightning Network Bug Fix",
+      "source": "github.com/lightning-network",
+      "reward": "$2000-5000",
+      "difficulty": "Hard",
+      "description": "Fix a critical routing bug in LN implementation",
+      "skills_required": [
+        "Rust",
+        "Cryptography",
+        "Bitcoin"
+      ],
+      "estimated_time": "30-50 hours"
+    },
+    {
+      "id": "bounty_003",
+      "title": "DeFi Protocol Analytics Tool",
+      "source": "gitcoin.co",
+      "reward": "2000 USDC",
+      "difficulty": "Medium",
+      "description": "Build analytics dashboard for DeFi token swaps",
+      "skills_required": [
+        "Python",
+        "Web3",
+        "React",
+        "APIs"
+      ],
+      "estimated_time": "15-25 hours"
+    },
+    {
+      "id": "bounty_004",
+      "title": "Blockchain Privacy Analysis",
+      "source": "hackerone.com",
+      "reward": "$5000-10000",
+      "difficulty": "Expert",
+      "description": "Analyze transaction privacy vulnerabilities in Layer 2 solutions",
+      "skills_required": [
+        "Cryptography",
+        "Blockchain",
+        "Python",
+        "Analysis"
+      ],
+      "estimated_time": "40-60 hours"
+    },
+    {
+      "id": "bounty_005",
+      "title": "Web3 Frontend Library Bug Bounty",
+      "source": "github.com/ethers-io",
+      "reward": "$500-2000",
+      "difficulty": "Medium",
+      "description": "Find and fix bugs in ethers.js library",
+      "skills_required": [
+        "JavaScript",
+        "TypeScript",
+        "Web3"
+      ],
+      "estimated_time": "10-20 hours"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+FOLDER TREE - PROJECT_S_SUPER_CORE
+===================================
+
+project_s_super_core/
+├── src/
+│   ├── core/
+│   ├── integrations/
+│   └── utils/
+├── tools/
+│   ├── registry/
+│   └── implementations/
+├── config/
+├── memory/
+├── tests/
+├── docs/
+├── archive/
+│   └── remove_later/
+├── .env
+├── .env.example
+└── super_intelligent_launcher.py
+
+===================================
+TEST COMMANDS (EXACT)
+===================================
+
+Run from: C:\1225\project_s_super_core\
+
+Command A - Test meta-learning:
+cd C:\1225\project_s_super_core
+python tests\TEST_D_META_LEARNING_PROOF.py
+
+Command B - Test regression learning:
+cd C:\1225\project_s_super_core
+python tests\TEST_E_REGRESSION_LEARNING_PROOF.py
+
+===================================

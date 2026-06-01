@@ -1,0 +1,30 @@
+{
+  "categories": [
+    {
+      "name": "Artificial Intelligence",
+      "news_count": 5,
+      "recent": "GPT-4o, Claude 3.5, Open AI advances"
+    },
+    {
+      "name": "Cloud Computing",
+      "news_count": 4,
+      "recent": "AWS Bedrock, Azure AI, GCP updates"
+    },
+    {
+      "name": "Cybersecurity",
+      "news_count": 3,
+      "recent": "Zero-day vulnerabilities, 2FA bypasses"
+    },
+    {
+      "name": "Blockchain",
+      "news_count": 3,
+      "recent": "Bitcoin, Ethereum, Solana news"
+    },
+    {
+      "name": "DevOps",
+      "news_count": 3,
+      "recent": "Docker, Kubernetes, Terraform"
+    }
+  ],
+  "collection_date": "2025-12-26T23:17:20.543857"
+}

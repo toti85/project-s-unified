@@ -1,0 +1,14 @@
+﻿{
+    "Git_Version":  "git version 2.47.1.windows.1",
+    "Timestamp":  "2026-05-18 14:53:21",
+    "Directories":  {
+                        "Created":  true,
+                        "Directory":  "C:\\ProjectS",
+                        "Exists":  true
+                    },
+    "Pip_Version":  [
+                        "pip 24.3.1 from C:\\Program Files\\Python312\\Lib\\site-packages\\pip (python 3.12)",
+                        ""
+                    ],
+    "Python_Version":  "Python 3.12.9"
+}

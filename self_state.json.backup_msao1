@@ -1,0 +1,1506 @@
+{
+  "schema_version": "0.1",
+  "last_updated": "2026-05-25T19:30:00Z",
+  "updated_by": "repair_and_sync_msfa1_state.py — MS-FA1 docs sync",
+  "identity": {
+    "what_i_am": "Project-S — egy kontrollált autonóm AI governance rendszer, persistent file-based self-model-lal. SAI (SuperIntelligentAI) az egyetlen aktív Doer runtime, MetaController aktív a SAI-en belül use_meta_controller=True úton, Interactive Layer v1 a verified operator-facing entry surface.",
+    "what_i_am_not": [
+      "nem agent rendszer a hagyományos értelemben",
+      "nem SaaS termék",
+      "nem bounty automation pipeline"
+    ],
+    "components_active": [
+      "SuperIntelligentAI (SAI) — sole active Doer pipeline",
+      "Interactive Layer v1 — verified operator entry surface"
+    ],
+    "components_ready_but_sleeping": [
+      "MetaController standalone dispatcher (dormant — RISK_001; SAI-integrated path is ACTIVE)",
+      "StrategyCouncil",
+      "ExecutionValidator",
+      "Organism (Observer/Prioritizer/Proposer)",
+      "AgentLoop (ARCHIVED — tool pipeline fixed but no use case for file watcher behavior)"
+    ],
+    "known_gaps": [
+      {
+        "gap_id": "GAP_001",
+        "title": "Organism→MetaController híd nem létezik",
+        "discovered": "2026-04-26",
+        "status": "RESOLVED",
+        "resolved_at": "2026-04-27",
+        "resolution": "witness/bridges/organism_to_meta.py létrehozva DRY_RUN módban (285 sor). Sablon-alapú goal string generálás, dedup hash, atomikus írás, RISK_001 blocking metadata."
+      },
+      {
+        "gap_id": "GAP_002",
+        "title": "meta_evidence.jsonl-nek nincs olvasója (write-only)",
+        "discovered": "2026-04-26",
+        "status": "RESOLVED",
+        "resolved_at": "2026-04-27",
+        "resolution": "witness/evidence_reader.py létrehozva (147 sor). Streaming olvasás, event_count, scan_duration mérés. Az első futás 5.00s alatt elemezte a 403,868 rekordot."
+      },
+      {
+        "gap_id": "GAP_003",
+        "title": "self_state.json nem létezik",
+        "discovered": "2026-04-26",
+        "status": "RESOLVED",
+        "resolved_at": "2026-04-27",
+        "resolution": "self_state.json kézzel létrehozva az AUTONOMOUS_STATUS_NOW.md audit alapján. Jelenleg 15,519 bytes, 9 decision, 3 risk, élő dokumentum."
+      },
+      {
+        "gap_id": "GAP_004",
+        "title": "PersistentStateManager nincs összekötve sem az Organism-mal sem a MetaController-rel",
+        "discovered": "2026-04-26",
+        "status": "RESOLVED",
+        "resolved_at": "2026-04-28T09:03:05Z",
+        "resolution": "witness/bridges/state_reader.py létrehozva (362 sor) + update_self_state() funkció. Read-only adapter a kanonikus PersistentStateManager-hez, asyncio.run() wrapper-rel. CLI módban summarize_state() vagy --update-state flag. PSM importálható, instanciálható, üres storage esetén fail-safe módon működik. A self_state.json mostantól tartalmaz egy persistent_state blokkot, amelyet a state_reader früssít.",
+        "priority": "medium",
+        "context": "A modul létezik (src/core/state/persistent_manager.py, 748 sor), de egyik integrációs hídban sincs felhasználva. A Witness most a self_state.json-t használja közvetlenül, ami egyelőre megfelelő. Ez a gap akkor válik sürgetővé, ha multi-process state szinkronizáció kell.",
+        "proposed_solution": "Vizsgáld meg a src/core/state/persistent_manager.py modulhoz tartozó BaseStateManager interfészt. Készíts adapter wrapper-t, amely az Organism Observer és a MetaController számára egységes state olvasás/írás API-t ad. Első lépésként read-only integráció: a meglévő moduloktól ne várjunk write-ot, csak olvassanak a perzisztens state-ből. Csak ha ez stabilisan működik, jöhet a write integráció.",
+        "audit_completed": "2026-04-28",
+        "audit_findings": {
+          "canonical_module": "src/core/state/persistent_manager.py",
+          "interface_pattern": "async (minden read/write metódus)",
+          "import_test": "PASS — instanciálható, create_state/get_state kör működik",
+          "blocking_surprises": "1 azonosítva (RISK_004, ACCEPTED)",
+          "integration_complexity": "közepes — sync→async wrapper kell"
+        },
+        "next_step": "Read-only adapter: witness/bridges/state_reader.py — asyncio.run() wrapper a load_context() és list_states() köré. Először üres mappán teszteljük (fail-safe), aztán élő adattal."
+      },
+      {
+        "gap_id": "GAP_005",
+        "title": "learning.jsonl parsing bug",
+        "discovered": "2026-04-26",
+        "status": "RESOLVED",
+        "priority": "low",
+        "context": "Az audit szerint a 213 rekordos learning.jsonl-ben parsing hiba van. Még nem vizsgáltuk meg részletesen. Ha a Witness ki akarja terjeszteni a learning.jsonl olvasásra, akkor ezt előbb javítani kell.",
+        "proposed_solution": "Első lépés: diagnosztikai script — olvasd végig a 213 rekordot streaming módon és logold milyen hibák vannak (JSON decode error, hiányzó mező, encoding probléma). NE javítsd a forrást azonnal — előbb értsd meg a hiba természetét. A bug 2025-12-25 óta dormant, így nincs sürgősség. Másoljuk a witness/evidence_diagnostic.py mintát.",
+        "resolved_at": "2026-04-28T09:35:00Z",
+        "resolution_type": "false_alarm",
+        "resolution": "A learning_diagnostic.py teljes scan-je: 213/213 rekord valid JSON, 0 hiba, tökéletesen egységes 6-mezős séma (timestamp, domain, insight, confidence, evidence, applied_improvements). Időszak: 2025-12-25 → 2026-02-19. A korábbi „parsing bug” bejegyzés téves volt — valószínűleg az AUTONOMOUS_STATUS_NOW.md auditba más forrásból szivárgott be (pl. execution_events.jsonl, vagy egy korábbi verzió).",
+        "lesson_learned": "Az auditba bekerült „ismert problémák” nem mindig valós problémák. A Witness most már tudja: minden gap-et verifikálni kell mielőtt javításra ítéljük. Ez maga a tudatréteg egyik fő funkciója — felfedezés, nem feltévés."
+      },
+      {
+        "gap_id": "GAP_006",
+        "title": "Organism konfigurációja avult — külső GitHub repókat figyel",
+        "discovered": "2026-04-27",
+        "status": "RESOLVED",
+        "resolved_at": "2026-04-28",
+        "resolution": "Lásd RISK_003. quickstart.py-ban explicit ignore_dirs lista bővítve külső repókkal és noise mappákkal. Verificálva: 0 külső repó találat az új top_proposals.md-ben."
+      },
+      {
+        "gap_id": "GAP_007",
+        "title": "Organism scope szűrése ad-hoc — manuális ignore_dirs lista",
+        "discovered": "2026-04-28",
+        "status": "ACCEPTED",
+        "priority": "low",
+        "context": "Tudatos döntés: YAGNI elv alapján nem építünk strukturáltabb whitelist mechanizmust amíg a blacklist működik. Ha sokat kell bővíteni, újragondoljuk."
+      },
+      {
+        "gap_id": "GAP_008",
+        "title": "Organism nem alkalmas self_state.json-alapú task generálásra",
+        "discovered": "2026-04-28",
+        "discovered_by": "Witness — első tiszta workspace futás",
+        "status": "RESOLVED",
+        "priority": "high",
+        "context": "Az Organism műfajilag bountyhoz/kód-auditálásra lett tervezve: extract_todos (TODO/FIXME), scan_repo_changes (git diff), read_terminal_history. Tiszta Project-S kódbázisban 0 TODO van, csak generikus terminál-mintákat talál. A self_state.json (known_gaps, next_concrete_step) strukturáltabb forrás, de az Observer ezt nem olvassa.",
+        "proposed_solution": "Új Observer-forrás: state_observer.py modul, ami a self_state.json-ből generál task-okat a meglévő Prioritizer + Proposer pipeline-ba. Foundation.md elv: meglévő modulokat összekötjük, nem helyettesítjük.",
+        "blocks": [
+          "Witness híd első valódi élesítése (live_mode)",
+          "Project-S önmagán-dolgozó képesség"
+        ],
+        "resolved_at": "2026-04-28",
+        "resolution": "organism/core/state_observer.py létrehozva (102 sor). loop.py-ban _convert_observation_to_tasks() bővítve: tasks.extend(read_self_state_gaps()). Verificálva: az új top_proposals.md-ben GAP_004 (#1, 86.40), GAP_008 (#2, 86.40), GAP_005 (#3, 86.05) jelenik meg saját javaslatkent."
+      },
+      {
+        "gap_id": "GAP_010",
+        "title": "AgentLoop tool pipeline lyukas — initialize_with_existing_tools() soha nem hívódik",
+        "discovered": "2026-04-28",
+        "discovered_by": "Belépési pontok mély audit",
+        "status": "RESOLVED",
+        "priority": "high",
+        "context": "Az AgentLoop _initialize_components() szinkron, és csak példányosítja a SmartToolOrchestrator-t. Az initialize_with_existing_tools() async metódus soha nem hívódik meg, ezért available_tools = {} marad. Az _tool_orchestration() fázis üres készlettel fut — fallback szöveggenerálásra esik vissza. A 2026-03-13-i 'production ready' audit ezt nem vette észre, mert a teszt-task (analyze_project) AI szöveggenerálással is megoldható volt.",
+        "evidence": {
+          "registered_but_unused_tools": [
+            "FileReadTool",
+            "FileWriteTool",
+            "FileSearchTool",
+            "FileInfoTool",
+            "FileContentSearchTool",
+            "WebPageFetchTool",
+            "WebApiCallTool",
+            "WebSearchTool",
+            "BrowserAutomationTool"
+          ],
+          "agent_loop_path": "src/core/agent/agent_loop.py",
+          "missing_call": "await self.tool_orchestrator.initialize_with_existing_tools()",
+          "workaround_scripts": [
+            "server_hunt_scraper.py (2026-02-19) — Playwright direkt hívás",
+            "meta_launcher_browser.py (2026-02-19) — AIClient + ToolRegistry direkt"
+          ]
+        },
+        "proposed_solution": "Két lehetséges minta. (a) async _async_init() metódus az AgentLoop-ban, ami a run() ciklus előtt hívódik — minimal invazív. (b) Async factory: AgentLoop.create() classmethod ami inicializál és visszaad — tisztabb, de több módosítás. Az (a) ajánlott első körben.",
+        "blocks": [
+          "GAP_009 — MetaController integráció (előbb a tool pipeline kell, utána a meta réteg)",
+          "Bármilyen valódi tool-használó task (web scraping, browser automation, file search)",
+          "Az AgentLoop képességeinek demonstrálása a meta_launcher_browser-szerű script-ek nélkül"
+        ],
+        "resolved_at": "2026-04-28T12:58:41Z",
+        "resolution": "Az eredeti GAP_010 (AgentLoop async tool init) helyes volt, de a fix közben négy további rejtett hiba derült ki, mind javítva. (1) AgentLoop._async_init() hívás — RESOLVED. (2) SmartOrchestrator import path 'tools.implementations' → 'tools.tools.implementations' — RESOLVED. (3) _analyze_task task_type detection: 'search', 'find', 'containing' keyword-ök hiányoztak, ezért 'general' lett — RESOLVED. (4) _select_tools 'general' default = web_page_fetch volt, új 'file_search' ág hozzáadva → file_content_search — RESOLVED. (5) FileContentSearchTool nem volt regisztrálva a ToolRegistry-ben — RESOLVED. (6) _execute_single_tool nem extrahált paramétereket a task szövegből, regex extrakció hozzáadva — RESOLVED.",
+        "verification": {
+          "method": "izolált teszt — közvetlen orchestrator hívás teszt task-kal",
+          "result": "task_type: file_search, selected tool: file_content_search, success: True, count: 8",
+          "real_findings": [
+            "src/core/cognitive_workflow_integration.py:43",
+            "src/core/state/persistent_manager.py:46",
+            "src/core/state/persistent_state_manager.py:36",
+            "(további 5 találat)"
+          ],
+          "production_run_pending": "Élő main.py futtatás GAP_011 (AI provider) miatt blokkolt"
+        }
+      },
+      {
+        "gap_id": "GAP_009",
+        "title": "MetaController nincs összekötve az aktív AgentLoop runtime-mal",
+        "discovered": "2026-04-28",
+        "discovered_by": "Belépési pontok audit",
+        "status": "RESOLVED",
+        "priority": "high → blocked",
+        "context": "Az AgentLoop a tényleges aktív runtime (main.py belépő), benne CognitiveCore + 6+ AI provider + 13+ tool. A MetaController dormant — utolsó valós futás 2026-02-19. A kettő nem kommunikál. Ez a Foundation.md fő integrációs célja: 'meglévő modulokat összekötjük'. GAP_010 megoldva, ezzel a Doer pipeline teljes — most mar lehet a Meta reteg integraciojat tervezni.",
+        "proposed_solution": "Az AgentLoop.run() ciklusába beépíteni egy MetaController hookot. Két lehetséges minta: (a) escalation — ha a CognitiveCore nem tudja megoldani a task-ot, eszkálálódik MetaController-hez; (b) observe-only — minden task lefutása után MetaController.observe(goal, result) frissíti a stratégiai állapotot. Az (b) a kisebb kockázat, ezzel kezdjük.",
+        "blocks": [
+          "Az első valódi end-to-end ciklus a teljes pipeline-on át",
+          "A MetaController stratégiai funkciói (replan, council) használata"
+        ],
+        "blocked_by": null,
+        "unblocked_note": "GAP_011 resolved — AI provider (OpenRouter) now enabled",
+        "resolution": "observe-only integráció megvalósítva: MetaController.observe() metódus hozzáadva (direct JSONL write, RISK_001 elkerülve). AgentLoop._initialize_components()-ban MetaController(council=None, ...) inicializálva. process_task_file() végén META OBSERVE HOOK hívja observe()-t. Élő teszt: external_observation rekord 390 byte, timestamp 2026-04-28T16:51:38.",
+        "resolved_at": "2026-04-28T13:53:38Z"
+      },
+      {
+        "gap_id": "GAP_011",
+        "title": "AI provider-ek nem elérhetők — OpenAI quota kimerült + OpenRouter disabled",
+        "discovered": "2026-04-28",
+        "discovered_by": "GAP_010 élő teszt — Phase 1 + Phase 3 blokkolva",
+        "status": "RESOLVED",
+        "priority": "high",
+        "context": "Az élő AgentLoop futtatás során a system.log két problémát mutatott: 'HTTP 429 - insufficient_quota (OpenAI)' és 'Provider openrouter is not enabled'. Az AgentLoop pipeline strukturálisan teljes (GAP_010 RESOLVED), de Phase 1 (cognitive analysis) és Phase 3 (evaluator) AI hívást igényel — provider nélkül None-t ad vissza, és az evaluator parser hibát dob.",
+        "evidence": {
+          "openai": "HTTP 429 insufficient_quota — fizetési vagy rate limit probléma",
+          "openrouter": "Provider not enabled — config fájlban hiányzó vagy disabled API key",
+          "ollama_local": "Státusz ismeretlen — nem volt teszt"
+        },
+        "proposed_solution": "Két lehetőség: (a) OpenRouter engedélyezés és API key beállítás — gyors, de pénzbe kerül. (b) Lokális LLM (Ollama vagy LM Studio) konfigurálása — ingyenes, de telepítés/letöltés szükséges. A B2 stratégia szerint amúgy is lokális modellre megyünk május 31-ig — érdemes most kezdeni.",
+        "blocks": [
+          "Élő AgentLoop futtatás teljes pipeline-nal",
+          "GAP_010 production verifikáció (izolált teszt rendben, élő nem)",
+          "Bármi ami AI cognitive layer-t igényel"
+        ],
+        "resolution": "load_dotenv() added to main.py (lines 15-18) before any imports. OPENROUTER_API_KEY (len=73, sk-or-v1) now loaded from .env at startup. AIClient enables OpenRouter provider.",
+        "resolved_at": "2026-04-28T13:14:13Z"
+      },
+      {
+        "gap_id": "GAP_013",
+        "title": "SAI pipeline valódi tool-output nem jutott el a válaszba — 5 rejtett bug",
+        "discovered": "2026-04-30",
+        "discovered_by": "B2 audit + SAI live validáció",
+        "status": "RESOLVED",
+        "resolved_at": "2026-04-30",
+        "priority": "high",
+        "resolution": "5 bug javítva 3 fájlban: (1) smart_orchestrator.py: directory_listing task type szétválasztva, directory_lister tool hozzáadva, DirectoryListerTool direct-instantiation fallback; (2) meta_controller.py: success return 'output' mező hozzáadva; (3) super_intelligent_ai.py: real tool output extraction a detailed_results-ből. Live test: 7/7 PASS."
+      },
+      {
+        "gap_id": "GAP_014",
+        "title": "requirements.txt csak 3 csomagot tartalmaz — valódi dependency lista hiányzik",
+        "discovered": "2026-04-30",
+        "discovered_by": "B2 audit",
+        "status": "RESOLVED",
+        "priority": "high",
+        "context": "A migráció előtt valódi dependency listát kell generálni: pip freeze > requirements_full.txt. Enélkül a szerveren ImportError-ek lennének.",
+        "proposed_solution": "pip freeze dev gépen, eredmény mentése requirements_full.txt-be, kézi tisztítás (Windows-specifikus csomagok kizárása)",
+        "blocks": [
+          "B2 stream 2 — Project-S migráció"
+        ],
+        "resolved_at": "2026-05-02T11:00:00Z",
+        "resolution": "Cline első élő Project-S taskja: pip freeze C:\\ProjectS-Unified-ben futtatva, 298 csomag rögzítve requirements_full.txt-be. A korábbi 3-csomagos requirements.txt félrevezető volt — most teljes a dependency lista.",
+        "windows_only_packages_to_exclude_on_linux": [
+          "pywin32",
+          "PyAutoGUI",
+          "PyAutoIt",
+          "PyMsgBox",
+          "MouseInfo",
+          "PyGetWindow",
+          "PyRect",
+          "PyScreeze",
+          "undetected-chromedriver",
+          "win32_setctime"
+        ],
+        "git_direct_dependencies_to_review": [
+          "auto_gpt_plugin_template @ git+https://github.com/Significant-Gravitas/Auto-GPT-Plugin-Template",
+          "vcrpy @ git+https://github.com/Significant-Gravitas/vcrpy.git"
+        ]
+      },
+      {
+        "gap_id": "GAP_015",
+        "title": "Phase 2 nem kombinál multi-tool sequence-et — egy task = egy tool",
+        "discovered": "2026-05-03",
+        "discovered_by": "SAI éles teszt: OpenAI imports keresés + report írás taskon",
+        "status": "RESOLVED",
+        "priority": "medium",
+        "resolved_date": "2026-05-04",
+        "resolution": "3-part fix: (1) strategic_task_planning prompt lists real tools + JSON schema with recommended_tools key, (2) _analyze_task fallback heuristic for search+write pattern, (3) _execute_single_tool handlers for file_search + fixed file_writer path extraction.",
+        "context": "A 2026-05-03-i éles teszten a SAI 'Search ... Then write a report ...' kétlépéses taskot kapott. A smart_orchestrator egyetlen tool-t választott (directory_lister, ami amúgy not_found is volt), nem kombinálta a file_content_search + file_write párost. A jelenlegi rendszer egy-tool-os feladatokon megbízható, multi-tool sequence-re nem.",
+        "evidence": {
+          "task": "Search for files importing OpenAI, then write summary to report.md",
+          "expected_tools": [
+            "file_content_search",
+            "file_write"
+          ],
+          "actual_tools": [
+            "directory_lister (not found)"
+          ],
+          "phase_3_token_overflow": "5.5M tokens vs 163K limit"
+        },
+        "proposed_solution": "Phase 2 kibővítése multi-step plan logikával — ha a strategic_plan több tool-t javasol, sorozatban futtatja őket, az egyik kimenete a következő bemenete. Magas komplexitás, későbbre."
+      },
+      {
+        "gap_id": "GAP_016",
+        "title": "Evaluator nincs védve context-size overflow ellen",
+        "discovered": "2026-05-03",
+        "discovered_by": "SAI éles teszt — evaluator 400 hiba",
+        "status": "RESOLVED",
+        "priority": "medium",
+        "context": "Phase 3 evaluator a teljes Phase 2 outputot beadja az AI-hoz. Ha a tool egy nagy listát ad vissza (pl. directory listing 5000 fájllal), 5.5M token-re ugorhat a context, a 163K token limit túllépve. HTTP 400 dobódik.",
+        "proposed_solution": "Evaluator input truncation — pl. utolsó 50K karakter, vagy intelligens summarization a Phase 2 outputon. Fail-safe: ha túl nagy, csak a 'success/failed' státuszt értékeljük, részleteket nem.",
+        "low_hanging_fruit": "Truncate to 50000 chars in evaluator prompt builder. Egysoros fix.",
+        "resolved_at": "2026-05-04T06:00:00Z",
+        "resolution": "Evaluator._build_evaluation_prompt()-ban _truncate_for_prompt(value, max_chars=50000) helper hozzáadva. Élő teszt: a komplex SAI task (OpenAI imports + report) korábban 400 token overflow-val (5.5M tokens vs 163K limit) elhasalt. Fix után: evaluation.replan_needed publikálódik (lefutott, nem crashed). Token overflow eltűnt a logból."
+      },
+      {
+        "gap_id": "GAP_012",
+        "title": "AI provider routing hianyzik — task_model_mapping kulcs hianyzik",
+        "discovered": "2026-04-28",
+        "status": "RESOLVED",
+        "resolved_at": "2026-04-28T14:00:00Z",
+        "resolution": "models.yaml analysis mapping added [qwen3-235b, deepseek-v3, gpt-4o-mini], code-fallback to defaults.model. qwen3-235b now explicit on OpenRouter."
+      },
+      {
+        "gap_id": "GAP_017",
+        "title": "WebSearchTool Google HTML scraper — bot-detection, nincs fallback",
+        "discovered": "2026-05-14",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-14",
+        "resolution": "WebSearchTool replaced with DDGS (DuckDuckGo) backend — no API key, primp TLS bypass, bot-detection resistant. 26 tests pass. GAP_018 covered by this fix."
+      },
+      {
+        "gap_id": "GAP_018",
+        "title": "False-success status when evaluator returns replan — MetaController deterministic_pass overrides evaluator verdict",
+        "discovered": "2026-05-14",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-14",
+        "resolution": "super_intelligent_ai.py: changed hardcoded success=True to evaluator-conditional _execution_success. meta_controller.py: added _eval_needs_replan guard so deterministic_pass cannot override an explicit replan signal from the evaluator. Distinct from GAP_017 (parameter mismatch). 11 tests in test_gap_017_018_web_tools.py confirm both fixes. Live B2 rerun confirmed: system now returns success=False when max_iters exhausted without goal completion."
+      },
+      {
+        "gap_id": "GAP_019",
+        "title": "LLM szintezis lepes hianyzik az orchestratorbol",
+        "discovered": "2026-05-14",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-14",
+        "resolution": "_synthesize_web_results() + _is_synthesis_task() added to smart_orchestrator.py. Synthesis model: qwen/qwen3.6-35b-a3b (max_tokens=8000). A/B test: 7/8 dimensions beats gpt-4o-mini. 11 synthesis tests green."
+      },
+      {
+        "gap_id": "GAP_020",
+        "title": "SAI/MetaController false-success — 5 rejett igazsag-kapu bug",
+        "discovered": "2026-05-14",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-14",
+        "resolution": "5 fixes: evaluator nested key, backup exception swallow, execution history empty-list, has_output stub rejection, replan blocking. 40 regression tests, 4/4 live scenarios pass."
+      },
+      {
+        "gap_id": "GAP_021",
+        "title": "Strategiai tervezo vak a browser_automation toolra",
+        "discovered": "2026-05-14",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-14",
+        "resolution": "TOOL MANIFEST added to Phase 1 planning prompt (26 lines, 5 numbered tools, explicit browser_automation criteria). 6 tests green, live mission PASS 9/9 (Chromium, 3 URLs, 94.30s)."
+      },
+      {
+        "gap_id": "GAP_022",
+        "title": "Evaluator TypeError — browser_use AgentHistoryList not JSON-serializable",
+        "discovered": "2026-05-14",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-14",
+        "resolution": "_sanitize_for_json() recursive helper added to evaluator.py. Handles all non-JSON-serializable tool outputs. 16/16 tests green."
+      },
+      {
+        "gap_id": "GAP_023",
+        "title": "browser_automation vegyes pipeline-ban teljes task leirast kap — scope pollution",
+        "discovered": "2026-05-14",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-14",
+        "resolution": "_build_browser_subtask() added to smart_orchestrator.py: browser-only subtask generation (URLs, research questions, explicit no-write constraint). 9/9 unit tests + 23/23 total pass."
+      },
+      {
+        "gap_id": "GAP_024",
+        "title": "file_reader registered but no _execute_single_tool dispatch branch — falls to UnboundLocalError + mock fallback",
+        "discovered": "2026-05-15",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-15",
+        "resolution": "elif tool_name == file_reader block added to _execute_single_tool in smart_orchestrator.py. Handler extracts all absolute input paths from task (up to 5), calls FileReadTool.execute(path=fp) for each, returns {success:True, output:combined_contents}. GAP_024: log line confirms dispatch. 14 tests pass."
+      },
+      {
+        "gap_id": "GAP_025",
+        "title": "file_writer path regex selects first absolute path in task (input file like self_state.json) instead of intended output path — corrupted self_state.json on 2026-05-14",
+        "discovered": "2026-05-15",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-15",
+        "resolution": "Smart output-path extraction added: priority 1=explicit output anchor patterns (OUTPUT FILE:, Write...to:, REQUIRED OUTPUT section), priority 2=LAST absolute path match (not first). GAP_025: log line confirms anchored path selection. 14 tests pass. self_state.json restored from backup."
+      },
+      {
+        "gap_id": "GAP_029",
+        "title": "Interactive evaluator-driven replan loops did not converge",
+        "discovered": "2026-05-18",
+        "discovered_by": "Interactive Layer live test rerun post-GAP_026/027/028",
+        "status": "RESOLVED",
+        "priority": "high",
+        "context": "Evaluator returned `action: replan` without concrete corrective delta. MetaController blindly followed repeated vague replans. Missions looped until max_iters, producing false interaction failures across ordinary UI prompts.",
+        "root_cause": [
+          "Evaluator returned vague replan without specific_issues or proposed_change",
+          "MetaController blindly followed repeated vague replans",
+          "Replan count tracking was incorrect"
+        ],
+        "fix": [
+          "GAP_029 evaluator action normalization introduced",
+          "replan valid only if concrete corrective delta exists (specific_issues, proposed_change, or actionable detail)",
+          "Vague replans downgraded: to CONTINUE if not severe, to FAIL if high-confidence inadequate output",
+          "Replan count tracking fixed"
+        ],
+        "evidence": {
+          "root_cause_report": "Created during GAP_029 diagnosis",
+          "test_file": "tests/test_gap029_replan_delta_validation.py",
+          "test_result": "35/35 PASS",
+          "live_ui_rerun": "Original non-converging max_iters loop removed. PASS count improved from 2 to 4; remaining failures are output-quality issues, not GAP_029 loop failures."
+        },
+        "resolved_at": "2026-05-18T23:00:00Z"
+      },
+      {
+        "gap_id": "GAP_030",
+        "title": "Interactive mission wall-clock timeout did not reliably terminalize missions",
+        "discovered": "2026-05-18",
+        "discovered_by": "DL380 staging server smoke testing",
+        "status": "RESOLVED",
+        "priority": "high",
+        "context": "Timeout window reset per replan iteration. Intended 600s mission timeout was not a true global wall-clock deadline. One server-side smoke mission remained stuck in EXECUTING instead of terminalizing.",
+        "root_cause": [
+          "Timeout window reset per replan iteration (no global deadline)",
+          "DEFAULT_TIMEOUT was per-replan, not per-mission",
+          "Staging mission stuck in EXECUTING"
+        ],
+        "fix": [
+          "interactive_layer/sai_runner.py: time.monotonic() global mission deadline",
+          "Remaining-time calculation across all retries/replans",
+          "_execute_with_global_deadline() helper added",
+          "No per-replan reset to full DEFAULT_TIMEOUT",
+          "When budget expires, mission transitions to TIMEOUT terminally",
+          "Stuck staging mission manually repaired: EXECUTING → TIMEOUT"
+        ],
+        "evidence": {
+          "test_file": "interactive_layer/test_sai_timeout_global_deadline.py",
+          "test_result": "8/8 PASS",
+          "live_validation": {
+            "timeout_override": "30s",
+            "mission_final_api_state": "TIMEOUT",
+            "final_persisted_sqlite_state": "TIMEOUT",
+            "did_not_remain_executing": true,
+            "health_after_test": "PASS (200)"
+          },
+          "report": "reports/GAP_030_DEV_LIVE_GLOBAL_TIMEOUT_VALIDATION_20260518.md"
+        },
+        "resolved_at": "2026-05-18T23:41:00Z"
+      },
+      {
+        "gap_id": "GAP_031",
+        "title": "Interactive Layer lacked interaction-grade routing — ordinary prompts misrouted into heavy MetaController loop",
+        "discovered": "2026-05-20",
+        "status": "RESOLVED",
+        "resolved_at": "2026-05-20",
+        "resolution": "Hybrid prompt-class-aware routing layer implemented in interactive_layer/prompt_router.py. Route classes: DIRECT_LIGHTWEIGHT_RESPONSE, TRUTHFUL_UNCERTAINTY_RESPONSE, INTERNAL_PROJECT_DOC_REASONING, EXTERNAL_RESEARCH_SYNTHESIS, FULL_AGENTIC_META_CONTROLLER, CLARIFICATION_NEEDED. Hungarian normalization included. Route metadata persisted into mission records. Phase 1 (direct/internal/truthfulness): 22/22 tests PASS, 7/8 live matrix. Phase 2 (EXTERNAL_RESEARCH_SYNTHESIS via DDGS): 31/31 tests PASS, 8/8 live PASS. TEST_5: route=EXTERNAL_RESEARCH_SYNTHESIS, state=COMPLETE, elapsed=4.4s, 8 real web results."
+      }
+    ]
+  },
+  "current_state": {
+    "last_active_run": "2026-04-26T23:33:15Z",
+    "last_meta_evidence_written": "2026-02-19T08:01:59Z",
+    "active_loop": "SuperIntelligentAI (SAI) via interactive_task.py (use_meta_controller=True, MetaController integrated)",
+    "sleeping_loops": [
+      "MetaController standalone dispatcher (meta_launcher.py — dormant due to RISK_001; SAI path is active)"
+    ],
+    "workspace_status": {
+      "cleaned_at": "2026-04-28",
+      "only_project_s": true,
+      "external_repos_present": false,
+      "noise_dirs_present": false
+    },
+    "gaps_summary": {
+      "total": 31,
+      "resolved": 30,
+      "active": 0,
+      "accepted": 1
+    },
+    "next_concrete_step": "MS-FA1 COMPLETE. Begin MS-AO1 planning phase. See reports/MS_AO1_SCOPE_DRAFT_20260525.md for scope draft.",
+    "minor_todos": [
+      {
+        "id": "TODO_001",
+        "discovered": "2026-05-04",
+        "title": "MetaController.observe() top-level 'source' konstans",
+        "context": "Az observe() metódus belül 'agent_loop'-ot ír top-level source-ként, függetlenül a hívótól. A tényleges forrás a result.source nested mezőben van. Most: minden SAI hook 'agent_loop' top-level-lel jelenik meg, organism bridge ugyanúgy. Megtévesztő de nem hibás.",
+        "fix": "MetaController.observe(goal, result, source='agent_loop') paraméterezhetővé tenni. 1 sor.",
+        "priority": "low"
+      }
+    ],
+    "evidence_streams": {
+      "total_records": 403889,
+      "active_writers": [
+        "MetaController dispatcher (dormant — utolsó: 2026-02-19)",
+        "AgentLoop observe hook (aktív — minden task után)",
+        "organism_to_meta bridge (opt-in --observe flag-gel)"
+      ],
+      "active_readers": [
+        "witness/evidence_reader.py (streaming scan, summary)"
+      ],
+      "last_observation_at": "2026-04-28T17:12:28.210288",
+      "event_type_distribution_last100": {
+        "goal_completed": 20,
+        "execution_done": 19,
+        "validation_done": 19,
+        "goal_started": 19,
+        "plan_selected": 19,
+        "external_observation": 4
+      }
+    },
+    "phase": "production_stable",
+    "open_question": {
+      "question": "STATUS_AND_JOURNAL frissites mikor?",
+      "options": [
+        "v1.2 ma este — friss emlekek alapjan",
+        "v2.0 holnap reggel — szelesebb perspektivaval"
+      ],
+      "raised_at": "2026-04-29T09:52:24Z",
+      "decided": true,
+      "decision": "v1.2 ma reggel megirva — friss fejjel, masodik nap teljes lezarasa"
+    },
+    "open_questions": [
+      {
+        "question": "DL380 OS: marad Windows Server vagy Proxmox-ra váltás?",
+        "options": [
+          "A — Windows Server marad: egyszerűbb, gyorsabb, kevesebb munka",
+          "B — Proxmox install: robusztusabb, több VM, Linux VM-ek lehetségesek, de több óra munka"
+        ],
+        "raised_at": "2026-04-30T01:10:00Z",
+        "decided": false,
+        "context": "Az 'A' opció gyorsabb, kompatibilis a jelenlegi Windows Project-S-szel. A 'B' a hosszú távú stratégia (a userMemories Proxmox-ot említett)."
+      },
+      {
+        "question": "meta_evidence.jsonl (104.7 MB) migrálódjon-e?",
+        "options": [
+          "Igen — folytatódik a tanulás a szerveren",
+          "Nem — szerver üres fejjel indul, friss meta_evidence",
+          "Részlegesen — csak az utolsó N rekord"
+        ],
+        "raised_at": "2026-04-30T01:10:00Z",
+        "decided": false,
+        "context": "104 MB plusz méret, de a 403,872 rekord a tudásbázis része."
+      }
+    ],
+    "model_policy": {
+      "synthesis_default": "qwen/qwen3.6-35b-a3b"
+    },
+    "tool_capabilities": {
+      "browser_automation": "VERIFIED",
+      "web_search": "VERIFIED",
+      "file_reader": "PARTIAL",
+      "file_writer": "VERIFIED",
+      "ilo_server_control": "VERIFIED — read-only access to DL380 Gen9 (serial CZ3733LABY) via iLO 4 Redfish API. Power management methods available but NOT exercised. NAT redirect workaround confirmed essential and working."
+    },
+    "active_focus": "MS-AO1 planning phase. MS-FA1 completed 2026-05-25 (FA1_014 PASS, 10/10 tests, 0 safety violations)."
+  },
+  "memory_index": {
+    "meta_evidence": {
+      "path": "memory/intelligence/meta_evidence.jsonl",
+      "records": 403868,
+      "first_record": "2026-01-14T19:52:43Z",
+      "last_write": "2026-02-19T08:01:59Z",
+      "readers": [],
+      "note": "write-only"
+    },
+    "learning": {
+      "path": "memory/intelligence/learning.jsonl",
+      "records": 213,
+      "last_write": "2026-02-19T08:01:59Z",
+      "known_issues": [
+        "parsing bug"
+      ]
+    },
+    "execution_events": {
+      "path": "memory/intelligence/execution_events.jsonl",
+      "records": 158,
+      "last_write": "2026-02-19T08:01:40Z"
+    },
+    "decisions": {
+      "path": "knowledge/decisions.jsonl",
+      "records": 5
+    }
+  },
+  "architecture_facts": {
+    "agent_loop": {
+      "path": "src/core/agent/agent_loop.py",
+      "lines": 509,
+      "size_bytes": 19493,
+      "last_modified": "2025-12-25T21:02:12",
+      "entry_point": "main.py",
+      "trigger": "file watcher (src/tasks/inbox/*.txt)",
+      "uses_meta_controller": false,
+      "last_started": "2026-04-26T23:33:15Z"
+    },
+    "meta_controller": {
+      "path": "src/core/meta/meta_controller.py",
+      "lines": 407,
+      "size_bytes": 20349,
+      "last_modified": "2026-01-15T08:02:12",
+      "entry_point": "meta_launcher.py",
+      "trigger": "explicit goal string",
+      "main_method": "async def run_goal(self, goal: str)",
+      "writes_to": "memory/intelligence/meta_evidence.jsonl",
+      "has_replan": true,
+      "has_invariant_gate": false,
+      "risk_budget_failures": "config.risk_budget_failures (threshold only)",
+      "last_goal_completed": "2026-02-19T06:01:59Z",
+      "tests_passing": "13/13 (verified 2026-01-02)"
+    },
+    "organism": {
+      "path": "organism/core/",
+      "loop_path": "organism/core/loop.py",
+      "loop_lines": 292,
+      "last_modified": "2026-02-18T10:12:34",
+      "imports_meta_controller": false,
+      "output": "organism/evidence/run_latest.txt (humans read this)",
+      "pipeline": "Observer → Prioritizer → Proposer → proposals file",
+      "missing_link": "Proposer output → goal string → MetaController.run_goal() bridge"
+    },
+    "super_intelligent_ai": {
+      "path": "src/core/super_intelligent_ai.py",
+      "use_meta_controller_flag": true,
+      "meta_layer_available": true,
+      "note": "Feature flag: MetaController path or standard path — only called when meta_launcher.py runs"
+    },
+    "state_management": {
+      "path": "src/core/state/",
+      "files": [
+        "persistent_manager.py (28508 bytes)",
+        "persistent_state_manager.py (20253 bytes)",
+        "base_state.py (16849 bytes)",
+        "autonomy_state.py (2471 bytes)"
+      ],
+      "connected_to_organism": false,
+      "connected_to_meta_controller": false,
+      "note": "Exists but not wired to either Organism or MetaController"
+    }
+  },
+  "decisions_made": [
+    {
+      "date": "2026-04-26",
+      "decision": "Foundation.md elfogadva mint a rendszer iránytűje",
+      "by": "Toti+Claude"
+    },
+    {
+      "date": "2026-04-27",
+      "decision": "B2 párhuzamos stratégia — Copilot most (május 31-ig), saját környezet párhuzamosan épül",
+      "by": "Toti+Claude"
+    },
+    {
+      "date": "2026-04-27",
+      "decision": "Június 1 után: Continue/Cline VS Code extension + lokális Qwen Coder a Tesla M60-on",
+      "by": "Toti+Claude"
+    },
+    {
+      "date": "2026-04-27",
+      "decision": "RISK_001 dokumentalva, nem javitva — observe-only",
+      "reasoning": "nem reprodukalhato, 3.5 honapja dormant, vak javitas kontraproduktiv",
+      "by": "Toti+Claude"
+    },
+    {
+      "date": "2026-04-27",
+      "decision": "Witness első end-to-end futása sikeres — a tudatréteg felfedett 2 új problémát (RISK_002, RISK_003)",
+      "reasoning": "az organism_to_meta híd dry-run módban lefutott, a generált pending goal valid struktúrájú, de mojibake-vel és avult tartalommal — ez pont az amiért a Witness épült: rejtett problémák felszínre hozása",
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-27",
+      "decision": "Stratégia: Út A — Organism javítása (encoding + scope), aztán élesítés",
+      "reasoning": "a Foundation.md elve: 'meglévő modulokat összekötjük, nem helyettesítjük'. Az Organism megvan, csak rosszul van konfigurálva. Félretenni új sziget keletkezne, ami az integrációs cél ellen menne.",
+      "alternatives_considered": [
+        "Út B — Organism félretevése, Witness mag bővítése (learning.jsonl parsolás)"
+      ],
+      "by": "Toti+Claude"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "RISK_002 + RISK_003 lezarva. Organism most mar a Project-S aktiv kodbazissat figyeli.",
+      "reasoning": "blacklist bovites a Foundation.md meglevo modulokat osszekojtuk elvevel. Strukturalt whitelist most nem szukseges (YAGNI).",
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "Workspace tisztitas Fazis 1 — 7 kulso bounty/audit repo torolve",
+      "reasoning": "A Project-S workspace-ben (C:\\\\ProjectS-Unified) ott pihent ~1.34 GB nem relevans kod: tbtc-v2, v4-core, jupiter_lend_code4rena, jupiter-lend, fluid-solana-programs, rujira-bounty, tbtc-hunt. A teljes mappa mashol mentve, biztonsagosan torolheto volt. Foundation.md elv: a workspace-nek a Project-S-e kell lennie, ne zavarjon semmi.",
+      "details": {
+        "deleted_dirs": [
+          "fluid-solana-programs",
+          "jupiter_lend_code4rena",
+          "jupiter-lend",
+          "rujira-bounty",
+          "tbtc-hunt",
+          "tbtc-v2",
+          "v4-core"
+        ],
+        "freed_space_mb": 1375,
+        "files_deleted": 7261,
+        "verification": "Project-S mag fajlszam valtozatlan minden modulban (src, organism, witness, knowledge, memory, tools)"
+      },
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "Workspace tisztitas Fazis 2 — archiv/ es archive/ mappak torolve",
+      "reasoning": "Az archiv/ mappa bounty/audit kutatas archivum volt (V4 Uniswap, Pendle, Kinetiq, testnet fork setup) — ugyanaz a kategoria mint a Fazis 1 repok. Az archive/ ures volt.",
+      "details": {
+        "deleted_paths": [
+          "C:\\\\ProjectS-Unified\\\\docs\\\\archiv",
+          "C:\\\\ProjectS-Unified\\\\memory\\\\state\\\\archive"
+        ],
+        "freed_space_mb": 1.31,
+        "files_deleted": 139
+      },
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "known_gaps átalakítva strukturált formára (gap_id, status, history)",
+      "reasoning": "A risk-ekhez hasonlóan a gap-ek is életciklussal rendelkeznek. A megoldottakat nem töröljük, hanem RESOLVED státuszt kapnak — a Foundation.md elv: tudja mit csinált, történet és tanulságok strukturáltan. A jelenlegi 7 gap audit + 1 új felfedezés (GAP_008): 4 RESOLVED, 3 ACTIVE, 1 ACCEPTED.",
+      "discovered_by": "Witness — known_gaps audit a tiszta Organism futás után",
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "GAP_008 megoldva — Organism most már self_state.json-alapú task-okat is generál",
+      "reasoning": "state_observer.py új forrás-függvény az Observer pipeline-jában. A self_state.json ACTIVE+priority gap-jei task-ká konvertálódnak és a meglévő Prioritizer+Proposer kezeli őket. Foundation.md elv: meglévő modulokat összekötjük.",
+      "details": {
+        "new_module": "organism/core/state_observer.py (102 sor)",
+        "modified": "organism/core/loop.py (2 sor)",
+        "verification": "GAP_004, GAP_008, GAP_005 a top 3 proposal kozott"
+      },
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "GAP_004 audit lezárva — kanonikus PersistentStateManager azonosítva (persistent_manager.py)",
+      "reasoning": "Két class létezett ugyanazzal a névvel. A persistent_manager.py (Aug 2025, 742 sor, BaseStateManager-t implementál, __init__.py-ban exportálva) a kanonikus. A persistent_state_manager.py (Jul 2025, Golden Age legacy) csak az advanced_langgraph_workflow.py-ban használt. Az adapter target: persistent_manager.py.",
+      "details": {
+        "canonical_api_async": [
+          "create_state",
+          "get_state",
+          "update_state",
+          "delete_state",
+          "list_states",
+          "load_context",
+          "save_context",
+          "load_langgraph_checkpoint",
+          "save_langgraph_checkpoint",
+          "add_conversation_entry",
+          "get_conversation_history"
+        ],
+        "canonical_api_sync": [
+          "get_statistics",
+          "get_persistent_statistics",
+          "log_operation",
+          "state_transaction",
+          "subscribe_to_events"
+        ],
+        "storage_path": "memory/state/ (sessions, conversations, checkpoints, context, archive, cache)",
+        "current_disk_state": "üres — manager még soha nem futott élesben"
+      },
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "GAP_004 megoldva — Witness most már olvassa a PersistentStateManager-t",
+      "reasoning": "Read-only adapter pattern (Foundation.md elv: meglévő modulokat összekötjük). Az asyncio.run() wrapper a legkevésbé invazív megoldás — a Witness sync marad, a PSM async marad, a két világ a wrapper-en keresztül találkozik. A storage egyelőre üres (a MetaController nem futott élesen), de az adapter működik és fail-safe.",
+      "details": {
+        "new_module": "witness/bridges/state_reader.py (362 sor)",
+        "exposed_methods": [
+          "is_available",
+          "list_state_types",
+          "list_contexts",
+          "load_context",
+          "list_sessions",
+          "get_conversation_history",
+          "get_statistics",
+          "summarize_state",
+          "update_self_state"
+        ],
+        "writes": "csak self_state.json/persistent_state blokk",
+        "psm_writes": "NINCS — read-only adapter"
+      },
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "GAP_005 lezárva — false alarm (learning.jsonl nem hibás)",
+      "reasoning": "A diagnosztika 213/213 rekordot validnak talált. A bug mint olyan nem létezik. Tanulság: az auditba bekerülő problémák egy részét vakon átvettük, anélkül hogy verifikáltuk volna. A tudatréteg most végzett első valós ellenőrzést egy korábbi 'tényen' és cáfolta.",
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "STATUS_AND_JOURNAL.md mint hivatalos session-átadó dokumentum",
+      "reasoning": "A self_state.json strukturált, gépiesen olvasható, de nem mesél. A Foundation.md vízió és elvek, nem napló. Egy köztes dokumentum kell ami emberi olvasásra is jó, és narratíván átad két nap munkáját. Ez az első ilyen — ha újabb mérföldkő jön, új STATUS_AND_JOURNAL_v2.md készül.",
+      "by": "Toti+Claude"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "Aktív végrehajtási útvonal tisztázva: main.py → AgentLoop (multi-AI is benne)",
+      "reasoning": "Toti korábbi emlékezete szerint az AgentLoop régi próbálkozás volt és van valami újabb. Az audit megerősítette: a main.py AZ újabb belépő, de az AgentLoop-ot indítja, nem helyettesíti. A multi-AI orchestráció (AIClient, 6+ provider) az AgentLoop belsejében él. Tehát az AgentLoop nem legacy — ez a tényleges aktív, multi-AI runtime. A MetaController dormant útvonalon él, integrációja az AgentLoop-pal lesz az Irány 2 célja.",
+      "implication": "Az Irány 2 (integráció) konkrét célja: AgentLoop.run() ciklusába beépíteni a MetaController.observe(goal, result) hívást — minden task előtt/után. Ezzel a Witness által dokumentált tudás és a MetaController stratégiai logikája csatlakozik az aktív runtime-hoz.",
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "Stratégia változás: GAP_010 (tool pipeline) elsőbbséget élvez GAP_009 (meta integráció) előtt",
+      "reasoning": "Az audit feltárta hogy az AgentLoop tool pipeline lyukas — az initialize_with_existing_tools() soha nem hívódik. Ha most integrálnánk a MetaController-t, akkor egy lyukas pipeline-ra csatlakoztatnánk. Először a Doer rétegnek kell teljesnek lennie, aztjut jöhet a Meta réteg. A két AgentLoop-megkerülő script (server_hunt_scraper.py, meta_launcher_browser.py) pont ezt bizonyítja: korábbi munka ezért került ki az AgentLoop-ból.",
+      "implication": "GAP_010 megoldása előbb. Aztán GAP_009 audit (most blokkolt). A self_state.json execution_paths blokkát is frissíteni kell — az 'active' útvonal valójában lyukas.",
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "GAP_010 megoldva — AgentLoop teljes tool pipeline-nal fut",
+      "reasoning": "Az audit altal feltart ket hiba (hianyzó async init + rossz import path) egyszerre javitva. Az izolalt teszt 9 tool-t mutat (5 file + 3 web + 1 browser). A workaround scriptek (server_hunt_scraper.py, meta_launcher_browser.py) most mar redundansak — de nem toroljuk oket azonnal, csak miutan elo AgentLoop teszt verifikalta.",
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "GAP_010 izolált tesztben verifikálva, élő futás GAP_011 (AI provider) miatt halasztva",
+      "reasoning": "A pipeline kód-szinten teljes és bizonyítottan működik (8 valódi találat a FileContentSearchTool-tól). De élő main.py futtatás Phase 1 cognitive analyst-t igényel, ami AI-t hív. OpenAI quota kimerült, OpenRouter disabled — élő futás most hibára futna. Inkább új gap-ként rögzítjük, és a B2 stratégiához igazodunk: lokális LLM konfigurálás május végéig.",
+      "by": "Toti+Claude+Copilot"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "STATUS_AND_JOURNAL.md v1.1 — a v1.0 felülírva, nem külön verzió",
+      "reasoning": "Ugyanazon a napon történt minden, koherens narratíva egy dokumentumban értelmesebb mint két különálló. Ha jelentős új mérföldkő jön, akkor lesz v2.0.",
+      "by": "Toti+Claude"
+    },
+    {
+      "date": "2026-04-28",
+      "decision": "observe-only integráció választva (escalation helyett)",
+      "reasoning": "Az escalation pattern (AgentLoop hívja run_goal()-t) RISK_001-et aktiválta volna (200K dormant rekord incidens). Az observe-only: MetaController.observe() új metódus, direct JSONL write, nulla dispatcher érintettség. Foundation.md: governance first — a kis kockázatú út az első integráció.",
+      "by": "Toti+Claude"
+    },
+    {
+      "id": 22,
+      "decision": "organism_to_meta.py --observe flag: argparse opt-in, DRY-RUN default marad. _call_observe() szinkron wrapper asyncio.run()-nal, fail-safe. RISK_001: run_goal() nem hivodik.",
+      "rationale": "Governance-first elvhez huen az observe only flag non-blocking, non-invasive; a pending JSON minden esetben keszul.",
+      "made_at": "2026-04-28T14:13:16Z"
+    },
+    {
+      "id": 23,
+      "date": "2026-04-28",
+      "decision": "GAP_009 (Doer↔Meta) + Organism híd observe mód mind élesen működik",
+      "reasoning": "Két observe forrás aktív, mindkettő RISK_001 elkerülésével (csak observe(), sosem run_goal()). A kétnapi mérföldkő-lánc lezárul: Witness kész, Doer él, Meta réteg observe módban kommunikál. Holnaptól új típusú munka jön — vagy stratégiai (Phase 1 AI provider routing), vagy strukturális (RISK_001 csapda telepítése jövő-élesítéshez).",
+      "by": "Toti+Claude+Copilot",
+      "made_at": "2026-04-28T20:05:07Z"
+    },
+    {
+      "id": 24,
+      "date": "2026-04-29",
+      "decision": "GAP_012: Belt-and-suspenders fix — YAML + Python mindkettojet javitjuk",
+      "rationale": "task_model_mapping-bol hianzott az \"analysis\" kulcs (AgentLoop fo hivasi tipusa). A Python fallback self.config.get(\"default_model\", ...) rossz nested utat olvasott (defaults.model helyett). Mindket hidat kijavitottuk: YAML entry + kod fallback path fix.",
+      "outcome": "get_recommended_model(\"analysis\") -> qwen3-235b (openrouter). OpenAI quota 429 hiba eliminálva az analyse task tipusnal."
+    },
+    {
+      "id": 25,
+      "date": "2026-04-29",
+      "decision": "RISK_001: executor is None guard hozzaadva run_goal() Phase 2-be",
+      "rationale": "Az Organism bridge observe-only mode-ban indit MetaControllert (executor=None). Ha run_goal() veletlenul meghivodik, AttributeError helyett most explicit [RISK_001 TRAP] uzenetet ad + evidence logot ir.",
+      "outcome": "RISK_001 trap mukodik: executor=None eseten run_goal() -> status=failed, error=[RISK_001 TRAP]"
+    },
+    {
+      "id": 27,
+      "date": "2026-04-30",
+      "decision": "MetaController 'passed' státusza success-equivalentként kezelendő",
+      "rationale": "MetaController.run_goal() sikeres cél esetén {'status': 'passed'}-t ad vissza, nem 'success'-t (meta_controller.py L286, L300). A super_intelligent_ai.py execute_intelligent_task() MetaController branch-ében az == 'success' ellenőrzés helyett in ('success', 'passed') a helyes feltétel. Ez volt a Status: False root cause-a a 2026-04-29 live teszten.",
+      "outcome": "super_intelligent_ai.py L379 javítva. sai_test4: Status: True confirmed. meta_evidence: 403889. Regression test: tests/test_sai_live_status_normalization.py",
+      "made_at": "2026-04-30T00:00:00Z"
+    },
+    {
+      "id": 26,
+      "date": "2026-04-29",
+      "decision": "v1.2 dokumentum kimondja: a Witness layer architektura-fuggetlen ertek, megmarad barmi cserejekkor",
+      "rationale": "A v1.2 III. reszeben explicit: Witness (meta_evidence, external_observation, EvidenceReader) nem kotodik a jelenlegi AgentLoop/MetaController implementaciohoz. Ha a Doer-fix reteg csere/upgrade/refactor, a Witness erteke megmarad. Ez strategiai vedettseg: a megfigyelo reteg fuggetlen az architekturatol.",
+      "outcome": "Strategiai irany-valasztas 4 opcioVal dokumentalva. B2 (saját kornyezet) hataridos: 2026-06-01."
+    },
+    {
+      "id": 28,
+      "date": "2026-04-30",
+      "decision": "B2 hadmûvelet audit-fázis kész, holnap konkrét végrehajtás indul",
+      "reasoning": "Ma este 74% weekly rate limit miatt megállunk. A holnapi első prompt: (1) DL380 IP megadása, (2) pip freeze dev gépen, (3) Proxmox vs Windows Server döntés. Aztán párhuzamosan: helyettesítő LM Studio setup + szerver Python telepítés.",
+      "by": "Toti+Claude+Copilot",
+      "made_at": "2026-04-30T01:10:00Z"
+    },
+    {
+      "id": 29,
+      "date": "2026-04-30",
+      "decision": "B2 stratégia két rétegre bontva: A (VS Code extension) és B (belső CodeAgent)",
+      "reasoning": "Toti felvetette: ha a Project-S self-developing, a kódoló képesség a Project-S része kell legyen. Ez igaz — de hosszú távú vízió. Az A réteg sürgős (június 1, Copilot leváltás). A B réteg post-Június 1, és az A bizonyítja hogy OpenRouter alkalmas a feladatra.",
+      "implication": "Ma az A halad. A B mint future_features rögzítve.",
+      "by": "Toti+Claude"
+    },
+    {
+      "id": 30,
+      "date": "2026-05-02",
+      "decision": "Continue Copilot Chat helyett — OpenRouter Qwen3 235B alapértelmezett",
+      "reasoning": "Élő teszt bizonyította: Continue valódi fájlt olvas, OpenRouter-en át. A következő Project-S taskokat Continue-on indítjuk. Cline még konfigurálandó az agent-szerű task-okhoz.",
+      "implication": "Copilot Chat továbbra is megmarad átmenetig (június 1-ig), de elsődleges eszköz Continue.",
+      "by": "Toti+Claude+Continue"
+    },
+    {
+      "id": 31,
+      "date": "2026-05-02",
+      "decision": "B2 layer A KÉSZ — átállás Cline-ra a következő Project-S taskon",
+      "reasoning": "Mindkét eszköz (Continue + Cline) éles teszten átment OpenRouter-en. Cline jobb agent-jellegű feladatokra mint Continue. A következő Project-S task (pl. CodeAgent prototípus, vagy pip freeze + szerver migráció) Cline-nal indul Copilot helyett. Copilot átmenetként megmarad.",
+      "by": "Toti+Claude+Continue+Cline"
+    },
+    {
+      "id": 32,
+      "date": "2026-05-02",
+      "decision": "Cline alapértelmezett a Project-S agent-szerű feladataira",
+      "reasoning": "Az első éles task (pip freeze + count) zökkenőmentesen futott. Cline képes shell-műveletekre, fájlírásra, számszerű jelentésre. A korábbi Copilot-feladatok többsége (audit-ok, fix-ek, élő tesztek) ugyanígy átvihető Cline-ra.",
+      "implication": "A user instrukciókban 'Cline' lesz az alapértelmezett agent (Copilot helyett). Copilot átmenetig megmarad, de a következő Project-S iteráció Cline-nal indul.",
+      "by": "Toti+Claude+Cline"
+    },
+    {
+      "id": 33,
+      "date": "2026-05-03",
+      "decision": "AgentLoop ARCHIVED, SAI sole active Doer pipeline",
+      "reasoning": "A Phase 2 _analyze_task cognitive_analysis kontextustól függően ad különböző task_type-ot (bizonyítva diag_phase2_compare.py izolált tesztben). SAI átadás 'file_search' + helyes tool, AgentLoop átadás 'programming' + rossz tool. A javítás lehetséges (5-10 sor) de nincs use case a file watcher viselkedésre. Egy aktív Doer egyszerűbb karbantartásban és önreflexióban. Ha autonóm scheduler kell később, a fix akkor megvalósítható.",
+      "implications": [
+        "main.py továbbra is létezik, de nem alapértelmezett",
+        "Új taskokat interactive_task.py vagy közvetlen SAI-hívás indít",
+        "FEAT_001 CodeAgent egy aktív Doer-re épül (SAI), nem kettőre",
+        "B2 stratégia stabilizálódott: Continue/Cline külső + SAI belső"
+      ],
+      "by": "Toti+Claude+Cline"
+    },
+    {
+      "id": 34,
+      "date": "2026-05-03",
+      "decision": "Mai munka lezárva, GAP_015 + GAP_016 javítása későbbre",
+      "reasoning": "84% weekly rate limit. A rate limit reset 2026-05-04 03:00. A komplex Phase 2 multi-tool fix nem 5 perc — alapos design kell. Az evaluator truncation egysoros, holnap megcsinálható. Jelenleg csak a felfedezést rögzítjük.",
+      "by": "Toti+Claude+Cline"
+    },
+    {
+      "id": 35,
+      "date": "2026-05-04",
+      "decision": "GAP_016 + hook fix kombinált javítás",
+      "reasoning": "Mindkét probléma 1-2 sor volt, együtt tesztelhető. Az élő mérés (delta +1, token overflow eltűnt) bizonyítja a fixeket.",
+      "by": "Toti+Claude+Cline"
+    },
+    {
+      "id": 36,
+      "date": "2026-05-04",
+      "decision": "GAP_015 fix: recommended_tools pipeline strategic_plan→orchestrator + tool handler fixes",
+      "reasoning": "Gyökérok: strategic_task_planning prompt nem kért explicit recommended_tools JSON kulcsot, ezért Qwen3 soha nem adta vissza. Fix 1: prompt kibővítve tool listával + JSON schema. Fix 2: _analyze_task fallback heurisztika (search+write keywords). Fix 3: file_search handler + file_writer path extraction. Eredmény: 3 tool pipeline élőben fut, openai_usage_report.md létrejött.",
+      "by": "Toti+Claude+Cline"
+    }
+  ],
+  "milestones": [
+    {
+      "date": "2026-04-26",
+      "title": "Foundation.md elfogadva",
+      "significance": "A tudatréteg építésének kezdete"
+    },
+    {
+      "date": "2026-04-27",
+      "title": "self_state.json létrejött, Witness mag (evidence_reader) működik",
+      "significance": "Az első gépiesen olvasott rendszer-önkép"
+    },
+    {
+      "date": "2026-04-27",
+      "title": "Organism→MetaController híd dry-run működik",
+      "significance": "Első integrációs pont 3.5 hónap szigetelt fejlesztés után"
+    },
+    {
+      "date": "2026-04-28",
+      "title": "Workspace tisztítás (1.34 GB), Organism Project-S-fókuszra állítva",
+      "significance": "A workspace most már CSAK Project-S"
+    },
+    {
+      "date": "2026-04-28",
+      "title": "state_observer + state_reader: Witness teljes ciklus",
+      "significance": "A Witness mostantól a self_state-en KÍVÜL is olvas (PSM, learning.jsonl)"
+    },
+    {
+      "date": "2026-04-28",
+      "title": "GAP_005 false alarm felfedezve",
+      "significance": "A tudatréteg cáfolt egy korábbi 'tényt' — első ön-korrekció"
+    },
+    {
+      "date": "2026-04-28",
+      "title": "STATUS_AND_JOURNAL.md elkészült — mérföldkő-dokumentum",
+      "significance": "Két nap munkája rögzítve narratív formában. Az új session-ök innen is képbe kerülnek (Foundation.md + self_state.json + STATUS_AND_JOURNAL.md hármas)."
+    },
+    {
+      "date": "2026-04-28",
+      "title": "Aktív végrehajtási útvonal azonosítva",
+      "significance": "main.py → AgentLoop a tényleges runtime, multi-AI a belsejében. A korábbi feltévés (külön újabb belépő) tévesnek bizonyult. A MetaController dormant — ezzel kell összekötni."
+    },
+    {
+      "date": "2026-04-28",
+      "title": "Az 'aktív runtime' valódi állapota feltárva — a tool pipeline lyukas",
+      "significance": "A korábbi 'production ready' audit megbízhatatlannak bizonyult. A Witness egy második tévhitet cáfolt (az első a GAP_005 false alarm volt). Toti emlékezete pontos volt: a script-szerű futtatások ('AIClient + Playwright') NEM legacy maradékok, hanem AZ AGENTLOOP MEGKERÜLÉSÉRE LÉTREJÖTT WORKAROUND-OK."
+    },
+    {
+      "date": "2026-04-28",
+      "title": "AgentLoop tool pipeline elesitve — 9 tool elerheto",
+      "significance": "A lebutitott verzio mostantol teljes. Ket 2-soros javitas visszaadta amit a 2026-03-13-i audit tevesen mukodonek jelolt. Toti emlekezete pontos volt: az AgentLoop nem volt teljes — most mar az."
+    },
+    {
+      "date": "2026-04-28",
+      "title": "AgentLoop pipeline strukturálisan teljes — 6 réteg javítva",
+      "significance": "A 'GAP_010' egyetlen sora alatt 6 különböző hiba volt elrejtve, mind javítva. Az izolált teszt 8 valódi találatot ad. Az élő futtatás új blokkoló (GAP_011, AI provider) miatt halasztva. A Witness most a Doer-t teljes mélységben átvilágította."
+    },
+    {
+      "date": "2026-04-28T13:14:13Z",
+      "title": "GAP_011 RESOLVED — OpenRouter AI provider enabled",
+      "significance": "A fő AI provider (OpenRouter, deepseek/gpt-4o-mini) most elérhető. AgentLoop élő AI tesztre kész. GAP_009 unblocked."
+    },
+    {
+      "date": "2026-04-28",
+      "title": "STATUS_AND_JOURNAL.md v1.1 — két nap teljes története rögzítve",
+      "significance": "A délutáni mély felfedezések is dokumentálva. A Witness most már egy 186 soros narratívában is mesél a rendszer fejlődéséről — a self_state.json mellett."
+    },
+    {
+      "date": "2026-04-28",
+      "title": "MetaController observe-only bekötve — első Doer↔Meta kommunikáció",
+      "significance": "Az AgentLoop (Doer réteg) és a MetaController (Meta réteg) most először kommunikálnak. Minden lezárt feladat external_observation rekordot ír a meta_evidence.jsonl-be. RISK_001 elkerülve: run_goal() NEM hívódik, csak observe(). 3.5 hónap izolált szigetek után az első valódi adat-csere a rétegek között."
+    },
+    {
+      "id": 15,
+      "title": "Organism Bridge -- observe mode",
+      "description": "organism_to_meta.py: --observe flag hozzaadva. DRY-RUN default, OBSERVE opt-in. MetaController.observe() RISK_001 biztonsagos hivassal. Mindket mod tesztelve (delta=0 / delta=1).",
+      "achieved_at": "2026-04-28T14:13:16Z",
+      "evidence": "meta_evidence.jsonl +1 sor (external_observation, source=organism_proposer)"
+    },
+    {
+      "id": 16,
+      "date": "2026-04-28",
+      "title": "Két irányú observe — Doer és Proposer egyaránt ír a meta_evidence-be",
+      "significance": "A Witness most már nemcsak olvas, hanem közvetít is. Az AgentLoop minden task után ír (external_observation source=agent_loop), és az Organism híd is observe módban (source=organism_proposer). A meta_evidence már nem write-only legacy — élő, multi-source eseménynapló.",
+      "achieved_at": "2026-04-28T20:05:07Z",
+      "evidence": "meta_evidence.jsonl total=403872, external_observation count=4"
+    },
+    {
+      "id": 17,
+      "date": "2026-04-29",
+      "title": "GAP_012 + RISK_001 trap: AI routing javitva, executor guard bekotve",
+      "significance": "Kettos javitas: (1) models.yaml task_model_mapping[\"analysis\"] bejegyzes hozzaadva + Python fallback defaults.model-re javitva — AgentLoop analyse hivasai mostantol qwen3-235b/openrouter-re mennek, nem gpt-4o-mini-re (quota 429 fix). (2) RISK_001 trap: MetaController.run_goal() executor is None esetén [RISK_001 TRAP] RuntimeError-t dob, ahelyett hogy AttributeError-ral kracholt volna.",
+      "achieved_at": "2026-04-29T09:47:43Z",
+      "evidence": "get_recommended_model(\"analysis\") -> qwen3-235b (openrouter). RISK_001 trap tesztelt: executor=None -> status=failed, error=[RISK_001 TRAP]"
+    },
+    {
+      "id": 19,
+      "date": "2026-04-30",
+      "title": "SAI pipeline LIVE — Status: True confirmed",
+      "significance": "A SuperIntelligentAI teljes pipeline (MetaController + StrategyCouncil + Qwen3 235B + CognitiveCore + Evaluator) bizonyítottan élő és Status: True-t ad vissza. Root cause fix: MetaController 'passed' státusz success-equivalentként kezelve (1 soros javítás). 3 bugfix round, 8 módosítás 3 fájlban. meta_evidence: 403872 → 403889 (+17 a tesztkörökből). Regression test és smoke test lefagyasztva.",
+      "achieved_at": "2026-04-30T00:00:00Z",
+      "evidence": "sai_test4.log: Status: True, [OK] MetaController completed goal in 1 iterations. tests/test_sai_live_status_normalization.py, tests/test_sai_pipeline_smoke.py létrehozva."
+    },
+    {
+      "id": 18,
+      "date": "2026-04-29",
+      "title": "STATUS_AND_JOURNAL.md v1.2 — ket ertek retege explicit",
+      "significance": "A v1.2 dokumentum kimondja: a ket nap munka ket kulonallo ertekreteg. Witness layer = architektura-fuggetlen, megmarad barmi cserejekkor. Doer-fix = architektura-specifikus, cserelheto. Teljes elozi munkadokumentacioja (GAP_009, Organism hid, GAP_012, RISK_001 csapda) + 4 strategiai irany-opcio (B2 hataridos junius 1).",
+      "achieved_at": "2026-04-29T10:10:16Z",
+      "evidence": "Downloads/PROJECT_S_STATUS_AND_JOURNAL (2).md — 17664 bytes, 192 sor, v1.2 marker line 3"
+    },
+    {
+      "id": 20,
+      "date": "2026-04-30",
+      "title": "B2 hadmûvelet audit kész — két blokkolóval",
+      "significance": "A Copilot-helyettesítő stratégia első konkrét lépése. A jelenlegi gép és a migrációs csomag pontosan felmérve. Két blokkoló: DL380 IP + pip freeze. A holnapi munka konkrét sorrenddel kezdhet.",
+      "achieved_at": "2026-04-30T01:10:00Z"
+    },
+    {
+      "id": 21,
+      "date": "2026-04-30",
+      "title": "Self-developing vízió konkretizálva — CodeAgent feature rögzítve",
+      "significance": "A 'self-developing system' kifejezés most már nem absztrakt. Konkrét modul-terv (FEAT_001) létezik, dependencies azonosítva, governance kockázat dokumentálva."
+    },
+    {
+      "id": 22,
+      "date": "2026-05-02",
+      "title": "B2 layer A ÉLŐ verifikáció — Continue valódi fájlt olvas OpenRouter-en",
+      "significance": "Marker fájl tesztje: Qwen3 235B OpenRouter visszaadta a tényleges fájl-tartalmat (SECRET_NUMBER 7392 + magyar mondat). Ez az első Copilot-független ÉLES bizonyítás. A B2 stratégia első valódi győzelme."
+    },
+    {
+      "id": 23,
+      "date": "2026-05-02",
+      "title": "B2 layer A TELJESEN verifikálva — Continue + Cline mindkettő élesben működik OpenRouter-en",
+      "significance": "A Copilot-helyettesítő dev setup KÉSZ. Continue-val Copilot Chat helyettesíthető, Cline-nal a Copilot agent (multi-step) workflow. A következő Project-S fejlesztési taskot már Cline-nal csinálhatjuk Copilot helyett."
+    },
+    {
+      "id": 24,
+      "date": "2026-05-02",
+      "title": "Cline első élő Project-S task — GAP_014 megoldva 298 csomag rögzítésével",
+      "significance": "Az első Copilot-mentes Project-S munka. Cline shell-parancsot futtatott, fájlt írt, eredményt jelentett. Ezzel a B2 layer A nem csak verifikált, hanem PRODUKTÍVAN ÉLESBEN használva. A jövő Project-S taskjai Cline-on mehetnek."
+    },
+    {
+      "id": 25,
+      "date": "2026-05-03",
+      "title": "AgentLoop ARCHIVED, SAI a sole Doer + Witness external_observation hook a SAI-ban",
+      "significance": "Két nap auditja után stratégiai döntés: a párhuzamos pipeline-t leegyszerűsítjük. SAI a primary, AgentLoop archive (visszahozható ha autonóm scheduler kell). A Witness-réteg meta_evidence stream-je nem veszít: a SAI observe hook-on át folytatódik. Ezzel a self-developing vízió (FEAT_001 CodeAgent) tisztább alapról indulhat."
+    },
+    {
+      "id": 26,
+      "date": "2026-05-03",
+      "title": "Teljes rendszer éles teszt — 2 új határérték felfedezve",
+      "significance": "A hat napi munka eredménye: a rendszer egy-tool-os feladatokon megbízható (TODO keresés ✓), multi-tool komplex feladatokon még nem (kombinált search+write ✗). Az evaluator context-overflow gyenge pont. Ez NEM regresszió — ez az első realisztikus mérce. Most már tudjuk hol vannak a valódi határok."
+    },
+    {
+      "id": 27,
+      "date": "2026-05-04",
+      "title": "SAI external_observation hook ÉLESEN aktív + GAP_016 RESOLVED",
+      "significance": "A hook tegnap bepült de nem tüzelt (use_meta_controller=False ágban a meta_controller=None volt). Mai fix: _observe_meta_controller külön példány, RISK_001-biztos. Egyszerű és komplex SAI taskon is delta +1 a meta_evidence-ben. Az evaluator truncation megszüntette a token overflow-t. Két aktív gap-ből egy lezárva, marad GAP_015 (multi-tool sequencing)."
+    },
+    {
+      "id": 28,
+      "date": "2026-05-04",
+      "title": "GAP_015 RESOLVED — multi-tool sequencing élőben működik",
+      "significance": "3 lépéses javítás: (1) strategic_task_planning prompt tartalmazza a valódi tool listát + JSON schema recommended_tools kulcscsal — Qwen3 most ['file_search','file_content_search','file_writer']-t ad vissza; (2) _analyze_task fallback heurisztika search+write keyword detektálásra; (3) _execute_single_tool: file_search handler (pattern+root_dir), file_writer path extraction (C:\\Users\\Admin\\openai_usage_report.md létrejött). Pipeline: 3 tool sorozatban fut, output piping aktív, meta_evidence delta +1. ÖSSzES eddig ismert gap lezárva."
+    },
+    {
+      "id": 29,
+      "date": "2026-05-18",
+      "title": "Interactive Layer v1 control-flow hardening — GAP_026 through GAP_030 all RESOLVED",
+      "significance": "Five consecutive control-flow gaps closed: self-state retrieval (GAP_026), non-answer false success (GAP_027), UTF-8 logging (GAP_028), non-converging vague replan loops (GAP_029), timeout non-terminalization (GAP_030). 35/35 GAP_029 tests PASS, 8/8 GAP_030 tests PASS, live DEV timeout validation PASS. Interactive Layer v1 is now operationally hardened.",
+      "achieved_at": "2026-05-18T23:41:00Z"
+    },
+    {
+      "id": 30,
+      "date": "2026-05-18",
+      "title": "DL380 Server — STAGING PROOF ACHIEVED",
+      "significance": "SHAYANSKA-DL380 (serial CZ3733LABY) proved Project-S can be reproduced outside DEV laptop. Code transferred to C:\\ProjectS\\project-s-code, Python 3.12.9, Git, runtime deps installed, Interactive Layer starts, /health returns 200, OpenRouter/Qwen3 235B SAI calls reached live execution path. Server-side development intentionally paused. DEV master remains canonical. Final clean resync later after DEV-side hardening.",
+      "achieved_at": "2026-05-18T23:00:00Z"
+    },
+    {
+      "id": 31,
+      "date": "2026-05-20",
+      "title": "Interactive Layer Interaction-Grade Routing — VALIDATED (GAP_031 RESOLVED)",
+      "significance": "Hybrid prompt-class-aware router deployed and acceptance-matrix validated. Project-S Interactive Layer no longer routes ordinary operator prompts into the heavy MetaController loop. 6 route classes: DIRECT_LIGHTWEIGHT_RESPONSE, TRUTHFUL_UNCERTAINTY_RESPONSE, INTERNAL_PROJECT_DOC_REASONING, EXTERNAL_RESEARCH_SYNTHESIS, FULL_AGENTIC_META_CONTROLLER, CLARIFICATION_NEEDED. EXTERNAL_RESEARCH_SYNTHESIS uses DDGS web search (30s timeout, 8 results, synthesized numbered points). Live acceptance matrix: 8 PASS / 0 PARTIAL / 0 FAIL. Unit tests: 31/31 PASS.",
+      "achieved_at": "2026-05-20T23:00:00Z"
+    },
+    {
+      "id": 34,
+      "date": "2026-05-24",
+      "title": "MS-FA1 Filesystem Automation Pipeline v1 completed through Phase 1.5",
+      "status": "completed",
+      "summary": "Project-S can now coordinate Cline through a controlled filesystem handoff protocol. FA1.1 manual loop, FA1.2 semi-automated loop, FA1.2H hardening, FA1.3 AI prompt/evaluator, FA1.4 controlled multi-iteration, and FA1.5 file-based handoff polling all passed.",
+      "evidence": [
+        "FA1_001 manual loop PASS",
+        "FA1_002 semi-auto JSON validator PASS",
+        "FA1_003 hardening CSV row counter PASS",
+        "FA1_004 AI prompt/evaluator INI parser PASS",
+        "FA1_005 multi-iteration TXT word counter PASS",
+        "FA1_006 handoff polling YAML key counter PASS",
+        "25/25 tests PASS",
+        "0 safety violations"
+      ],
+      "classification": "controlled_orchestration_not_full_autonomy"
+    },
+    {
+      "id": 35,
+      "date": "2026-05-25",
+      "title": "MS-FA1 COMPLETE — Auto Mode v1 Validation Finalized",
+      "status": "completed",
+      "summary": "MS-FA1 fully completed through Auto Mode v1 validation. FA1_014 executed and finalized with PASS verdict. All CLI entrypoints, resume/consume-output commands, and .env.local auto-load confirmed working. Stale output false-PASS bug fixed with run_id validation and consumed flag enforcement.",
+      "evidence": [
+        "FA1_014 Auto Mode v1 validation PASS",
+        "10/10 Auto Mode validation tests (5 prompt drafting + 5 AI evaluation)",
+        "0 safety violations",
+        ".env.local auto-load confirmed",
+        "CLI resume / consume-output commands fixed",
+        "Stale output false-PASS bug fixed",
+        "Run properly consumed, archived, finalized"
+      ],
+      "classification": "controlled_orchestration_not_full_autonomy",
+      "verdict": {
+        "cline_side": "PASS confidence 1.00",
+        "project_s_side": "PASS confidence 0.85",
+        "note": "Cline reported confidence 1.00 based on deliverables created. Project-S evaluator independently assessed confidence 0.85 due to no raw test execution logs provided for independent verification. Both agree on PASS."
+      }
+    }
+  ],
+  "bridges": {
+    "organism_to_meta": {
+      "modes": [
+        "DRY_RUN (default)",
+        "OBSERVE (--observe flag)"
+      ],
+      "mode": "OBSERVE",
+      "last_run": "2026-04-28T14:12:28Z",
+      "pending_goals_count": 1,
+      "last_generated_goal_id": "fc8335a2-e525-4a52-89d8-98161764892c",
+      "live_mode": false,
+      "observe_calls": 3,
+      "last_observe_at": "2026-04-28T14:12:28Z"
+    }
+  },
+  "persistent_state": {
+    "available": true,
+    "storage_path": "C:\\ProjectS-Unified\\memory\\state",
+    "context_count": 0,
+    "session_count": 0,
+    "has_data": false,
+    "last_modified": null,
+    "last_scanned_at": "2026-04-28T09:03:05Z"
+  },
+  "documents": [
+    {
+      "name": "PROJECT_S_FOUNDATION.md",
+      "role": "iránytű — alapelvek, vízió, NEM változik gyakran",
+      "path": "PROJECT_S_FOUNDATION.md",
+      "version": "v1.0",
+      "created": "2026-04-26"
+    },
+    {
+      "name": "PROJECT_S_STATUS_AND_JOURNAL.md",
+      "role": "snapshot + napló — hol tartunk és hogyan jutottunk ide",
+      "path": "C:\\Users\\Admin\\Downloads\\PROJECT_S_STATUS_AND_JOURNAL (2).md",
+      "version": "v1.2",
+      "created": "2026-04-28",
+      "size_bytes": 17664,
+      "lines": 192,
+      "updated": "2026-04-29 (v1.2 — ket ertek retege koncepció)",
+      "v1_1_additions": [
+        "Aktív végrehajtási útvonal tisztázása (Toti emlékezete pontos volt)",
+        "GAP_010 hat-rétegű feltárás és javítás",
+        "RISK_005: korábbi production ready audit megbízhatatlansága",
+        "GAP_011: .env load_dotenv() hiány",
+        "Élő AgentLoop teszt — 8 valódi találat"
+      ],
+      "v1_2_additions": [
+        "Esti munka teljes dokumentalasa (GAP_009, Organism hid, GAP_012, RISK_001 csapda)",
+        "III. RESZ — Ket ertek retege: Witness architektura-fuggetlen, Doer-fix architektura-specifikus",
+        "Strategiai irany-merlegeles negy opcioVal (B2 mint hataridos)"
+      ]
+    }
+  ],
+  "execution_paths": {
+    "active": {
+      "name": "main.py → AgentLoop (ARCHIVED)",
+      "entry_point": "main.py",
+      "trigger": "file watcher (tasks/inbox/*.txt)",
+      "components": [
+        "AgentLoop (src/core/agent/agent_loop.py, 509 sor)",
+        "CognitiveCore (src/core/cognitive/cognitive_core.py, 715 sor)",
+        "AIClient — multi-AI orchesztráció (src/integrations/ai_models/multi_model_ai_client.py, 449 sor, 6+ provider)",
+        "SmartToolOrchestrator (tools/tools/registry/smart_orchestrator.py, 1589 sor, 13+ tool)",
+        "Evaluator (output validáció)"
+      ],
+      "status": "ARCHIVED_2026_05_03",
+      "notes": "Ez NEM legacy. A multi-AI orchesztráció az AgentLoop belsejében van (AIClient.chat()). A kódfájlok dátuma régi (2025-12), de a copy date — nem az utolsó futás dátuma. FIGYELEM (2026-04-28): a tool pipeline LYUKAS — initialize_with_existing_tools() soha nem hívódik. Lásd GAP_010. Az AgentLoop jelenleg AIClient szöveggenerátorként működik, nem teljes tool-os agentként.",
+      "archived_reason": "A Phase 2 _analyze_task ignorálja a cognitive_analysis paramétert AgentLoop kontextusban (programming task_type → web_page_fetch fallback). A SAI helyes tool-t választ ugyanazon orchestrátorral. AgentLoop egyedi funkciója (file watcher) nem szükséges most. Minden taskot interaktívan SAI-n keresztül futtatunk.",
+      "rehabilitation_path": "Ha autonóm scheduler use case felmerül, smart_orchestrator._analyze_task fix lehetséges (cognitive_analysis ai_analysis.task_type tisztelete)."
+    },
+    "dormant": {
+      "name": "meta_launcher.py → MetaController",
+      "entry_point": "meta_launcher.py",
+      "trigger": "explicit goal string (CLI argument)",
+      "components": [
+        "MetaController (src/core/meta/meta_controller.py, 407 sor)",
+        "StrategyCouncil (src/core/meta/strategy_council.py, 287 sor)",
+        "ExecutionValidator"
+      ],
+      "status": "DORMANT — utolsó valódi futás 2026-02-19",
+      "notes": "A meta_launcher.py egyedi célú szkript (Ukraine server search), nem rendszeres belépő. A MetaController-t senki nem hívja az aktív útvonalból. Ez a 200K dormant goal forrása (RISK_001 incidens-nap)."
+    },
+    "supporting": {
+      "name": "WorkflowEngine (LangGraph)",
+      "path": "src/core/orchestration/workflow_engine.py",
+      "lines": 947,
+      "status": "PRESENT_BUT_UNUSED",
+      "notes": "main.py csak elérhetőséget ellenőrzi, nem indítja. cognitive_workflow_integration.py lazán hivatkozik rá. Az AgentLoop saját ciklusát futtatja, nem LangGraph gráfot."
+    },
+    "workaround_scripts": {
+      "name": "Direkt AIClient + Playwright hívások",
+      "files": [
+        "server_hunt_scraper.py (2026-02-19)",
+        "meta_launcher_browser.py (2026-02-19)"
+      ],
+      "purpose": "Az AgentLoop tool pipeline lyukassága miatt létrejött kerülő útvonalak. Közvetlenül hívják az AIClient-et és a Playwright-et, megkerülve az AgentLoop-ot.",
+      "status": "WORKAROUND — GAP_010 megoldása után archiválhatók"
+    },
+    "sai_primary": {
+      "name": "SuperIntelligentAI (SOLE DOER)",
+      "entry_point": "src/core/super_intelligent_ai.py",
+      "trigger": "interactive_task.py vagy közvetlen SAI-hívás",
+      "status": "ACTIVE_SOLE_DOER",
+      "external_observation_hook_added": "2026-05-03T08:00:00Z",
+      "verified_2026_05_03": "Phase 2 izolált tesztben file_content_search helyesen választva, valódi 'TODO' eredmény: archaeology_mission.py:23 stb. A meta hook beépítve (Cline 2026-05-03).",
+      "components": [
+        "SuperIntelligentAI (src/core/super_intelligent_ai.py)",
+        "SmartToolOrchestrator (tools/tools/registry/smart_orchestrator.py)",
+        "Phase 2 cognitive analysis (strategic_plan + recommended_tools)",
+        "external_observation hook → meta_evidence.jsonl"
+      ]
+    }
+  },
+  "gaps_summary": {
+    "total": 31,
+    "resolved": 30,
+    "active": 0,
+    "accepted": 1,
+    "open": 0,
+    "latest": "GAP_031 (2026-05-20): RESOLVED — Hybrid interaction-grade prompt routing for Interactive Layer"
+  },
+  "b2_strategy": {
+    "goal": "Copilot helyettesítés saját környezettel — június 1 előtt",
+    "deadline": "2026-06-01",
+    "audit_completed": "2026-04-30",
+    "two_streams": [
+      "Stream 1: Helyettesítő infrastruktúra (LM Studio + Continue/Cline VS Code)",
+      "Stream 2: Project-S szerver migráció (DL380 Gen9)"
+    ],
+    "dev_machine_state": {
+      "lm_studio": "NOT_INSTALLED",
+      "ollama": "INSTALLED_NOT_RUNNING",
+      "vscode_ai_extensions": "GitHub Copilot active (others: none detected)",
+      "gpu": "Quadro P2000 (4 GB VRAM) — limited, only 7B Q4 viable locally",
+      "verdict": "Frissen kell telepíteni LM Studio-t. A 4 GB VRAM csak backup-nak elég, fő modell host a szerver lesz.",
+      "cline_extension": "DONE_AND_VERIFIED",
+      "cline_verified_at": "2026-05-02T10:00:00Z",
+      "cline_verification": "self_state.json elemzés tool-használattal: 13 resolved gap helyesen visszaadva, utolsó milestone pontosan azonosítva. Multi-step gondolkodás bizonyított (közben felhasználói kérdés kezelése). Search-képesség működik (marker fájl törölve volt, helyesen NEM hallucinált, hanem search-elt)."
+    },
+    "server_state": {
+      "hardware": "HP DL380 Gen9, 36 cores, 128 GB RAM, Tesla M60 16 GB VRAM",
+      "os": "Windows Server 2019 Datacenter",
+      "hostname": "SHAYANSKA-DL380",
+      "serial": "CZ3733LABY",
+      "external_ip": "46.253.140.72",
+      "staging_proof_achieved": "2026-05-18",
+      "staging_proof_details": {
+        "code_transferred_to": "C:\\ProjectS\\project-s-code",
+        "python_version": "3.12.9",
+        "git_available": true,
+        "runtime_dependencies_installed": true,
+        "interactive_layer_starts": true,
+        "health_check_passes": true,
+        "saai_live_execution_path": true,
+        "bugs_discovered": [
+          "fresh DB user/session FK issue (fixed in DEV master)",
+          "GAP_030 timeout terminalization issue (fixed in DEV master)"
+        ]
+      },
+      "status": "STAGING PROOF ACHIEVED — development intentionally paused",
+      "notes": "Server can host staging runtime. Code transfer, dependencies, health check, and SAI execution path proven. Final clean resync will occur later after DEV-side hardening. NOT production. DEV master remains canonical.",
+      "modelvault_status": "OPERATIONAL",
+      "modelvault_models": [
+        "Qwen3.6-35B-A3B-Q4_K_M (port 8096/8097, Cline via proxy)",
+        "Qwen2.5-Coder-14B-Instruct-Q4_K_M (port 8098, BENCHMARK PASSED 2026-05-22)"
+      ],
+      "inference_engine": "llama.cpp Vulkan b9279 (permanent - CUDA 11.4 mismatch, Vulkan only)",
+      "external_port_note": "Ports 8096-8098 blocked by ISP/router. SSH tunnel required for external Cline access. WinRM 15985 open."
+    },
+    "project_s_migration_package": {
+      "garbage_to_exclude_GB": 2.0,
+      "core_code_MB": 390,
+      "with_meta_evidence_MB": 495,
+      "with_logs_MB": 538,
+      "critical_files": "9/9 OK",
+      "requirements_txt_issue": "RESOLVED 2026-05-02 (Cline-nal)",
+      "actual_dependency_count": 298,
+      "linux_specific_changes_needed": "10 Windows-only csomag kiveendő ha Linux szerverre megy"
+    },
+    "layer_a_external_tools": {
+      "status": "FULLY_VERIFIED — 2026-05-02",
+      "verified_at": "2026-05-02T09:00:00Z",
+      "verification_method": "marker fájl teszt — Continue Qwen3 235B OpenRouter visszaadta a SECRET_NUMBER 7392 és a magyar RANDOM_PHRASE értéket. Valódi fájl-olvasás bizonyított.",
+      "lesson_learned": "Continue automatikusan tool-használatra vált ha a kérdés konkrét és fájlra utal. Általános 'mit csinál' kérdésre AI-szöveggenerálás történhet — pontosabb prompt kell.",
+      "tools_installed": [
+        "continue.continue",
+        "saoudrizwan.claude-dev"
+      ],
+      "models_configured": [
+        "anthropic/claude-sonnet-4-5 (chat/edit)",
+        "qwen/qwen-2.5-coder-32b-instruct (autocomplete/chat)",
+        "deepseek/deepseek-chat (chat)",
+        "qwen/qwen3-235b-a22b (chat)"
+      ],
+      "tools_verified": [
+        "Continue (chat) — marker file read teszt PASS (Qwen3 235B)",
+        "Cline (agent) — self_state.json multi-step elemzés PASS (modell változó, retry working)"
+      ],
+      "local_models_verified": [
+        "Qwen2.5-Coder-14B-Instruct-Q4_K_M @ 127.0.0.1:8098 - BENCHMARK PASS 2026-05-22 (3/3 bugs, 8/8 tests, 0 hallucinations)"
+      ],
+      "local_model_access_note": "External access requires SSH tunnel: ssh -L 8098:127.0.0.1:8098 Administrator@46.253.140.72. Then Cline Base URL: http://127.0.0.1:8098"
+    }
+  },
+  "future_features": [
+    {
+      "id": "FEAT_001",
+      "name": "CodeAgent — Self-developing Project-S",
+      "description": "Belső modul a Project-S-en belül, ami képes a saját kódbázisát olvasni, módosítani, tesztelni. Az Organism Proposer már képes változás-javaslatokra (top_proposals.md). A CodeAgent ezeket valódi kódváltozásokká alakítaná.",
+      "components_needed": [
+        "src/core/agents/code_agent.py (új modul)",
+        "TestRunnerTool (új tool — pytest futtatás)",
+        "GitTool (új tool — commit/diff)",
+        "kézi review queue (Foundation: governance first)"
+      ],
+      "uses_existing": [
+        "FileReadTool, FileWriteTool, FileContentSearchTool",
+        "AIClient (OpenRouter)",
+        "Organism Proposer (változás-javaslatok forrása)",
+        "MetaController (validáció — observe-only kezdetben)"
+      ],
+      "dependencies": [
+        "B2 réteg A sikere — bizonyítja hogy OpenRouter alkalmas kódolásra",
+        "Június 1 után — nem sürgős, hosszú távú"
+      ],
+      "risk": "Magas — a rendszer önmagát módosíthatja. Governance first, csak kézi review után execute.",
+      "reference": "Foundation.md self-developing vízió + IDEA_010 (Agent Genome)"
+    }
+  ],
+  "known_risks": [
+    {
+      "risk_id": "RISK_001",
+      "title": "MetaController dispatcher szinkronizacios bug",
+      "discovered": "2026-04-27",
+      "first_observed": "2026-01-14T??:??:00Z (incidens kezdete, pontos idopont ismeretlen)",
+      "last_observed": "2026-01-14T22:19:00Z",
+      "occurrence_count": 1,
+      "status": "DORMANT — nem reprodukalodott 2026-01-15 ota",
+      "evidence": {
+        "incident_records": 201798,
+        "fail_rate_during_incident": "99.995%",
+        "evidence_path": "memory/intelligence/meta_evidence.jsonl",
+        "diagnostic_report": "witness/reports/evidence_diagnostic_2026-04-27.md"
+      },
+      "symptoms": [
+        "em dash sequence",
+        "magyar encoding",
+        "UTF-8 conversion error"
+      ],
+      "trigger_hypothesis": "tomeges parhuzamos goal_started spawn (~200K egy nap alatt)",
+      "current_action": "OBSERVE — nem javitjuk, csak figyeljuk",
+      "future_action": "csapda telepitese amikor az Organism hid el — assertion a plan_selected → enqueue kapcsolatra",
+      "do_not_fix_reason": "nem reprodukalhato, vak javitas uj bugot okozhatna mukodo rendszerben"
+    },
+    {
+      "risk_id": "RISK_004",
+      "title": "PersistentStateManager névütközés — két class definíció ugyanazzal a névvel",
+      "discovered": "2026-04-28",
+      "discovered_by": "GAP_004 audit (Witness)",
+      "status": "ACCEPTED — dokumentált, nem blokkoló",
+      "evidence": {
+        "canonical": {
+          "file": "src/core/state/persistent_manager.py",
+          "size_bytes": 28508,
+          "lines": 742,
+          "last_write": "2025-08-17T22:25:00",
+          "inherits_from": "BaseStateManager",
+          "exported_via_init_py": true
+        },
+        "legacy": {
+          "file": "src/core/state/persistent_state_manager.py",
+          "size_bytes": 20253,
+          "lines": 480,
+          "last_write": "2025-07-01T00:32:00",
+          "inherits_from": "none (standalone)",
+          "exported_via_init_py": false,
+          "origin": "Golden Age migration (2025-01-02), nem portolva v2 API-ra"
+        },
+        "only_legacy_consumer": "src/golden_age/advanced_langgraph_workflow.py"
+      },
+      "current_action": "ACCEPT — nincs runtime ütközés (csak a kanonikus van exportálva). A legacy fájl egyetlen hivatkozója a golden_age modul, amíg az nincs v2-re portolva, marad.",
+      "future_action": "Ha a golden_age modul v2 API-ra portolódik VAGY archiválódik: persistent_state_manager.py átnevezése _legacy_persistent_state_manager.py-re vagy archiv mappába mozgatása."
+    },
+    {
+      "risk_id": "RISK_002",
+      "title": "Organism Proposer encoding bug — mojibake a top_proposals.md-ben",
+      "discovered": "2026-04-27",
+      "discovered_by": "Witness — organism_to_meta bridge dry-run",
+      "first_observed": "2026-02-18T10:25:21Z (a top_proposals.md genálási ideje)",
+      "occurrence_count": "ismeretlen — minden Proposer futás potenciálisan érintett",
+      "status": "RESOLVED — javítva 2026-04-28",
+      "evidence": {
+        "affected_file": "organism/evidence/top_proposals.md",
+        "symptoms": [
+          "em dash sequence",
+          "magyar encoding",
+          "UTF-8 conversion error"
+        ]
+      },
+      "root_cause_hypothesis": "az Organism Proposer rossz encoding-gal írja a fájlt, vagy a CP-1252 default Windows konzol encoding szivárog be",
+      "current_action": "FIX_PLANNED — Organism Proposer javítása",
+      "blocks": [
+        "live_mode híd üzem (a generált goal stringek sérültek lennének)"
+      ],
+      "resolution": {
+        "resolved_at": "2026-04-27T22:13:14Z",
+        "resolution_method": "Az Organism Proposer (proposer.py line 634) mar encoding=utf-8-cal ir. A serult 2026-02-18-i top_proposals.md regeneralodott a quickstart.py ujrafuttatasaval.",
+        "verification": "0 mojibake talalat az uj fajlban (Select-String ellenorzes)"
+      }
+    },
+    {
+      "risk_id": "RISK_003",
+      "title": "Organism scope avult — külső repók, nem Project-S",
+      "discovered": "2026-04-27",
+      "discovered_by": "Witness — organism_to_meta bridge dry-run",
+      "status": "RESOLVED — javítva 2026-04-28",
+      "evidence": {
+        "example_proposal": "[Issue] 502 — keep-network/tbtc-v2 (Bitcoin-Ethereum bridge)",
+        "proposal_locations": [
+          "tbtc-v2/typescript/test/lib/electrum.test.ts:60",
+          "tbtc-v2/typescript/test/lib/electrum.test.ts:73"
+        ],
+        "proposal_age": "2.5 hónapos (2026-02-18)"
+      },
+      "context": "Az IDEA_LOG #021 'GitHub Issues bounty' stratégia maradványa. Ez a stratégia az 'Internal test → GitHub → Security' phased approach-ban deprioritizált lett, de az Organism konfigurációja nem lett frissítve.",
+      "current_action": "RECONFIGURE_PLANNED — Organism Observer scope váltás Project-S kódbázisra",
+      "implication": "amíg ez nincs javítva, a híd csak avult / nem releváns goal-okat termel",
+      "resolution": {
+        "resolved_at": "2026-04-27T22:13:14Z",
+        "resolution_method": "quickstart.py-ban explicit ignore_dirs lista bovites: kulso repok (tbtc-v2, fluid-solana-programs, tbtc-hunt, bounty, rujira-bounty) + zaj mappak (memory, logs, archiv, archive, _old, _deprecated, backup, backups)",
+        "verification": "0 kulso repo talalat az uj top_proposals.md-ben"
+      }
+    },
+    {
+      "risk_id": "RISK_005",
+      "title": "Korábbi 'production ready' jelölések megbízhatatlanok",
+      "discovered": "2026-04-28",
+      "discovered_by": "GAP_010 felfedezése",
+      "status": "ACCEPTED — figyelmeztetés a jövőre",
+      "context": "A 2026-03-13-i AUTONOMOUS_AGENT_ACTIVATION_REPORT.md azt állította: 'Status: FULLY OPERATIONAL', '✅ Tool Orchestrator inicializálva', 'production ready'. A valóság: a tool inicializálás SOHA NEM TÖRTÉNT MEG. A teszt-task véletlenül olyan volt amit AI szöveggenerálás is meg tudott oldani.",
+      "lesson": "Egy AI által írt 'production ready' audit csak akkor megbízható, ha valódi tool-használó task-tal van bizonyítva (pl. webautomation feladat ami csak Playwright-tel oldható meg). A jövőben minden 'működik' állítást reprodukálható tool-teszttel kell igazolni.",
+      "implication": "Más korábbi audit-okat is verifiкálni kell mielőtt elfogadjuk őket. A self_state.json-ben rögzített tények (pl. AUTONOMOUS_STATUS_NOW.md alapján) felülvizsgálatra szorulnak ahol 'működik' szó szerepel.",
+      "evidence_2026_04_30b": "Az első Continue prompt ('mit csinál a script') hallucinált választ adott (Optimize login flow, fiktív src/auth.py). A második (konkrét fájl-utalással) tényleges read-műveletet tett. Tanulság: az AI 'production ready' státusza a PROMPT FORMÁTUM-tól is függ, nem csak a setup-tól.",
+      "evidence_2026_04_30c": "Cline a marker fájl keresésekor (már törölve volt) NEM hallucinált — search-elt, nem talált, jelezte. Ez ellentét az AI szöveggenerálás-only viselkedéssel. Az agent-szerű eszközök valódi tool-használata strukturálisan más mint a chat-szerű AI.",
+      "evidence_2026_05_03": "A 2026-04-30-i SAI 7/7 fix EGYSZERŰ taskokon ment. A mai komplex teszten a Phase 2 elakadt. A 'production ready' fokozat továbbra is a feladat-típustól függ — ezt explicit különböztetni kell. Egy-tool-os: igen. Multi-tool: nem.",
+      "evidence_2026_05_04": "GAP_016 token overflow ténylegesen futási állapotban volt, nem csak elméletben — bizonyítva. A 'production ready' fokozat továbbra is feladat-méretfüggő. Truncation után most már nagy outputtal is dolgozik a Phase 3."
+    },
+    {
+      "risk_id": "RISK_006",
+      "title": "AgentLoop reaktiválás esetén Phase 2 cognitive_analysis fix kötelező",
+      "discovered": "2026-05-03",
+      "status": "ACCEPTED — figyelmeztetés",
+      "context": "AgentLoop archived, de a Phase 2 _analyze_task hibája dokumentálva. Ha valaki később unarchive-olja, először a smart_orchestrator._analyze_task-ban a cognitive_analysis ai_analysis.task_type-ját kell tiszteletben tartani.",
+      "fix_pattern": "ld. diag_phase2_compare.py — SAI-szerű kontextusban (strategic_plan + recommended_tools mezőkkel) file_search lesz, AgentLoop kontextusban (csak ai_analysis) programming."
+    }
+  ]
+}

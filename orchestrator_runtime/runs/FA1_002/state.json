@@ -1,0 +1,55 @@
+{
+  "run_id": "FA1_002",
+  "current_state": "ARCHIVED",
+  "history": [
+    {
+      "from": null,
+      "to": "NEW_GOAL",
+      "timestamp": "2026-05-24T20:24:04.548206Z",
+      "reason": "Run created"
+    },
+    {
+      "from": "NEW_GOAL",
+      "to": "PROMPT_DRAFTED",
+      "timestamp": "2026-05-24T20:24:04.556730Z",
+      "reason": "Prompt drafted (placeholder)"
+    },
+    {
+      "from": "PROMPT_DRAFTED",
+      "to": "HUMAN_REVIEW",
+      "timestamp": "2026-05-24T20:24:04.560033Z",
+      "reason": "Awaiting human review"
+    },
+    {
+      "from": "HUMAN_REVIEW",
+      "to": "IN_PROGRESS",
+      "timestamp": "2026-05-24T20:24:04.561465Z",
+      "reason": "Human approved, Cline executing"
+    },
+    {
+      "from": "IN_PROGRESS",
+      "to": "CLINE_OUTPUT_RECEIVED",
+      "timestamp": "2026-05-24T20:57:26.904427Z",
+      "reason": "Cline output received"
+    },
+    {
+      "from": "CLINE_OUTPUT_RECEIVED",
+      "to": "EVALUATING_OUTPUT",
+      "timestamp": "2026-05-24T20:57:26.906447Z",
+      "reason": "Evaluating output (placeholder)"
+    },
+    {
+      "from": "EVALUATING_OUTPUT",
+      "to": "VERDICT_ISSUED",
+      "timestamp": "2026-05-24T20:57:26.912299Z",
+      "reason": "Verdict: PASS"
+    },
+    {
+      "from": "VERDICT_ISSUED",
+      "to": "ARCHIVED",
+      "timestamp": "2026-05-24T20:57:26.920442Z",
+      "reason": "Run archived"
+    }
+  ],
+  "updated_at": "2026-05-24T20:57:26.920442Z"
+}

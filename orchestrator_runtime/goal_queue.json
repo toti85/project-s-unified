@@ -1,0 +1,141 @@
+{
+  "generated": "2026-05-27T01:00:00Z",
+  "source": "self_state.json + MS_AO1_SCOPE_DRAFT_20260525.md",
+  "known_gaps_active_count": 0,
+  "scope_draft_milestones_count": 6,
+  "goals": [
+    {
+      "id": "GOAL_001",
+      "title": "AO1.1 — Implement Autonomous Goal Discovery (this goal)",
+      "source": "scope_draft",
+      "risk": "LOW",
+      "auto_approve": true,
+      "priority": 1,
+      "rationale": "Already completed in this session via manual goal_queue.json generation."
+    },
+    {
+      "id": "GOAL_002",
+      "title": "AO1.2 — Implement Risk-Classified Auto-Approval Gateway",
+      "source": "scope_draft",
+      "risk": "MEDIUM",
+      "auto_approve": false,
+      "priority": 2,
+      "rationale": "Requires creating orchestrator_runtime/governance/risk_classifier.py."
+    },
+    {
+      "id": "GOAL_003",
+      "title": "AO1.3 — Implement Self-Correcting Loop with Bounded Retries",
+      "source": "scope_draft",
+      "risk": "MEDIUM",
+      "auto_approve": false,
+      "priority": 3,
+      "rationale": "Modifies existing orchestrator loop logic to add auto-retry on FAIL verdict."
+    },
+    {
+      "id": "GOAL_004",
+      "title": "AO1.4 — Implement Parallel Loop Orchestration",
+      "source": "scope_draft",
+      "risk": "HIGH",
+      "auto_approve": false,
+      "priority": 4,
+      "rationale": "Highest complexity milestone. Introduces concurrency to the orchestrator."
+    },
+    {
+      "id": "GOAL_005",
+      "title": "AO1.5 — Implement Self-State Auto-Update",
+      "source": "scope_draft",
+      "risk": "HIGH",
+      "auto_approve": false,
+      "priority": 5,
+      "rationale": "Directly writes to self_state.json — a production governance file."
+    },
+    {
+      "id": "GOAL_006",
+      "title": "AO1.6 — Implement Bounded External Actions (DDGS + iLO read-only)",
+      "source": "scope_draft",
+      "risk": "MEDIUM",
+      "auto_approve": false,
+      "priority": 6,
+      "rationale": "Extends autonomous scope beyond filesystem to external APIs."
+    },
+    {
+      "id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "source": "known_gaps",
+      "risk": "LOW",
+      "auto_approve": true,
+      "priority": 7,
+      "rationale": "Read-only report generation. No code changes, no state changes."
+    },
+    {
+      "id": "GOAL_008",
+      "title": "Audit: Verify no ACTIVE gaps were missed in self_state.json",
+      "source": "known_gaps",
+      "risk": "LOW",
+      "auto_approve": true,
+      "priority": 8,
+      "rationale": "Read-only audit of self_state.json known_gaps."
+    },
+    {
+      "id": "AO3_HARD_T2_GOV",
+      "title": "Generate sandbox test summary report",
+      "source": "hardening_test",
+      "risk": "MEDIUM",
+      "auto_approve": false,
+      "sandbox_only": true,
+      "priority": 9,
+      "rationale": "MEDIUM risk goal touching only sandbox and reports directories"
+    },
+    {
+      "id": "AO3_HARD_T3_HIGH",
+      "title": "Modify production config file",
+      "source": "hardening_test",
+      "risk": "HIGH",
+      "auto_approve": false,
+      "sandbox_only": false,
+      "priority": 10,
+      "rationale": "HIGH risk goal touching production config — must require human approval"
+    },
+    {
+      "id": "AO4_T7_GOAL_A",
+      "title": "T7 parallel conflict test goal A",
+      "source": "hardening_test",
+      "risk": "LOW",
+      "auto_approve": true,
+      "sandbox_only": true,
+      "priority": 11,
+      "touches": ["orchestrator_runtime/sandbox/t7_shared.txt"]
+    },
+    {
+      "id": "AO4_T7_GOAL_B",
+      "title": "T7 parallel conflict test goal B",
+      "source": "hardening_test",
+      "risk": "LOW",
+      "auto_approve": true,
+      "sandbox_only": true,
+      "priority": 12,
+      "touches": ["orchestrator_runtime/sandbox/t7_shared.txt"]
+    },
+    {
+      "id": "AO4_T7_GOAL_C",
+      "title": "T7 parallel conflict test goal C",
+      "source": "hardening_test",
+      "risk": "LOW",
+      "auto_approve": true,
+      "sandbox_only": true,
+      "priority": 13,
+      "touches": ["orchestrator_runtime/sandbox/t7_unique.txt"]
+    }
+  ],
+  "risk_breakdown": {
+    "LOW": 6,
+    "MEDIUM": 4,
+    "HIGH": 3
+  },
+  "auto_approvable_count": 6,
+  "requires_approval_count": 7,
+  "notes": [
+    "AO3_HARD_T2_GOV added for hardening T2 governance test (MEDIUM + sandbox_only)",
+    "AO3_HARD_T3_HIGH added for hardening T3 safety test (HIGH risk human gate)"
+  ]
+}

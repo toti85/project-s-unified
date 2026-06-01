@@ -1,0 +1,10 @@
+{
+    "id": "AO3_HARD_T3_HIGH",
+    "title": "Modify production config file",
+    "source": "hardening_test",
+    "risk": "HIGH",
+    "sandbox_only": false,
+    "auto_approve": false,
+    "priority": 1,
+    "rationale": "HIGH risk goal touching production config — must require human approval"
+}

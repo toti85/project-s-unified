@@ -1,0 +1,1 @@
+{"timestamp": 1766951479, "hardcoded_dims": {"rows": 16, "cols": 64}, "real_dims": {"rows": 64, "cols": 64}, "proofA_len": 48, "proofB_len": 48, "proofA_first16": "86b7b181707bc9fcfc26fff10dfbc08b", "proofB_first16": "946e7269eccde7b2ef45250eb706492f", "bytes_equal": false, "result": "MISMATCH_OBSERVED", "error": null}

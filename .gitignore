@@ -1,0 +1,146 @@
+# ============================================
+# CREDENTIALS & SECRETS (CRITICAL)
+# ============================================
+.env
+.env.local
+.env.production
+.env.development
+.env.*
+*.env
+**/credentials.json
+**/service_account.json
+**/api_key*
+**/api-key*
+**/secret*
+**/token*
+!**.token.md
+
+# ============================================
+# PYTHON
+# ============================================
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.egg-info
+.venv/
+venv/
+env/
+
+# ============================================
+# NODE.JS
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ============================================
+# IDE & EDITORS
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ============================================
+# OS
+# ============================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============================================
+# TESTING
+# ============================================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ============================================
+# LOGS
+# ============================================
+*.log
+
+# ============================================
+# LARGE BINARY FILES
+# ============================================
+*.exe
+*.msi
+*.dll
+*.apk
+*.zip
+*.tar
+*.gz
+*.7z
+*.rar
+*.bz2
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.rbxl
+*.rbxm
+*.rbxlx
+*.rbxmx
+
+# ============================================
+# DATABASES
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+*.pkl
+
+# ============================================
+# BUILD ARTIFACTS
+# ============================================
+*.lock
+*.bak
+*.bak_cleanup
+
+# ============================================
+# PROJECT-S SPECIFIC
+# ============================================
+.benchmarks/
+orchestrator_runtime/cline_inbox/*
+orchestrator_runtime/cline_outbox/*
+!orchestrator_runtime/cline_inbox/.gitkeep
+!orchestrator_runtime/cline_outbox/.gitkeep
+
+# ============================================
+# GENERATED / TRANSFER ARTIFACTS
+# ============================================
+.transfer_list.txt
+.transfer_results.json
+.winrm_diagnosis.json
+.audit_results.json
+.gap*_results.json
+.phase*_results.json
+.redaction_results.json
+
+# ============================================
+# SENSITIVE REPORTS (optional - adjust as needed)
+# ============================================
+# Uncomment if reports contain secrets:
+# reports/*_credentials*
+# reports/*_secret*

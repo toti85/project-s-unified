@@ -1,0 +1,28 @@
+{
+  "cities": [
+    {
+      "name": "Budapest",
+      "temp": "5C",
+      "humidity": "65%",
+      "weather": "Cloudy"
+    },
+    {
+      "name": "Debrecen",
+      "temp": "3C",
+      "humidity": "70%",
+      "weather": "Rainy"
+    },
+    {
+      "name": "Szeged",
+      "temp": "4C",
+      "humidity": "68%",
+      "weather": "Cloudy"
+    },
+    {
+      "name": "Pecs",
+      "temp": "6C",
+      "humidity": "62%",
+      "weather": "Partly Cloudy"
+    }
+  ]
+}

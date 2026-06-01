@@ -1,0 +1,27 @@
+{
+  "bridge_id": "fc8335a2-e525-4a52-89d8-98161764892c",
+  "proposal_hash": "ab0a7e4e87c942ef",
+  "generated_at": "2026-04-28T14:12:28Z",
+  "source": {
+    "module": "organism.proposer",
+    "input_file": "C:\\ProjectS-Unified\\organism\\evidence\\top_proposals.md",
+    "input_generated_at": "2026-04-28T11:19:31.460804",
+    "input_summary": "TODO: learning.jsonl parsing bug... -- priority score: 87.65"
+  },
+  "generated_goal": "Task: TODO: learning.jsonl parsing bug...\nScope: in unknown\n\nSteps:\n  1. Read the TODO context — Understand the requirement\n  2. Plan the implementation — Break down into steps\n  3. Implement incrementally — Code + test in small pieces\n  4. Request review — Get feedback before merging\nSuccess criteria: All steps completed, changes reviewed and tested. No regressions introduced.",
+  "metadata": {
+    "priority_score": 87.65,
+    "strategic_score": 8.5,
+    "rabbit_hole_risk": "MEDIUM",
+    "risk_level": "MEDIUM",
+    "quick_win": false,
+    "estimated_complexity": "medium",
+    "issue_url": "",
+    "locations_count": 1,
+    "blocking_risks": [
+      "RISK_001 (DORMANT)"
+    ]
+  },
+  "status": "PENDING_HUMAN_REVIEW",
+  "next_action": "Toti ellenorzi, es ha rendben van: python meta_launcher.py --goal '<generated_goal>'"
+}

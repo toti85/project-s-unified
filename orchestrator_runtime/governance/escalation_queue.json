@@ -1,0 +1,12 @@
+{
+  "entries": [
+    {
+      "goal_id": "AO3_HARD_T4_FAIL",
+      "reason": "Max retries (2) exhausted. Goal requires human review.",
+      "feedback": "FAILED: retry also failed. Error: dependencies still missing.",
+      "attempts": 3,
+      "escalated_at": "2026-06-01T08:37:05.885216+00:00",
+      "status": "ESCALATED"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+No files changed, compilation skipped
+
+Ran 6 tests for test/H3_WithdrawalOrdering.t.sol:H3_WithdrawalOrderingTest
+[PASS] test_H3_ClaimOrderRespectDepositOrder() (gas: 530550)
+[PASS] test_H3_DepositCountMonotonic() (gas: 309365)
+[PASS] test_H3_FairnessNoInterference() (gas: 1136621)
+[PASS] test_H3_IndexAssignmentDeterministic() (gas: 369596)
+[PASS] test_H3_NoTimestampReordering() (gas: 220239)
+[PASS] test_H3_SkippingPrevention() (gas: 227851)
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 4.30ms (3.34ms CPU time)
+
+Ran 1 test suite in 51.06ms (4.30ms CPU time): 6 tests passed, 0 failed, 0 skipped (6 total tests)

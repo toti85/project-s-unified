@@ -1,0 +1,17 @@
+{
+  "run_id": "FA1_005",
+  "goal": "CLI test goal: verify run-loop works",
+  "status": "INVALID_STALE_OUTPUT",
+  "confidence": 0.0,
+  "summary": "INVALID: This run consumed stale cline_outbox output from a previous run. The output was not produced by Cline for this specific run. Run must be re-executed with stale output protection.",
+  "evidence_files": [],
+  "files_changed": [],
+  "tests_run": [],
+  "risks": [
+    "Stale output consumption: cline_outbox/last_output.md from previous run was consumed",
+    "No run_id/iteration validation on output consumption",
+    "No outbox clearing before new run"
+  ],
+  "next_action": "Re-run with stale output fix applied.",
+  "created_at": "2026-05-26T08:00:00+03:00"
+}

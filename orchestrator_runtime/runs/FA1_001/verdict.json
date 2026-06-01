@@ -1,0 +1,24 @@
+{
+  "run_id": "FA1_001",
+  "goal": "Create a Python helper script that lists markdown files in a given folder, with 3 unit tests, sandbox-only execution.",
+  "status": "PASS",
+  "confidence": 0.95,
+  "summary": "SANDBOX_TASK_001 completed successfully. md_lister.py and test_md_lister.py created in sandbox. All 3 unit tests passed. No files outside sandbox were modified. Safety policy violations: 0.",
+  "evidence_files": [
+    "orchestrator_runtime/sandbox/md_lister.py",
+    "orchestrator_runtime/sandbox/test_md_lister.py",
+    "orchestrator_runtime/runs/FA1_001/evidence.md"
+  ],
+  "files_changed": [
+    "orchestrator_runtime/sandbox/md_lister.py",
+    "orchestrator_runtime/sandbox/test_md_lister.py"
+  ],
+  "tests_run": [
+    "test_list_md_files_in_temp_dir: PASS",
+    "test_empty_directory: PASS",
+    "test_nonexistent_directory: PASS"
+  ],
+  "risks": [],
+  "next_action": "Proceed to FA1.2 semi-automated loop design.",
+  "created_at": "2026-05-24T21:47:00+03:00"
+}

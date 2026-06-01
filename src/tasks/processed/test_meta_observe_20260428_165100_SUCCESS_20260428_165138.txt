@@ -1,0 +1,2 @@
+List all Python files in C:\ProjectS-Unified\witness using FileSearchTool.
+Return file paths and sizes. Pattern: *.py

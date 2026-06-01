@@ -1,0 +1,187 @@
+{
+  "meta": {
+    "version": "1.0",
+    "last_updated": "2026-05-02T21:07:14.738472+00:00",
+    "updated_by": "knowledge_manager",
+    "schema_version": 1,
+    "last_startup": "2026-05-03T00:07:14.738472"
+  },
+  "system": {
+    "name": "Project-S",
+    "status": "operational",
+    "codebase": "project_s_super_core",
+    "entry_point": "main.py",
+    "startup_time_seconds": 4.0,
+    "python_version": "3.11",
+    "platform": "windows"
+  },
+  "models": {
+    "configured": {
+      "qwen3-235b": {
+        "provider": "openrouter",
+        "role": "primary",
+        "available": false,
+        "reason": "no_api_key"
+      },
+      "deepseek-v3": {
+        "provider": "openrouter",
+        "role": "strategic",
+        "available": false,
+        "reason": "no_api_key"
+      },
+      "gpt-4o-mini": {
+        "provider": "openai",
+        "role": "fallback",
+        "available": true
+      },
+      "gpt-3.5-turbo": {
+        "provider": "openai",
+        "role": "bulk",
+        "available": true
+      },
+      "claude-sonnet-4": {
+        "provider": "anthropic",
+        "role": "validator",
+        "available": false,
+        "reason": "no_api_key"
+      },
+      "llama3": {
+        "provider": "ollama",
+        "role": "local",
+        "available": true
+      },
+      "mistral": {
+        "provider": "ollama",
+        "role": "local",
+        "available": true
+      }
+    },
+    "available_count": 4,
+    "total_configured": 7,
+    "fallback_chain": [
+      "qwen3-235b",
+      "gpt-4o-mini",
+      "llama3"
+    ]
+  },
+  "components": {
+    "golden_age": {
+      "cognitive_core": {
+        "status": "working",
+        "file": "src/core/cognitive/cognitive_core.py",
+        "lines": 715
+      },
+      "workflow_engine": {
+        "status": "working",
+        "file": "src/core/orchestration/workflow_engine.py",
+        "lines": 959
+      },
+      "decision_router": {
+        "status": "working",
+        "file": "src/integrations/decision_routing/base_router.py",
+        "lines": 585
+      },
+      "ai_client": {
+        "status": "working",
+        "file": "src/integrations/ai_models/multi_model_ai_client.py"
+      },
+      "smart_orchestrator": {
+        "status": "partial",
+        "file": "tools/tools/registry/smart_orchestrator.py",
+        "lines": 1480
+      }
+    },
+    "organism": {
+      "observer": {
+        "status": "working",
+        "file": "organism/core/observer.py"
+      },
+      "prioritizer": {
+        "status": "working",
+        "file": "organism/core/prioritizer.py"
+      },
+      "proposer": {
+        "status": "working",
+        "file": "organism/core/proposer.py"
+      },
+      "taste_model": {
+        "status": "working",
+        "file": "organism/modules/taste_model.py"
+      },
+      "loop": {
+        "status": "working",
+        "file": "organism/core/loop.py"
+      }
+    },
+    "meta_learning": {
+      "ai_strategist": {
+        "status": "working",
+        "file": "src/core/meta/ai_strategist.py"
+      },
+      "ai_validator": {
+        "status": "working",
+        "file": "src/core/meta/ai_validator.py"
+      },
+      "meta_controller": {
+        "status": "partial",
+        "file": "src/core/meta/meta_controller.py"
+      },
+      "strategy_council": {
+        "status": "partial",
+        "file": "src/core/meta/strategy_council.py"
+      }
+    }
+  },
+  "memory": {
+    "learning_records": 213,
+    "meta_evidence_records": 403868,
+    "execution_events": 158,
+    "total_records": 404239,
+    "learning_file": "memory/intelligence/learning.jsonl",
+    "meta_evidence_file": "memory/intelligence/meta_evidence.jsonl",
+    "telemetry_file": "memory/telemetry/executions.jsonl"
+  },
+  "config": {
+    "env_file": ".env",
+    "system_config": "config/config.yaml",
+    "model_config": "config/models.yaml",
+    "log_level": "INFO",
+    "log_file": "logs/project_s.log"
+  },
+  "tools": {
+    "registry_file": "tools/tools/registry/smart_orchestrator.py",
+    "ghost_tools": 0,
+    "status": "clean"
+  },
+  "phase": {
+    "current": "phase_2",
+    "phase_1_completed": "2026-03-13",
+    "phase_1_score": "8/9",
+    "current_task": "knowledge_layer_v1",
+    "next_tasks": [
+      "pattern_learning_library",
+      "lm_studio_hybrid"
+    ]
+  },
+  "infrastructure": {
+    "dl380_gen9": {
+      "status": "ordered",
+      "specs": "36 cores, 128GB RAM, Tesla M60 16GB VRAM",
+      "purpose": "LM Studio local inference + Proxmox VMs"
+    },
+    "current_server": {
+      "location": "local_dev",
+      "os": "windows"
+    }
+  },
+  "not_implemented": [
+    "knowledge_layer_full",
+    "pattern_learning_library",
+    "lm_studio_hybrid",
+    "dream_mode",
+    "blackbox_guardrail",
+    "evidence_graph",
+    "agent_genome",
+    "emergence_catalog"
+  ]
+}

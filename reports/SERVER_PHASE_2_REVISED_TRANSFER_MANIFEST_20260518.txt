@@ -1,0 +1,138 @@
+============================================
+SERVER PHASE 2 - REVISED TRANSFER MANIFEST
+============================================
+Date: 2026-05-18
+Target: SHAYANSKA-DL380 (192.168.1.180)
+Destination: C:\ProjectS\project-s-code
+
+============================================
+TRANSFER STRATEGY: MINIMAL CODE/RUNTIME SNAPSHOT
+============================================
+
+This manifest defines the revised transfer scope for Server Phase 2.
+The goal is to transfer only the code and runtime-critical files
+needed to verify Python imports and run basic smoke tests.
+
+============================================
+SOURCE: C:\ProjectS-Unified
+DESTINATION: C:\ProjectS\project-s-code
+============================================
+
+============================================
+EXCLUDE PATTERNS (applied in order)
+============================================
+
+# Standard excludes (from original Phase 2)
+.git
+__pycache__
+*.pyc
+.pytest_cache
+.vscode
+node_modules
+.benchmarks
+*.log
+
+# NEW excludes for scope reduction
+*.zip                    # ZIP archives (238 MB savings)
+*meta_evidence*          # JSONL evidence files (105 MB savings)
+*audits*                 # Audit directories
+*bounty*                 # Bounty directories
+*.db                     # SQLite databases
+*.sqlite                 # SQLite databases
+*.sqlite3                # SQLite databases
+*.png                    # Image files
+*.jpg                    # Image files
+*.jpeg                   # Image files
+*.gif                    # Image files
+*.exe                    # Executables
+*.apk                    # Android packages
+*.msi                    # Installers
+*.dll                    # DLLs
+*.rbxl                   # Roblox models
+*.rbxm                   # Roblox meshes
+*.rbxlx                  # Roblox scenes
+*.rbxmx                  # Roblox meshes
+*.csv                    # CSV data files
+*.lock                   # Lock files
+*.bak                    # Backup files
+*.bak_cleanup            # Backup cleanup files
+*.html                   # HTML files (EXCEPT interactive_layer/static/ui.html - runtime UI)
+*.pdf                    # PDF files
+*.pkl                    # Pickle files
+*browser_automation_report*  # Old browser reports
+*ultra_optimized*        # Old optimization reports
+*test_output*            # Test output files
+*debug_output*           # Debug output files
+*d_output*               # Debug output files
+*e_output*               # Debug output files
+*qwen_full_run*          # Run output files
+*strategic_output*       # Run output files
+*test_strategic*         # Run output files
+
+# Transfer scripts (avoid circular copies)
+.transfer_list.txt
+transfer_*.ps1
+prepare_transfer.ps1
+test_winrm.ps1
+verify_server.ps1
+audit_transfer_scope.ps1
+transfer_v2.ps1
+transfer_v3.ps1
+transfer_v4.ps1
+
+============================================
+EXPECTED TRANSFER SIZE
+============================================
+
+Original scope:  1062 files, 520.55 MB
+Revised scope:    789 files, 172.03 MB
+Reduction:        26% fewer files, 67% less data
+
+============================================
+KEY DIRECTORIES EXPECTED ON SERVER
+============================================
+
+src/                    - Core source code
+tools/                  - Utility tools
+interactive_layer/      - Interactive layer code
+config/                 - Configuration files
+scripts/                - Bootstrap scripts
+tests/                  - Test files
+memory/telemetry/       - Runtime telemetry
+logs/                   - Server logs
+reports/                - Migration reports
+
+============================================
+KEY FILES EXPECTED ON SERVER
+============================================
+
+self_state.json
+PROJECT_S_OVERVIEW.md
+PROJECT_S_STATUS_AND_JOURNAL.md
+DECISIONS.md
+COMPONENT_INVENTORY.md
+README.md
+requirements.txt
+foundry.toml
+.env.example
+
+============================================
+PRE-TRANSFER CHECKLIST
+============================================
+
+[ ] Server staging directory cleaned (C:\ProjectS\project-s-code)
+[ ] WinRM connectivity verified
+[ ] Transfer script ready with revised exclude patterns
+[ ] Pre-transfer snapshot completed (if needed)
+
+============================================
+POST-TRANSFER VERIFICATION
+============================================
+
+[ ] File count matches expected (~789)
+[ ] Directory count matches expected
+[ ] Key directories present (src/, config/, interactive_layer/)
+[ ] Python import smoke test passes
+[ ] No unexpected files on server
+
+============================================

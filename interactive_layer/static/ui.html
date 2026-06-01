@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project-S Interactive Console</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Consolas', 'Courier New', monospace;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Header */
+  #header {
+    background: #16213e;
+    padding: 8px 16px;
+    border-bottom: 1px solid #0f3460;
+  }
+  #header h1 {
+    font-size: 16px;
+    color: #00d4ff;
+    font-weight: 600;
+  }
+  #header .subtitle {
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+  }
+  /* Session bar */
+  #session-bar {
+    background: #0f3460;
+    padding: 6px 16px;
+    font-size: 11px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  #session-bar .label { color: #888; }
+  #session-bar .value { color: #00d4ff; word-break: break-all; }
+  #health-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #e74c3c; display: inline-block; margin-right: 4px;
+  }
+  #health-dot.ok { background: #2ecc71; }
+  /* Main layout */
+  #main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+  /* Chat area */
+  #chat-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #0f3460;
+  }
+  #chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+  }
+  .msg { margin-bottom: 12px; }
+  .msg-user { color: #aaa; }
+  .msg-user .msg-label { color: #00d4ff; font-size: 10px; }
+  .msg-assistant { color: #2ecc71; }
+  .msg-assistant .msg-label { color: #2ecc71; font-size: 10px; }
+  .msg-error { color: #e74c3c; }
+  .msg-error .msg-label { color: #e74c3c; font-size: 10px; }
+  .msg-text {
+    margin-top: 4px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .msg-mission-id { font-size: 10px; color: #666; margin-top: 2px; }
+  /* Input area */
+  #input-area {
+    padding: 10px 16px;
+    background: #16213e;
+    border-top: 1px solid #0f3460;
+    display: flex;
+    gap: 8px;
+  }
+  #prompt-input {
+    flex: 1;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    resize: none;
+    height: 40px;
+  }
+  #prompt-input:focus { outline: none; border-color: #00d4ff; }
+  #send-btn {
+    background: #0f3460;
+    color: #00d4ff;
+    border: 1px solid #00d4ff;
+    border-radius: 4px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+  }
+  #send-btn:hover { background: #0f3460cc; }
+  #send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  /* Mission panel */
+  #mission-panel {
+    width: 340px;
+    background: #16213e;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #mission-panel h2 {
+    font-size: 12px;
+    color: #888;
+    padding: 8px 12px;
+    border-bottom: 1px solid #0f3460;
+    background: #0f3460;
+  }
+  #mission-info {
+    padding: 10px 12px;
+    font-size: 11px;
+    border-bottom: 1px solid #0f3460;
+  }
+  #mission-info .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  #mission-info .info-label { color: #888; }
+  #mission-info .info-value { color: #00d4ff; }
+  #mission-info .info-value.state-QUEUED { color: #f39c12; }
+  #mission-info .info-value.state-PLANNING { color: #3498db; }
+  #mission-info .info-value.state-EXECUTING { color: #e67e22; }
+  #mission-info .info-value.state-SYNTHESIZING { color: #9b59b6; }
+  #mission-info .info-value.state-WRITING { color: #1abc9c; }
+  #mission-info .info-value.state-COMPLETE { color: #2ecc71; }
+  #mission-info .info-value.state-FAILED { color: #e74c3c; }
+  #mission-info .info-value.state-TIMEOUT { color: #e74c3c; }
+  #state-log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 12px;
+    font-size: 10px;
+  }
+  .log-entry {
+    padding: 3px 0;
+    border-bottom: 1px solid #0f346033;
+    color: #888;
+  }
+  .log-entry .log-time { color: #555; margin-right: 6px; }
+  .log-entry .log-state { color: #00d4ff; }
+  /* Error panel */
+  #error-panel {
+    display: none;
+    background: #2c1111;
+    border: 1px solid #e74c3c44;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 8px 16px;
+    font-size: 11px;
+  }
+  #error-panel .error-title { color: #e74c3c; font-weight: 600; margin-bottom: 4px; }
+  #error-panel .error-detail { color: #c08080; }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #1a1a2e; }
+  ::-webkit-scrollbar-thumb { background: #0f3460; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header">
+  <h1>Project-S Interactive Console</h1>
+  <div class="subtitle">SAI mission runner — live state streaming</div>
+</div>
+
+<!-- Session bar -->
+<div id="session-bar">
+  <span><span class="label">user:</span> <span class="value">toti</span></span>
+  <span><span class="label">session:</span> <span class="value" id="session-id">loading...</span></span>
+  <span><span id="health-dot"></span><span class="label">health:</span> <span class="value" id="health-status">checking...</span></span>
+</div>
+
+<!-- Main -->
+<div id="main">
+  <!-- Chat panel -->
+  <div id="chat-panel">
+    <div id="chat-messages"></div>
+    <div id="error-panel">
+      <div class="error-title">Mission Failed</div>
+      <div class="error-detail" id="error-detail"></div>
+    </div>
+    <div id="input-area">
+      <textarea id="prompt-input" placeholder="Enter mission prompt..."></textarea>
+      <button id="send-btn" onclick="sendMission()">Send</button>
+    </div>
+  </div>
+
+  <!-- Mission panel -->
+  <div id="mission-panel">
+    <h2>Live Mission Status</h2>
+    <div id="mission-info">
+      <div class="info-row">
+        <span class="info-label">mission_id:</span>
+        <span class="info-value" id="mi-mid">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">state:</span>
+        <span class="info-value" id="mi-state">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">progress:</span>
+        <span class="info-value" id="mi-progress">—</span>
+      </div>
+    </div>
+    <div id="state-log"></div>
+  </div>
+</div>
+
+<script>
+// ── State ──
+var sessionId = null;
+var currentMissionId = null;
+var eventSource = null;
+
+// ── Init ──
+window.addEventListener('DOMContentLoaded', function() {
+  checkHealth();
+  loadSession();
+  document.getElementById('prompt-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMission();
+    }
+  });
+});
+
+// ── Health ──
+function checkHealth() {
+  fetch('/health')
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      document.getElementById('health-dot').className = 'ok';
+      document.getElementById('health-status').textContent = 'ok';
+    })
+    .catch(function() {
+      document.getElementById('health-status').textContent = 'down';
+    });
+}
+
+// ── Session ──
+function loadSession() {
+  var stored = localStorage.getItem('ps_session_id');
+  if (stored) {
+    fetch('/api/sessions/' + stored)
+      .then(function(r) {
+        if (r.ok) {
+          sessionId = stored;
+          document.getElementById('session-id').textContent = sessionId;
+          return;
+        }
+        throw new Error('not found');
+      })
+      .catch(createSession);
+  } else {
+    createSession();
+  }
+}
+
+function createSession() {
+  fetch('/api/sessions', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({user_id: 'toti'})
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    sessionId = data.session_id;
+    localStorage.setItem('ps_session_id', sessionId);
+    document.getElementById('session-id').textContent = sessionId;
+  })
+  .catch(function(e) {
+    document.getElementById('session-id').textContent = 'ERROR: ' + e.message;
+  });
+}
+
+// ── Send Mission ──
+function sendMission() {
+  var input = document.getElementById('prompt-input');
+  var prompt = input.value.trim();
+  if (!prompt) return;
+  if (!sessionId) { alert('Session not ready, wait...'); return; }
+
+  var btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  input.disabled = true;
+
+  // Clear error panel
+  document.getElementById('error-panel').style.display = 'none';
+
+  // Reset live mission panel for new mission
+  document.getElementById('state-log').innerHTML = '';
+
+  // Add user message
+  addChatMessage('user', prompt);
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({session_id: sessionId, message: prompt, user_id: 'toti'})
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var mid = data.mission_id;
+    addChatMessage('system', 'Mission queued: ' + mid);
+    currentMissionId = mid;
+    updateMissionPanel(mid, 'QUEUED', 0);
+    addStateLog('Mission created', 'QUEUED');
+    startSSE(mid);
+  })
+  .catch(function(e) {
+    addChatMessage('error', 'Failed to create mission: ' + e.message);
+    btn.disabled = false;
+    input.disabled = false;
+  });
+}
+
+// ── SSE ──
+function startSSE(missionId) {
+  if (eventSource) {
+    eventSource.close();
+  }
+
+  eventSource = new EventSource('/api/missions/' + missionId + '/stream');
+
+  eventSource.addEventListener('mission_state', function(e) {
+    var data = JSON.parse(e.data);
+    var state = data.state;
+    var ts = data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : '';
+
+    updateMissionPanel(missionId, state, data.progress || 0);
+    addStateLog(ts, state);
+
+    // If we just entered a terminal state, don't fetch result yet
+    // The terminal event handler will do that
+  });
+
+  eventSource.addEventListener('mission_terminal', function(e) {
+    var data = JSON.parse(e.data);
+    var state = data.state;
+    var ts = data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : '';
+
+    addStateLog(ts, state + ' [TERMINAL]');
+    updateMissionPanel(missionId, state, 1.0);
+
+    // Fetch final result
+    fetch('/api/missions/' + missionId)
+      .then(function(r) { return r.json(); })
+      .then(function(mission) {
+        if (state === 'COMPLETE' && mission.result) {
+          addChatMessage('assistant', mission.result);
+        } else if (state === 'FAILED' || state === 'TIMEOUT') {
+          var errMsg = 'Mission ' + state;
+          if (mission.error) errMsg += ': ' + mission.error;
+          addChatMessage('error', errMsg);
+          document.getElementById('error-panel').style.display = 'block';
+          document.getElementById('error-detail').textContent = mission.error || 'No error details';
+        }
+      })
+      .catch(function(e) {
+        addChatMessage('error', 'Failed to fetch result: ' + e.message);
+      });
+
+    // Re-enable input
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('prompt-input').disabled = false;
+    currentMissionId = null;
+
+    eventSource.close();
+  });
+
+  eventSource.addEventListener('error', function(e) {
+    var data = JSON.parse(e.data);
+    addChatMessage('error', 'SSE error: ' + (data.error || JSON.stringify(data)));
+    document.getElementById('send-btn').disabled = false;
+    document.getElementById('prompt-input').disabled = false;
+    eventSource.close();
+  });
+
+  eventSource.onerror = function(e) {
+    // Connection error — EventSource will auto-reconnect
+  };
+}
+
+// ── UI Helpers ──
+function addChatMessage(type, text) {
+  var container = document.getElementById('chat-messages');
+  var div = document.createElement('div');
+  div.className = 'msg msg-' + type;
+
+  var label = '';
+  if (type === 'user') label = 'YOU';
+  else if (type === 'assistant') label = 'PROJECT-S';
+  else if (type === 'error') label = 'ERROR';
+  else label = 'SYSTEM';
+
+  div.innerHTML = '<div class="msg-label">' + label + '</div><div class="msg-text">' + escapeHtml(text) + '</div>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function updateMissionPanel(mid, state, progress) {
+  document.getElementById('mi-mid').textContent = mid.length > 20 ? mid.substring(0, 16) + '...' : mid;
+  var stateEl = document.getElementById('mi-state');
+  stateEl.textContent = state;
+  stateEl.className = 'info-value state-' + state;
+  document.getElementById('mi-progress').textContent = (progress * 100).toFixed(0) + '%';
+}
+
+function addStateLog(time, state) {
+  var log = document.getElementById('state-log');
+  var div = document.createElement('div');
+  div.className = 'log-entry';
+  div.innerHTML = '<span class="log-time">' + (time || '--:--:--') + '</span><span class="log-state">' + escapeHtml(state) + '</span>';
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>

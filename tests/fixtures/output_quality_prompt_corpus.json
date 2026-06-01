@@ -1,0 +1,252 @@
+{
+  "corpus_version": "1.0",
+  "created": "2026-05-21",
+  "milestone": "MS-OQ1",
+  "description": "20-prompt output quality evaluation corpus for Project-S Interactive Layer baseline measurement.",
+  "route_groups": 5,
+  "prompts_per_group": 4,
+  "total_prompts": 20,
+  "prompts": [
+
+    {
+      "id": "DL_01",
+      "route_type_expected": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "group": "A",
+      "prompt": "Írj 3 rövid mondatot arról, miért fontos a pontos dokumentáció a szoftverrendszerekben.",
+      "expected_quality_notes": "3 well-formed sentences, each clearly about documentation importance. No filler.",
+      "scoring_focus": "Relevance (exact 3 sentences), Structure (3 sentences, not a list or essay), Action-readiness (usable content)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "simple_explanation"
+    },
+
+    {
+      "id": "DL_02",
+      "route_type_expected": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "group": "A",
+      "prompt": "Írj egy rövid (4-6 soros) motiváló üzenetet egy programozónak, aki belefáradt a hibakeresésbe.",
+      "expected_quality_notes": "4–6 lines of genuine motivational content, not generic corporate-speak. Should feel human.",
+      "scoring_focus": "Relevance (length, tone), Specificity (programmer context, not generic), Structure (lines match requested range)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "short_creative_writing"
+    },
+
+    {
+      "id": "DL_03",
+      "route_type_expected": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "group": "A",
+      "prompt": "Adj pontosan 4 soros választ. Minden sor elején legyen egy kötőjel. Téma: mik a Python előnyei más nyelvekkel szemben.",
+      "expected_quality_notes": "Exactly 4 lines, each starting with a dash '-'. Content about Python advantages.",
+      "scoring_focus": "Relevance (Python advantages, exact format), Structure (4 lines, dash prefix), Specificity (named advantages, not vague)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "structured_list"
+    },
+
+    {
+      "id": "DL_04",
+      "route_type_expected": "DIRECT_LIGHTWEIGHT_RESPONSE",
+      "group": "A",
+      "prompt": "Mi az a REST API? Adj egy egyszerű definíciót és egy konkrét példát a mindennapi életből.",
+      "expected_quality_notes": "Clear definition + one concrete analogy or real-world example. Not overly technical.",
+      "scoring_focus": "Relevance (definition + example), Specificity (concrete example, not abstract), Truthfulness (technically correct)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "definition_with_example"
+    },
+
+    {
+      "id": "TU_01",
+      "route_type_expected": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "group": "B",
+      "prompt": "Mondd meg biztosan, hogy holnap pontosan mennyi bevétele lesz a Project-S-nek.",
+      "expected_quality_notes": "Should clearly state this cannot be known. Should not fabricate a number. May offer alternatives (what CAN be said).",
+      "scoring_focus": "Truthfulness (no fabricated number, explicit uncertainty), Relevance (addresses why it cannot be answered), Action-readiness (what the user CAN do instead)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "future_quantitative_certainty"
+    },
+
+    {
+      "id": "TU_02",
+      "route_type_expected": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "group": "B",
+      "prompt": "Melyik AI modell lesz 2027-ben a legjobb? Add meg a nevét, pontszámát és a fejlesztő cégét pontosan.",
+      "expected_quality_notes": "Should acknowledge this is an unknowable future prediction. No fabricated model name or score.",
+      "scoring_focus": "Truthfulness (refuses to fabricate future facts), Specificity (explains WHY: fast-moving field, no data), Action-readiness (what signals to watch)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "speculative_prediction"
+    },
+
+    {
+      "id": "TU_03",
+      "route_type_expected": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "group": "B",
+      "prompt": "Garantáld nekem, hogy a Project-S bounty hunting aktivitása 6 hónapon belül 10 000 EUR bevételt fog hozni.",
+      "expected_quality_notes": "Must not give a guarantee. Should explain the nature of bounty hunting uncertainty. Should not be dismissive.",
+      "scoring_focus": "Truthfulness (no fake guarantee), Specificity (names the specific uncertainties: severity, acceptance, competition), Structure (clear explanation not wall text)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "personal_guarantee"
+    },
+
+    {
+      "id": "TU_04",
+      "route_type_expected": "TRUTHFUL_UNCERTAINTY_RESPONSE",
+      "group": "B",
+      "prompt": "Ha 2026. január 1-jén nem fejlesztettem volna tovább a Project-S-t, pontosan hol tartana most?",
+      "expected_quality_notes": "Classic unknowable counterfactual. Should not pretend to know the alternate timeline. May reason about dependencies.",
+      "scoring_focus": "Truthfulness (counterfactuals are inherently unknowable), Specificity (names what IS known vs. what is unknowable), Relevance (engages with the thought experiment)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "impossible_counterfactual"
+    },
+
+    {
+      "id": "ID_01",
+      "route_type_expected": "INTERNAL_PROJECT_DOC_REASONING",
+      "group": "C",
+      "prompt": "Írj 5 rövid pontot arról, hogy mi a Project-S jelenlegi állapota.",
+      "expected_quality_notes": "5 points grounded in self_state.json facts: phase, gaps resolved, active capabilities, etc. Not generic AI inference.",
+      "scoring_focus": "Truthfulness (documented facts, not guessed), Specificity (gap counts, phase name, milestone references), Relevance (current state, not history)",
+      "requires_external_web": false,
+      "requires_internal_docs": true,
+      "topic": "self_state_current_status"
+    },
+
+    {
+      "id": "ID_02",
+      "route_type_expected": "INTERNAL_PROJECT_DOC_REASONING",
+      "group": "C",
+      "prompt": "Sorolj fel 3 gap-et, amelyeket a Project-S megoldott, és mondd el röviden, mit javítottak.",
+      "expected_quality_notes": "3 real GAP entries (e.g., GAP_029, GAP_030, GAP_031) with accurate descriptions of what each fixed.",
+      "scoring_focus": "Specificity (real GAP IDs and correct descriptions), Truthfulness (accurate fix descriptions), Relevance (gaps that are actually RESOLVED)",
+      "requires_external_web": false,
+      "requires_internal_docs": true,
+      "topic": "gap_history_query"
+    },
+
+    {
+      "id": "ID_03",
+      "route_type_expected": "INTERNAL_PROJECT_DOC_REASONING",
+      "group": "C",
+      "prompt": "A Project-S jelenlegi dokumentumai alapján mondd meg, mi a következő legésszerűbb fejlesztési irány.",
+      "expected_quality_notes": "Should reference next_concrete_step or active_focus from docs. Should not invent a random new direction.",
+      "scoring_focus": "Truthfulness (grounded in documented next steps), Specificity (concrete direction, not 'improve the system'), Action-readiness (useful planning input)",
+      "requires_external_web": false,
+      "requires_internal_docs": true,
+      "topic": "next_step_recommendation"
+    },
+
+    {
+      "id": "ID_04",
+      "route_type_expected": "INTERNAL_PROJECT_DOC_REASONING",
+      "group": "C",
+      "prompt": "Milyen AI modellek vannak jelenleg konfigurálva a Project-S-ben, és melyiket mire használja?",
+      "expected_quality_notes": "Should describe the model_policy: qwen3.6-35b-a3b for synthesis, qwen3-235b for Phase 1, deepseek for evaluator.",
+      "scoring_focus": "Specificity (actual model names and roles), Truthfulness (matches model_policy from self_state.json), Structure (clear model → role mapping)",
+      "requires_external_web": false,
+      "requires_internal_docs": true,
+      "topic": "architecture_question"
+    },
+
+    {
+      "id": "ER_01",
+      "route_type_expected": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "group": "D",
+      "prompt": "Keress röviden 3 aktuális okot arra, miért hasznos a lokális LLM egy saját AI-infrastruktúrában, és foglald össze 5 pontban.",
+      "expected_quality_notes": "5 numbered points from real web results about local LLM benefits. Should be current (2025-2026 sources if available).",
+      "scoring_focus": "Relevance (local LLM, own infra), Specificity (real named benefits, not generic), Truthfulness (sourced synthesis, not hallucinated), Structure (numbered 5 points)",
+      "requires_external_web": true,
+      "requires_internal_docs": false,
+      "topic": "current_fact_lookup"
+    },
+
+    {
+      "id": "ER_02",
+      "route_type_expected": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "group": "D",
+      "prompt": "Keress röviden: milyen trendek jellemzik az AI agent keretrendszerek fejlődését 2025-2026-ban? Foglald össze 4 pontban.",
+      "expected_quality_notes": "4 points about AI agent framework trends (LangGraph, CrewAI, etc.). Should reflect current landscape.",
+      "scoring_focus": "Specificity (named frameworks or trends), Truthfulness (web-sourced, not hallucinated), Structure (4 numbered points), Relevance (2025-2026 timeframe)",
+      "requires_external_web": true,
+      "requires_internal_docs": false,
+      "topic": "trend_summary"
+    },
+
+    {
+      "id": "ER_03",
+      "route_type_expected": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "group": "D",
+      "prompt": "Nézz utána: miben különbözik az Ollama a LM Studio-tól helyi LLM futtatás szempontjából? Adj rövid összehasonlítást.",
+      "expected_quality_notes": "Comparison of Ollama vs LM Studio: interface, ease of use, model support, API. Should be concrete.",
+      "scoring_focus": "Specificity (concrete differences, not 'both are good'), Relevance (comparison of the two tools), Structure (clear comparison format), Truthfulness (accurate tool descriptions)",
+      "requires_external_web": true,
+      "requires_internal_docs": false,
+      "topic": "tool_comparison"
+    },
+
+    {
+      "id": "ER_04",
+      "route_type_expected": "EXTERNAL_RESEARCH_SYNTHESIS",
+      "group": "D",
+      "prompt": "Keress röviden: mi az a Model Context Protocol (MCP), és miért fontos? Foglald össze 3 pontban.",
+      "expected_quality_notes": "3 points about MCP: what it is, why it matters for AI tool integration. Should reference Anthropic or real sources.",
+      "scoring_focus": "Relevance (MCP explained), Specificity (what MCP does concretely), Truthfulness (accurate description of the protocol), Structure (3 numbered points)",
+      "requires_external_web": true,
+      "requires_internal_docs": false,
+      "topic": "new_technology_explanation"
+    },
+
+    {
+      "id": "FA_01",
+      "route_type_expected": "FULL_AGENTIC_META_CONTROLLER",
+      "group": "E",
+      "prompt": "Készíts rövid döntési memót: a Project-S következő UI-fejlesztése legyen mobilbarát design vagy parancssoros dashboard? Elemezd a két opciót és adj ajánlást.",
+      "expected_quality_notes": "Should produce a decision memo with analysis of both options and a concrete recommendation. Should use Project-S context if available.",
+      "scoring_focus": "Structure (memo format, sections), Specificity (actual tradeoffs named), Action-readiness (decision-ready recommendation), Relevance (both options analyzed)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "multi_step_analysis"
+    },
+
+    {
+      "id": "FA_02",
+      "route_type_expected": "FULL_AGENTIC_META_CONTROLLER",
+      "group": "E",
+      "prompt": "Hasonlítsd össze a FastAPI-t és a Flask-ot egy AI backend API építéséhez 4 szempont szerint: teljesítmény, async támogatás, dokumentáció, közösség.",
+      "expected_quality_notes": "Structured comparison table or 4-section analysis. Concrete claims, not vague impressions.",
+      "scoring_focus": "Structure (4 criteria clearly addressed), Specificity (concrete facts per criterion), Relevance (AI backend context), Truthfulness (accurate framework claims)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "structured_comparison"
+    },
+
+    {
+      "id": "FA_03",
+      "route_type_expected": "FULL_AGENTIC_META_CONTROLLER",
+      "group": "E",
+      "prompt": "Szintetizálj egy rövid összefoglalót: hogyan lehet biztonságosan kezelni az API kulcsokat egy Python alapú AI rendszerben? Adj legalább 5 konkrét gyakorlati szabályt.",
+      "expected_quality_notes": "5+ concrete security rules for API key management. Not generic. Should include env vars, secrets managers, rotation, etc.",
+      "scoring_focus": "Specificity (5 named concrete rules), Truthfulness (accurate security advice), Action-readiness (rules can be implemented), Structure (numbered list or clear sections)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "document_synthesis"
+    },
+
+    {
+      "id": "FA_04",
+      "route_type_expected": "FULL_AGENTIC_META_CONTROLLER",
+      "group": "E",
+      "prompt": "Lassú a laptop. Mérd fel röviden, milyen irányokban lehetne gyorsítani. Adj prioritásos listát.",
+      "expected_quality_notes": "Prioritized list of laptop performance improvements. Should distinguish quick wins from deeper interventions.",
+      "scoring_focus": "Structure (prioritized list), Specificity (concrete actionable steps), Relevance (laptop performance), Action-readiness (can act immediately on top items)",
+      "requires_external_web": false,
+      "requires_internal_docs": false,
+      "topic": "decision_support_memo"
+    }
+
+  ]
+}

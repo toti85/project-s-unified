@@ -1,0 +1,19 @@
+{
+  "task": "Search the web for 2026 developments in local AI workflow orchestration. Write a concise strategic memo to C:\\ProjectS-U",
+  "output_file": "C:\\ProjectS-Unified\\reports\\QWEN_DEFAULT_SYNTHESIS_SMOKE_20260514.md",
+  "success": true,
+  "elapsed_s": 42.7,
+  "file_exists": true,
+  "file_size_bytes": 3480,
+  "section_score": "5/5",
+  "section_results": {
+    "Executive Summary section": true,
+    "Key Findings section": true,
+    "Recommendation section": true,
+    "Sources section": true,
+    "Non-empty content": true
+  },
+  "synthesis_model_override": null,
+  "expected_synthesis_model": "qwen/qwen3.6-35b-a3b",
+  "verdict": "PASS"
+}

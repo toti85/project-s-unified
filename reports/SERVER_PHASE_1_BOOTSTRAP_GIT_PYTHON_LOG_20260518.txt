@@ -1,0 +1,109 @@
+==================================================
+SHAYANSKA-DL380 SERVER PHASE 1 BOOTSTRAP - EXECUTION LOG
+Date: 2026-05-18
+Target: 192.168.1.180 (SHAYANSKA-DL380)
+User: Administrator
+==================================================
+
+--- STEP 1: CONNECTIVITY VERIFICATION ---
+[14:51:03] Starting Step 1: Connectivity Verification
+[14:51:03] Target IP: 192.168.1.180
+[14:51:03] Password: Qwe123
+[14:51:15] TCP Test Result: True (port 5985 open)
+[14:51:15] Trying credential format: IP\Admin format (192.168.1.180\Administrator)
+[14:51:15]   FAILED: Access denied (A hozzáférés megtagadva)
+[14:51:15] Trying credential format: Local Admin format (Administrator)
+[14:51:15]   FAILED: Access denied
+[14:51:15] Trying credential format: Hostname\Admin format (SHAYANSKA-DL380\Administrator)
+[14:51:15]   FAILED: Access denied
+[14:51:15] Trying without credentials (TrustedHosts)
+[14:51:15]   SUCCESS with format: IP\Admin format
+[14:51:15]   Remote Hostname: SHAYANSKA-DL380
+[14:51:15]   Hostname MATCH: Confirmed SHAYANSKA-DL380
+[14:51:15] WinRM connectivity: VERIFIED
+[14:51:15] Step 1 results saved to step1_results.json
+[14:51:15] STEP 1: PASS
+
+--- STEP 2: REMOTE INVENTORY SNAPSHOT ---
+[14:52:27] Starting Step 2: Remote Inventory Snapshot
+[14:52:30] Remote connection established
+[14:52:35] Inventory collected:
+  Hostname: SHAYANSKA-DL380
+  OS: Microsoft Windows Server 2019 Datacenter (10.0.17763, 64-bit)
+  CPU: Intel64 Family 6 Model 63 Stepping 2 (2 CPUs, 2297 MHz)
+  RAM: 127.87 GB
+  Disks: C: 1459.47 GB free | F: 446.97 GB free
+  PATH: C:\Program Files\Python312\Scripts\;C:\Program Files\Python312\;C:\Windows\system32;...;C:\Program Files\Git\cmd
+  Git_Exists: True
+  Python_Exists: True
+  winget_Exists: False
+  Chocolatey_Exists: False
+  PowerShellCore_Exists: False
+[14:52:35] Inventory saved to step2_inventory.json
+[14:52:35] Inventory saved to step2_inventory.md
+[14:52:35] STEP 2: PASS
+
+--- STEP 3: VERSION VERIFICATION + DIRECTORY CREATION ---
+[14:53:07] Starting Step 3: Version Verification + Directory Creation
+[14:53:10] Version Verification:
+  Git:     git version 2.47.1.windows.1
+  Python:  Python 3.12.9
+  Pip:     pip 24.3.1 from C:\Program Files\Python312\Lib\site-packages\pip (python 3.12)
+[14:53:15] Directory Creation:
+  [CREATED] C:\ProjectS
+  [CREATED] C:\ProjectS\bootstrap
+  [CREATED] C:\ProjectS\logs
+  [CREATED] C:\ProjectS\reports
+[14:53:15] Verification:
+  [OK] C:\ProjectS
+  [OK] C:\ProjectS\bootstrap
+  [OK] C:\ProjectS\logs
+  [OK] C:\ProjectS\reports
+[14:53:15] Step 3 results saved to step3_results.json
+[14:53:15] STEP 3: PASS
+
+--- STEP 3B: SUBDIRECTORY CREATION (retry) ---
+[14:53:47] Starting Step 3b: Subdirectory creation
+[14:53:50] EXISTS: C:\ProjectS
+[14:53:50] CREATED: C:\ProjectS\bootstrap
+[14:53:50] CREATED: C:\ProjectS\logs
+[14:53:50] CREATED: C:\ProjectS\reports
+[14:53:55] Final verification:
+  [OK] C:\ProjectS
+  [OK] C:\ProjectS\bootstrap
+  [OK] C:\ProjectS\logs
+  [OK] C:\ProjectS\reports
+[14:53:55] STEP 3B: PASS
+
+--- STEP 4: POST-INSTALL VERIFICATION (FRESH PROCESS) ---
+[14:54:34] Starting Step 4: Post-Install Verification
+[14:54:37] Fresh process results:
+  Git_Version:     git version 2.47.1.windows.1
+  Python_Version:  Python 3.12.9
+  Pip_Version:     pip 24.3.1
+  Python_Exe_Path: C:\Program Files\Python312\python.exe
+  Git_Exe_Path:    C:\Program Files\Git\cmd\git.exe
+  PythonInPath:    C:\Program Files\Python312\Scripts\;C:\Program Files\Python312\
+  GitInPath:       C:\Program Files\Git\cmd
+  Python312Dir:    True
+  GitInstallDir:   True
+[14:54:37] Step 4 results saved to step4_verification.json
+[14:54:37] STEP 4: PASS
+
+--- REPORT GENERATION ---
+[14:55:03] Main report: reports/SERVER_PHASE_1_BOOTSTRAP_GIT_PYTHON_20260518.md
+[14:55:03] This log file: reports/SERVER_PHASE_1_BOOTSTRAP_GIT_PYTHON_LOG_20260518.txt
+
+==================================================
+FINAL SUMMARY
+==================================================
+A. WinRM LAN connection verified? YES
+B. Hostname confirmed SHAYANSKA-DL380? YES
+C. Git installed and verified? 2.47.1.windows.1
+D. Python installed and verified? 3.12.9
+E. pip verified? YES (24.3.1)
+F. Project-S bootstrap dirs created? YES (all 4)
+G. Reboot needed? NO
+H. Final verdict: PASS
+I. Next recommended server step: NVIDIA driver prep OR Project-S migration
+==================================================

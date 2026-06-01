@@ -1,0 +1,7 @@
+{
+  "id": "AO4_T7_GOAL_C",
+  "risk": "LOW",
+  "auto_approve": true,
+  "sandbox_only": true,
+  "touches": ["orchestrator_runtime/sandbox/t7_unique.txt"]
+}

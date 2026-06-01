@@ -1,0 +1,186 @@
+{
+  "timestamp": "2025-12-26T23:38:08.504735",
+  "title": "Uniswap V3 POC Test Plan",
+  "target": "Uniswap V3 Core",
+  "network": "Sepolia Testnet (no mainnet risk)",
+  "status": "READY FOR IMPLEMENTATION",
+  "test_suites": [
+    {
+      "name": "Reentrancy Tests",
+      "file": "test/reentrancy.test.ts",
+      "tests": [
+        {
+          "name": "Flash Swap Reentrancy",
+          "description": "Attempt reentrancy in flash swap callback",
+          "severity": "CRITICAL",
+          "estimated_reward": "$50,000 - $100,000",
+          "test_steps": [
+            "1. Create mock token pair",
+            "2. Deploy UNI V3 pool",
+            "3. Execute flash swap",
+            "4. In callback, attempt state mutation before callback end",
+            "5. Verify if guard is insufficient"
+          ]
+        },
+        {
+          "name": "Mint Reentrancy",
+          "description": "Reentrancy in mint() callback",
+          "severity": "CRITICAL",
+          "test_steps": [
+            "1. Deploy attacker contract",
+            "2. Call mint() on pool",
+            "3. In callback, call mint() again",
+            "4. Check if guard prevents nested calls"
+          ]
+        },
+        {
+          "name": "Collect Reentrancy",
+          "description": "Extract fees with reentrancy",
+          "severity": "CRITICAL",
+          "estimated_profit": "All fees in pool",
+          "test_steps": [
+            "1. Accumulate fees (swap activity)",
+            "2. Call collect()",
+            "3. In callback, call collect() again",
+            "4. Verify guard mechanisms"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Precision Loss Tests",
+      "file": "test/precision.test.ts",
+      "tests": [
+        {
+          "name": "1 Wei Dust Attack",
+          "description": "Loss from rounding with minimal amounts",
+          "severity": "HIGH",
+          "test_steps": [
+            "1. Create pool with 18-decimal tokens",
+            "2. Mint with 1 wei liquidity",
+            "3. Perform small swaps",
+            "4. Check if dust accumulates in pool"
+          ]
+        },
+        {
+          "name": "Division Rounding",
+          "description": "Precision loss in division operations",
+          "severity": "HIGH",
+          "test_steps": [
+            "1. Test LiquidityMath functions",
+            "2. Use values that divide with remainder",
+            "3. Verify rounding direction",
+            "4. Check for exploitable patterns"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Flash Loan Attack Tests",
+      "file": "test/flashloan.test.ts",
+      "tests": [
+        {
+          "name": "Price Oracle Manipulation",
+          "description": "Manipulate TWAP with flash loan",
+          "severity": "HIGH",
+          "estimated_reward": "$10,000 - $50,000",
+          "test_steps": [
+            "1. Deploy TWAP oracle (Uniswap V3 oracle)",
+            "2. Take flash loan",
+            "3. Massive swap to skew price",
+            "4. Observe oracle values",
+            "5. Repay flash loan",
+            "6. Check if oracle was manipulated"
+          ]
+        },
+        {
+          "name": "Liquidity Draining",
+          "description": "Extract liquidity using flash loan",
+          "severity": "HIGH",
+          "test_steps": [
+            "1. Use flash loan to get capital",
+            "2. Execute large swap",
+            "3. Drain pool of token0",
+            "4. Check if flashloan must be repaid"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tick Bitmap Tests",
+      "file": "test/ticks.test.ts",
+      "tests": [
+        {
+          "name": "Tick Overflow",
+          "description": "Integer overflow in tick management",
+          "severity": "HIGH",
+          "test_steps": [
+            "1. Test TickBitmap.flipTick()",
+            "2. Use max/min tick values",
+            "3. Check for overflow conditions",
+            "4. Verify boundary checks"
+          ]
+        }
+      ]
+    }
+  ],
+  "setup_requirements": {
+    "network": "Sepolia Testnet",
+    "wallet": "Development wallet with testnet ETH",
+    "node": "Hardhat local node fork or RPC endpoint",
+    "tools": [
+      "Hardhat",
+      "Ethers.js",
+      "Waffle"
+    ]
+  },
+  "setup_commands": [
+    "npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox",
+    "npm install --save-dev @uniswap/v3-core @uniswap/v3-periphery",
+    "npx hardhat init",
+    "npm install dotenv"
+  ],
+  "hardhat_config": "\n// hardhat.config.js\nmodule.exports = {\n  solidity: \"0.7.6\",\n  networks: {\n    sepolia: {\n      url: process.env.SEPOLIA_RPC_URL,\n      accounts: [process.env.PRIVATE_KEY],\n      chainId: 11155111\n    },\n    hardhat: {\n      forking: {\n        enabled: true,\n        url: process.env.SEPOLIA_RPC_URL,\n        blockNumber: process.env.FORK_BLOCK\n      }\n    }\n  }\n};\n        ",
+  "expected_outcomes": {
+    "best_case": {
+      "finding": "Critical reentrancy vulnerability",
+      "severity": "CRITICAL",
+      "reward": "$50,000 - $100,000",
+      "description": "Unguarded external call allowing fund extraction"
+    },
+    "good_case": {
+      "finding": "High severity precision or flash loan issue",
+      "severity": "HIGH",
+      "reward": "$5,000 - $50,000",
+      "description": "Economically exploitable but harder to execute"
+    },
+    "baseline": {
+      "finding": "Medium findings + responsible disclosure",
+      "severity": "MEDIUM",
+      "reward": "$1,000 - $10,000",
+      "description": "Still valuable, less immediate impact"
+    }
+  },
+  "timeline": {
+    "setup": "1-2 hours",
+    "poc_development": "16-24 hours",
+    "testing": "8-16 hours",
+    "documentation": "4-8 hours",
+    "submission": "1 hour",
+    "total": "30-50 hours"
+  },
+  "responsible_disclosure": {
+    "testnet_only": "All tests run on Sepolia, no mainnet",
+    "no_deployment": "Do not deploy to mainnet",
+    "no_profit": "POC is for verification only",
+    "embargo": "30-day disclosure period after Uniswap acknowledgment",
+    "documentation": "Include mitigation recommendations"
+  },
+  "submission_requirements": {
+    "format": "Detailed vulnerability report with POC",
+    "code": "Solidity test file demonstrating vulnerability",
+    "impact": "Clear explanation of financial impact",
+    "timeline": "Suggested timeline for patch/disclosure",
+    "references": "Links to relevant code/documentation"
+  }
+}

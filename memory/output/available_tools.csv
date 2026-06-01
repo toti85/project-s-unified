@@ -1,0 +1,11 @@
+name,category,purpose
+file_reader,File I/O,Read file contents
+file_writer,File I/O,Write data to files
+file_search,File I/O,Search files in directory
+web_api_call,Web,Call REST APIs
+web_scraper,Web,Scrape web pages
+web_analyzer,Web,Analyze web content
+pdf_generator,Generation,Create PDF reports
+system_command,System,Run system commands
+general_assistant,AI,General AI assistance
+tech_news_aggregator,Web,Aggregate tech news

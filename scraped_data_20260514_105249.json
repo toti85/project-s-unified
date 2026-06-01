@@ -1,0 +1,27 @@
+[
+  {
+    "url": "https://playwright.dev",
+    "scraped_at": "2026-05-14T10:52:49.875820",
+    "title": "Playwrightenables reliable web automation for testing, scripting, and AI agents.",
+    "description": "Web automation and testing for apps, scripts, and AI agents",
+    "links": [
+      "https://playwright.dev#__docusaurus_skipToContent_fallback",
+      "https://playwright.dev/",
+      "https://playwright.dev/docs/intro",
+      "https://playwright.dev/mcp/introduction",
+      "https://playwright.dev/agent-cli/introduction",
+      "https://playwright.dev/docs/api/class-playwright",
+      "https://playwright.dev",
+      "https://playwright.dev/",
+      "https://playwright.dev/python/",
+      "https://playwright.dev/java/"
+    ],
+    "images": [
+      "https://playwright.dev/img/playwright-logo.svg",
+      "https://playwright.dev/img/playwright-logo.svg",
+      "https://playwright.dev/img/logos/Browsers.png",
+      "https://playwright.dev/img/logos/VSCode.png",
+      "https://playwright.dev/img/logos/Bing.png"
+    ]
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "run_id": "FA1_012",
+  "current_state": "ARCHIVED",
+  "history": [
+    {
+      "from": null,
+      "to": "NEW_GOAL",
+      "timestamp": "2026-05-26T07:50:01.953138Z",
+      "reason": "Run created"
+    },
+    {
+      "from": "NEW_GOAL",
+      "to": "PROMPT_DRAFTED",
+      "timestamp": "2026-05-26T07:50:21.032248Z",
+      "reason": "Prompt drafted (ai)"
+    },
+    {
+      "from": "PROMPT_DRAFTED",
+      "to": "IN_PROGRESS",
+      "timestamp": "2026-05-26T07:50:21.035078Z",
+      "reason": "Auto mode: sandbox task, skipping human review"
+    },
+    {
+      "from": "IN_PROGRESS",
+      "to": "CLINE_OUTPUT_RECEIVED",
+      "timestamp": "2026-05-26T08:33:53.575115Z",
+      "reason": "Cline output consumed"
+    },
+    {
+      "from": "CLINE_OUTPUT_RECEIVED",
+      "to": "EVALUATING_OUTPUT",
+      "timestamp": "2026-05-26T08:33:53.615568Z",
+      "reason": "Evaluating output (ai)"
+    },
+    {
+      "from": "EVALUATING_OUTPUT",
+      "to": "VERDICT_ISSUED",
+      "timestamp": "2026-05-26T08:33:53.630567Z",
+      "reason": "Verdict: PASS"
+    },
+    {
+      "from": "VERDICT_ISSUED",
+      "to": "ARCHIVED",
+      "timestamp": "2026-05-26T08:33:53.688821Z",
+      "reason": "Run archived"
+    }
+  ],
+  "updated_at": "2026-05-26T08:33:53.692820Z"
+}

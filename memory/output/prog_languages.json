@@ -1,0 +1,40 @@
+{
+  "languages": [
+    {
+      "name": "Python",
+      "year": 1991,
+      "category": "High-level",
+      "popularity": "Very High"
+    },
+    {
+      "name": "JavaScript",
+      "year": 1995,
+      "category": "Web",
+      "popularity": "Very High"
+    },
+    {
+      "name": "Java",
+      "year": 1995,
+      "category": "Enterprise",
+      "popularity": "High"
+    },
+    {
+      "name": "C++",
+      "year": 1985,
+      "category": "Systems",
+      "popularity": "High"
+    },
+    {
+      "name": "Go",
+      "year": 2009,
+      "category": "Systems",
+      "popularity": "Medium"
+    },
+    {
+      "name": "Rust",
+      "year": 2010,
+      "category": "Systems",
+      "popularity": "Medium"
+    }
+  ]
+}

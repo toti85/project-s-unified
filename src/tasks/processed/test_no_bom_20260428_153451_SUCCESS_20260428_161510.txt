@@ -1,0 +1,12 @@
+Search the Project-S workspace for Python files containing PersistentStateManager.
+Use FileContentSearchTool with these parameters:
+- root: C:\ProjectS-Unified\src
+- pattern: PersistentStateManager
+- file_extensions: [.py]
+
+Output format for each match:
+- Full file path
+- Line number
+- Matching line content (trimmed to 100 chars)
+
+Group results by directory. Expect at least 3 different files.

@@ -1,0 +1,72 @@
+{
+  "framework": "EVIDENCE_GATING",
+  "timestamp": "2025-12-27T00:00:00Z",
+  "project": "Uniswap V3 Reentrancy POC",
+  "gates": {
+    "gate_a": {
+      "name": "Local Mock Validation",
+      "status": "COMPLETED",
+      "result": "PASSED",
+      "evidence_file": "memory/output/poc_local_proof.json",
+      "target_type": "MOCK",
+      "vulnerability_found": false,
+      "reentrancy_executed": false,
+      "guard_status": "ACTIVE",
+      "tests_passed": "3/3",
+      "command": "npx hardhat test"
+    },
+    "gate_b": {
+      "name": "Network Forking Test",
+      "status": "PENDING",
+      "prerequisite": "FORK_RPC_URL environment variable",
+      "target_type": "SEPOLIA_FORK",
+      "command": "FORK_RPC_URL=https://sepolia.infura.io/v3/KEY npx hardhat test test/fork.test.js --network hardhat",
+      "behavior_without_rpc": "SKIPS gracefully with explicit error message",
+      "tests": 4
+    }
+  },
+  "poc_assessment": {
+    "type": "MOCK_VALIDATION",
+    "target_contract": "MockUniswapV3Pool",
+    "guard_implementation": "mutex-based lock",
+    "attack_vector": "callback reentrancy",
+    "attack_result": "BLOCKED"
+  },
+  "test_output": {
+    "test_1": {
+      "name": "Should test swap callback reentrancy",
+      "status": "PASS",
+      "evidence": "Reentrancy attempts: 1, Vulnerability found: false"
+    },
+    "test_2": {
+      "name": "Should test flash callback reentrancy",
+      "status": "PASS",
+      "evidence": "Reentrancy attempts: 1, Vulnerability found: false"
+    },
+    "test_3": {
+      "name": "Should verify reentrancy guard is active",
+      "status": "PASS",
+      "evidence": "Guard active: true"
+    }
+  },
+  "code_changes": [
+    {
+      "file": "hardhat.config.js",
+      "change": "Added hardhat.forking configuration for fork testing"
+    },
+    {
+      "file": "test/fork.test.js",
+      "change": "NEW - Fork test runner (Gate B)"
+    },
+    {
+      "file": ".env.example",
+      "change": "Added FORK_RPC_URL configuration"
+    }
+  ],
+  "verdict": {
+    "gate_a_result": "MOCK PROTECTS AGAINST REENTRANCY - NO VULNERABILITY",
+    "gate_b_readiness": "CONFIGURED - AWAITING RPC ENDPOINT",
+    "vulnerability_status": "NOT_DEMONSTRATED",
+    "next_action": "OBTAIN_RPC_AND_RUN_GATE_B"
+  }
+}

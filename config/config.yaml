@@ -1,0 +1,40 @@
+# Project-S Configuration - Updated 2026-03-13
+# Consolidated configuration file (replaces scattered config files)
+
+system:
+  name: "Project-S Unified System"
+  version: "0.1-consolidated"
+  log_level: "INFO"
+  timezone: "UTC"
+  
+interfaces:
+  dom_listener:
+    enabled: false
+    port: 8765
+  vscode:
+    enabled: true
+    port: 9000
+
+resource_limits:
+  max_parallel_tasks: 4
+  max_memory_mb: 2048
+  timeout_seconds: 300
+  ai_request_timeout: 60
+  
+feature_flags:
+  strategic_overlay: true
+  meta_learning: true
+  tool_orchestration: true
+  decision_routing: true
+  
+task_allocator:
+  route_strategy: "affinity"
+  fallback_on_error: true
+  max_retries: 3
+  
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  output: "logs/project_s.log"
+  max_file_size_mb: 10
+  backup_count: 5

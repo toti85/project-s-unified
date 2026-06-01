@@ -1,0 +1,86 @@
+TARGET_DIMS MISMATCH POC - IMPLEMENTATION SUMMARY
+===================================================
+
+FILES CREATED:
+1. avail/e2e/tests/test_target_dims_poc.rs (272 lines)
+   - Integration test for target_dims mismatch in multiproof generation
+   - Creates deterministic 4x8 grid input
+   - Compares multiproof output using hardcoded (16,64) vs real dims
+   - Writes JSON artifact to memory/output/target_dims_poc_proof.json
+
+FILES MODIFIED:
+1. avail/e2e/Cargo.toml
+   - Added serde_json = "1.0"
+   - Added sha2 = "0.10"
+   - Added hex = "0.4"
+
+EXECUTION:
+From avail-da/avail/ directory:
+
+  cargo test -p e2e test_target_dims_mismatch -- --nocapture
+
+EXPECTED BEHAVIOR:
+
+On success (test passes):
+- stderr output shows:
+  * Grid creation with real_dims: 4x8 (extended)
+  * Proof1 generation with hardcoded 16x64
+  * Proof1 hash (SHA256, first 16 bytes)
+  * Proof2 generation with real dims
+  * Proof2 hash
+  * Comparison result: MISMATCH or NO_DIFF
+  * Artifact written path and status
+
+On error:
+- Test panics with error message
+- JSON artifact written with error status and reason
+- stderr shows ERROR: [reason]
+
+JSON ARTIFACT STRUCTURE:
+File: memory/output/target_dims_poc_proof.json
+
+{
+  "timestamp": 1735400000,
+  "real_dims": {
+    "rows": 8,
+    "cols": 16
+  },
+  "hardcoded_dims": {
+    "rows": 16,
+    "cols": 64
+  },
+  "proof1": {
+    "label": "hardcoded_16x64",
+    "len": 48,
+    "hash": "abc123def456..."
+  },
+  "proof2": {
+    "label": "real_dims",
+    "len": 48,
+    "hash": "xyz789..."
+  },
+  "proofs_differ": true|false,
+  "result": "MISMATCH_OBSERVED" | "NO_OBSERVABLE_EFFECT" | "ERROR",
+  "error": "none" | "[error reason]"
+}
+
+KEY OBSERVATIONS:
+- real_dims will be extended grid dims (rows extended from 4 to 8, cols from 8 to 16)
+- hardcoded_dims is always (16, 64) per native.rs line 112
+- If real_dims < hardcoded_dims, target_dims mismatch is guaranteed
+- Proof hash comparison is deterministic (fixed seed, fixed cell index)
+- Test is pure Rust, no external tools or git commands
+
+PROOF-GRADE CHARACTERISTICS:
+✓ Deterministic input (fixed data, fixed seed, fixed cell)
+✓ Reproducible output (same input = same hash every run)
+✓ Clear observable difference metric (proof bytes/hash)
+✓ Minimal changes (only 1 new test file + 3 deps)
+✓ No bounty/severity claims (only reports MISMATCH_OBSERVED or NO_OBSERVABLE_EFFECT)
+✓ Artifact evidence (JSON written before any assertions)
+✓ ASCII-only output (no emojis or fancy characters)
+
+REFERENCE:
+avail/runtime/src/kate/native.rs:112-113
+  let target_dims = Dimensions::new(16, 64).expect("16,64>0");
+  // TODO: This isn't correct, need to put in the correct mp grid dim

@@ -1,0 +1,45 @@
+Itt van egy példa JSON a 2025-ös tech trendekről:
+
+```json
+{
+  "trends": [
+    {
+      "trend": "Mesterséges intelligencia és gépi tanulás",
+      "relevance": "high",
+      "description": "A mesterséges intelligencia és gépi tanulás folyamatosan fejlődik, és egyre inkább integrálódik a különböző iparágakba, mint az egészségügy, pénzügy, és logisztika."
+    },
+    {
+      "trend": "5G és 6G hálózatok",
+      "relevance": "high",
+      "description": "A 5G technológia elterjedése új lehetőségeket teremt a gyors adatátvitel és az IoT eszközök számára, míg a 6G fejlesztése már elkezdődött, ígérve a még nagyobb sebességet és megbízhatóságot."
+    },
+    {
+      "trend": "Kibervédelem és adatbiztonság",
+      "relevance": "high",
+      "description": "A kibertámadások növekvő száma miatt a vállalatok és szervezetek prioritássá tették az adatbiztonságot, új technológiák és stratégiák kidolgozásával."
+    },
+    {
+      "trend": "Fenntarthatóság és zöld technológiák",
+      "relevance": "medium",
+      "description": "A környezeti fenntarthatóság iránti növekvő igény miatt a zöld technológiák, mint a megújuló energiaforrások és az energiahatékony megoldások, egyre nagyobb szerepet kapnak."
+    },
+    {
+      "trend": "Virtualizáció és kiterjesztett valóság",
+      "relevance": "medium",
+      "description": "A virtuális (VR) és kiterjesztett valóság (AR) technológiák a szórakoztatás mellett a képzés és a távoli munkavégzés területén is egyre elterjedtebbé válnak."
+    },
+    {
+      "trend": "Blockchain és decentralizált technológiák",
+      "relevance": "medium",
+      "description": "A blockchain technológia nemcsak a kriptovalutákban, hanem az ellátási lánc, a pénzügy és az adatkezelés területén is szerepet kap, lehetővé téve a decentralizált megoldásokat."
+    },
+    {
+      "trend": "Robotic Process Automation (RPA)",
+      "relevance": "low",
+      "description": "Az RPA technológia segítségével a vállalatok automatizálhatják az adminisztratív és rutinszerű feladatokat, azonban a piaci igény még mindig fejlődésben van."
+    }
+  ]
+}
+``` 
+
+Ez a JSON a 2025-ös technológiai trendeket és azok relevanciáját mutatja be.

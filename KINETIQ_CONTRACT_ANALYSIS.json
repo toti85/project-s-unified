@@ -1,0 +1,1115 @@
+{
+  "contracts": [
+    {
+      "contract_name": "StakingManager",
+      "file": "src/StakingManager.sol",
+      "purpose": "Manages staking, withdrawals, rewards, and validator delegation for the HYPE staking system",
+      "state_variables": {
+        "constants": {
+          "L1_HYPE_CONTRACT": "address",
+          "l1Write": "L1Write",
+          "BASIS_POINTS": "uint256 = 10000",
+          "OPERATOR_ROLE": "bytes32",
+          "MANAGER_ROLE": "bytes32",
+          "TREASURY_ROLE": "bytes32",
+          "SENTINEL_ROLE": "bytes32"
+        },
+        "core_contracts": {
+          "validatorManager": "IValidatorManager",
+          "pauserRegistry": "IPauserRegistry",
+          "stakingAccountant": "IStakingAccountant",
+          "kHYPE": "KHYPE",
+          "treasury": "address"
+        },
+        "accounting": {
+          "totalStaked": "uint256",
+          "totalClaimed": "uint256",
+          "totalQueuedWithdrawals": "uint256",
+          "hypeBuffer": "uint256",
+          "targetBuffer": "uint256"
+        },
+        "parameters": {
+          "HYPE_TOKEN_ID": "uint64",
+          "stakingLimit": "uint256",
+          "minStakeAmount": "uint256",
+          "maxStakeAmount": "uint256",
+          "withdrawalDelay": "uint256",
+          "unstakeFeeRate": "uint256"
+        },
+        "flags": {
+          "stakingPaused": "bool",
+          "withdrawalPaused": "bool",
+          "whitelistEnabled": "bool"
+        },
+        "tracking": {
+          "nextWithdrawalId": "mapping(address => uint256)",
+          "_withdrawalRequests": "mapping(address => mapping(uint256 => WithdrawalRequest))",
+          "_whitelist": "EnumerableSet.AddressSet",
+          "_pendingWithdrawals": "L1Operation[]",
+          "_pendingDeposits": "L1Operation[]"
+        }
+      },
+      "public_external_functions": [
+        {
+          "name": "initialize",
+          "visibility": "public",
+          "params": "admin, operator, manager, _pauserRegistry, _kHYPE, _validatorManager, _stakingAccountant, _treasury, _minStakeAmount, _maxStakeAmount, _stakingLimit, _hypeTokenId",
+          "description": "Initializes contract with configuration and role setup"
+        },
+        {
+          "name": "stake",
+          "visibility": "public",
+          "payable": true,
+          "modifiers": "nonReentrant, whenNotPaused, whenStakingNotPaused",
+          "description": "Stakes HYPE tokens and mints kHYPE tokens"
+        },
+        {
+          "name": "queueWithdrawal",
+          "visibility": "external",
+          "params": "uint256 kHYPEAmount",
+          "modifiers": "nonReentrant, whenNotPaused, whenWithdrawalNotPaused",
+          "description": "Queues a withdrawal request with fee calculation"
+        },
+        {
+          "name": "processL1Operations",
+          "visibility": "public",
+          "params": "uint256 batchSize",
+          "modifiers": "onlyRole(OPERATOR_ROLE), whenNotPaused",
+          "description": "Processes pending L1 operations in batches (withdrawals and deposits)"
+        },
+        {
+          "name": "setTargetBuffer",
+          "visibility": "external",
+          "params": "uint256 newTargetBuffer",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Updates target buffer size"
+        },
+        {
+          "name": "setStakingLimit",
+          "visibility": "external",
+          "params": "uint256 newStakingLimit",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Updates maximum total staking limit"
+        },
+        {
+          "name": "setMinStakeAmount",
+          "visibility": "external",
+          "params": "uint256 newMinStakeAmount",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Sets minimum per-transaction stake amount"
+        },
+        {
+          "name": "setMaxStakeAmount",
+          "visibility": "external",
+          "params": "uint256 newMaxStakeAmount",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Sets maximum per-transaction stake amount"
+        },
+        {
+          "name": "setWithdrawalDelay",
+          "visibility": "external",
+          "params": "uint256 newDelay",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Sets withdrawal delay period"
+        },
+        {
+          "name": "enableWhitelist",
+          "visibility": "external",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Enables whitelist enforcement for staking"
+        },
+        {
+          "name": "disableWhitelist",
+          "visibility": "external",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Disables whitelist enforcement"
+        },
+        {
+          "name": "addToWhitelist",
+          "visibility": "external",
+          "params": "address[] calldata accounts",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Adds addresses to whitelist"
+        },
+        {
+          "name": "removeFromWhitelist",
+          "visibility": "external",
+          "params": "address[] calldata accounts",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Removes addresses from whitelist"
+        },
+        {
+          "name": "isWhitelisted",
+          "visibility": "public",
+          "params": "address account",
+          "returns": "bool",
+          "description": "Checks if address is whitelisted"
+        },
+        {
+          "name": "pauseStaking",
+          "visibility": "external",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Pauses staking operations"
+        },
+        {
+          "name": "unpauseStaking",
+          "visibility": "external",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Unpauses staking operations"
+        },
+        {
+          "name": "pauseWithdrawal",
+          "visibility": "external",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Pauses withdrawal operations"
+        },
+        {
+          "name": "unpauseWithdrawal",
+          "visibility": "external",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Unpauses withdrawal operations"
+        },
+        {
+          "name": "cancelWithdrawal",
+          "visibility": "external",
+          "params": "address user, uint256 withdrawalId",
+          "modifiers": "onlyRole(MANAGER_ROLE), whenNotPaused",
+          "description": "Cancels a withdrawal request and returns kHYPE to user"
+        },
+        {
+          "name": "setUnstakeFeeRate",
+          "visibility": "external",
+          "params": "uint256 newRate",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Updates unstake fee rate (max 10%)"
+        },
+        {
+          "name": "setTreasury",
+          "visibility": "external",
+          "params": "address newTreasury",
+          "modifiers": "onlyRole(DEFAULT_ADMIN_ROLE)",
+          "description": "Updates treasury address"
+        },
+        {
+          "name": "withdrawFromSpot",
+          "visibility": "external",
+          "params": "uint64 amount",
+          "modifiers": "onlyRole(OPERATOR_ROLE)",
+          "description": "Withdraws funds from spot balance to EVM"
+        },
+        {
+          "name": "withdrawalRequests",
+          "visibility": "external",
+          "params": "address user, uint256 id",
+          "returns": "WithdrawalRequest",
+          "description": "Gets withdrawal request details"
+        }
+      ],
+      "dependencies": {
+        "external_contracts": [
+          "IValidatorManager",
+          "IPauserRegistry",
+          "IStakingAccountant",
+          "KHYPE",
+          "L1Write",
+          "IERC20",
+          "AccessControlEnumerableUpgradeable",
+          "ReentrancyGuardUpgradeable"
+        ],
+        "external_calls": [
+          "validatorManager.getDelegation()",
+          "validatorManager.totalRewards()",
+          "stakingAccountant.HYPEToKHYPE()",
+          "stakingAccountant.kHYPEToHYPE()",
+          "stakingAccountant.recordStake()",
+          "kHYPE.mint()",
+          "kHYPE.transferFrom()",
+          "kHYPE.transfer()",
+          "kHYPE.balanceOf()",
+          "pauserRegistry.isPaused()",
+          "l1Write.sendTokenDelegate()",
+          "l1Write.sendCWithdrawal()",
+          "l1Write.sendSpot()"
+        ]
+      },
+      "access_control": {
+        "roles": [
+          {
+            "role": "DEFAULT_ADMIN_ROLE",
+            "permissions": [
+              "setTreasury"
+            ]
+          },
+          {
+            "role": "OPERATOR_ROLE",
+            "permissions": [
+              "processL1Operations",
+              "withdrawFromSpot"
+            ]
+          },
+          {
+            "role": "MANAGER_ROLE",
+            "permissions": [
+              "setTargetBuffer",
+              "setStakingLimit",
+              "setMinStakeAmount",
+              "setMaxStakeAmount",
+              "setWithdrawalDelay",
+              "enableWhitelist",
+              "disableWhitelist",
+              "addToWhitelist",
+              "removeFromWhitelist",
+              "pauseStaking",
+              "unpauseStaking",
+              "pauseWithdrawal",
+              "unpauseWithdrawal",
+              "cancelWithdrawal",
+              "redelegateWithdrawnHYPE",
+              "resetL1OperationsQueue",
+              "setUnstakeFeeRate"
+            ]
+          },
+          {
+            "role": "TREASURY_ROLE",
+            "permissions": [
+              "Exempted from unstake fees"
+            ]
+          }
+        ],
+        "modifiers": [
+          "onlyRole()",
+          "whenNotPaused",
+          "whenStakingNotPaused",
+          "whenWithdrawalNotPaused",
+          "nonReentrant"
+        ]
+      }
+    },
+    {
+      "contract_name": "KHYPE",
+      "file": "src/KHYPE.sol",
+      "purpose": "ERC20 token representing staked HYPE with permit functionality for gasless transactions",
+      "state_variables": {
+        "roles": {
+          "MINTER_ROLE": "bytes32",
+          "BURNER_ROLE": "bytes32"
+        },
+        "core": {
+          "pauserRegistry": "IPauserRegistry"
+        }
+      },
+      "public_external_functions": [
+        {
+          "name": "initialize",
+          "visibility": "public",
+          "params": "string name, string symbol, address admin, address minter, address burner, address _pauserRegistry",
+          "description": "Initializes ERC20Permit token with role assignments"
+        },
+        {
+          "name": "mint",
+          "visibility": "external",
+          "params": "address to, uint256 amount",
+          "modifiers": "onlyRole(MINTER_ROLE)",
+          "description": "Mints new tokens to specified address"
+        },
+        {
+          "name": "burn",
+          "visibility": "external",
+          "params": "address from, uint256 amount",
+          "modifiers": "onlyRole(BURNER_ROLE)",
+          "description": "Burns tokens from specified address"
+        },
+        {
+          "name": "supportsInterface",
+          "visibility": "public",
+          "params": "bytes4 interfaceId",
+          "returns": "bool",
+          "description": "ERC165 interface detection"
+        }
+      ],
+      "dependencies": {
+        "external_contracts": [
+          "ERC20PermitUpgradeable",
+          "AccessControlEnumerableUpgradeable",
+          "IPauserRegistry"
+        ],
+        "external_calls": [
+          "pauserRegistry.isPaused()"
+        ]
+      },
+      "access_control": {
+        "roles": [
+          {
+            "role": "DEFAULT_ADMIN_ROLE",
+            "permissions": [
+              "Grant/revoke MINTER_ROLE",
+              "Grant/revoke BURNER_ROLE"
+            ]
+          },
+          {
+            "role": "MINTER_ROLE",
+            "permissions": [
+              "mint"
+            ]
+          },
+          {
+            "role": "BURNER_ROLE",
+            "permissions": [
+              "burn"
+            ]
+          }
+        ],
+        "modifiers": [
+          "onlyRole()",
+          "whenNotPaused"
+        ]
+      }
+    },
+    {
+      "contract_name": "StakingAccountant",
+      "file": "src/StakingAccountant.sol",
+      "purpose": "Manages global staking accounting and exchange rate calculations between HYPE and kHYPE tokens",
+      "state_variables": {
+        "roles": {
+          "MANAGER_ROLE": "bytes32"
+        },
+        "core": {
+          "validatorManager": "IValidatorManager"
+        },
+        "accounting": {
+          "totalStaked": "uint256",
+          "totalClaimed": "uint256"
+        },
+        "managers": {
+          "_authorizedManagers": "EnumerableMap.AddressToAddressMap",
+          "_uniqueTokens": "EnumerableSet.AddressSet"
+        }
+      },
+      "public_external_functions": [
+        {
+          "name": "initialize",
+          "visibility": "public",
+          "params": "address admin, address manager, address _validatorManager",
+          "description": "Initializes contract with admin and manager roles"
+        },
+        {
+          "name": "authorizeStakingManager",
+          "visibility": "external",
+          "params": "address manager, address kHYPEToken",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Authorizes a StakingManager with its kHYPE token"
+        },
+        {
+          "name": "deauthorizeStakingManager",
+          "visibility": "external",
+          "params": "address manager",
+          "modifiers": "onlyRole(DEFAULT_ADMIN_ROLE)",
+          "description": "Removes authorization from a StakingManager"
+        },
+        {
+          "name": "recordStake",
+          "visibility": "external",
+          "params": "uint256 amount",
+          "modifiers": "onlyAuthorizedManager",
+          "description": "Records stake amount (called by authorized managers)"
+        },
+        {
+          "name": "recordClaim",
+          "visibility": "external",
+          "params": "uint256 amount",
+          "modifiers": "onlyAuthorizedManager",
+          "description": "Records claimed amount (called by authorized managers)"
+        },
+        {
+          "name": "isAuthorizedManager",
+          "visibility": "external",
+          "params": "address manager",
+          "returns": "bool",
+          "description": "Checks if manager is authorized"
+        },
+        {
+          "name": "getManagerToken",
+          "visibility": "external",
+          "params": "address manager",
+          "returns": "address",
+          "description": "Gets kHYPE token address for manager"
+        },
+        {
+          "name": "kHYPEToHYPE",
+          "visibility": "public",
+          "params": "uint256 kHYPEAmount",
+          "returns": "uint256",
+          "description": "Converts kHYPE to HYPE using exchange ratio"
+        },
+        {
+          "name": "HYPEToKHYPE",
+          "visibility": "public",
+          "params": "uint256 HYPEAmount",
+          "returns": "uint256",
+          "description": "Converts HYPE to kHYPE using exchange ratio"
+        },
+        {
+          "name": "totalRewards",
+          "visibility": "external",
+          "returns": "uint256",
+          "description": "Gets total rewards from ValidatorManager"
+        },
+        {
+          "name": "totalSlashing",
+          "visibility": "external",
+          "returns": "uint256",
+          "description": "Gets total slashing from ValidatorManager"
+        }
+      ],
+      "dependencies": {
+        "external_contracts": [
+          "IValidatorManager",
+          "AccessControlEnumerableUpgradeable",
+          "IERC20",
+          "EnumerableMap",
+          "EnumerableSet"
+        ],
+        "external_calls": [
+          "validatorManager.totalRewards()",
+          "validatorManager.totalSlashing()",
+          "IERC20(token).totalSupply()"
+        ]
+      },
+      "access_control": {
+        "roles": [
+          {
+            "role": "DEFAULT_ADMIN_ROLE",
+            "permissions": [
+              "deauthorizeStakingManager"
+            ]
+          },
+          {
+            "role": "MANAGER_ROLE",
+            "permissions": [
+              "authorizeStakingManager"
+            ]
+          },
+          {
+            "role": "Authorized Managers",
+            "permissions": [
+              "recordStake",
+              "recordClaim"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contract_name": "ValidatorManager",
+      "file": "src/ValidatorManager.sol",
+      "purpose": "Manages validator registration, performance tracking, rebalancing, rewards, and slashing",
+      "state_variables": {
+        "constants": {
+          "BASIS_POINTS": "uint256 = 10000"
+        },
+        "roles": {
+          "MANAGER_ROLE": "bytes32",
+          "ORACLE_MANAGER_ROLE": "bytes32"
+        },
+        "core": {
+          "pauserRegistry": "IPauserRegistry"
+        },
+        "accounting": {
+          "totalSlashing": "uint256",
+          "totalRewards": "uint256"
+        },
+        "validators": {
+          "delegations": "mapping(address => address)",
+          "validatorRebalanceRequests": "mapping(address => RebalanceRequest)",
+          "validatorPerformance": "mapping(address => PerformanceReport)",
+          "validatorSlashing": "mapping(address => uint256)",
+          "validatorRewards": "mapping(address => uint256)",
+          "_validators": "Validator[]",
+          "_validatorIndexes": "EnumerableMap.AddressToUintMap",
+          "_validatorsWithPendingRebalance": "EnumerableSet.AddressSet"
+        }
+      },
+      "public_external_functions": [
+        {
+          "name": "initialize",
+          "visibility": "external",
+          "params": "address admin, address manager, address _oracle, address _pauserRegistry",
+          "description": "Initializes contract with role setup"
+        },
+        {
+          "name": "activateValidator",
+          "visibility": "external",
+          "params": "address validator",
+          "modifiers": "whenNotPaused, onlyRole(MANAGER_ROLE)",
+          "description": "Activates a new validator"
+        },
+        {
+          "name": "deactivateValidator",
+          "visibility": "external",
+          "params": "address validator",
+          "modifiers": "nonReentrant, onlyRole(MANAGER_ROLE)",
+          "description": "Deactivates an active validator"
+        },
+        {
+          "name": "reactivateValidator",
+          "visibility": "external",
+          "params": "address validator",
+          "modifiers": "nonReentrant, onlyRole(MANAGER_ROLE)",
+          "description": "Reactivates a deactivated validator"
+        },
+        {
+          "name": "rebalanceWithdrawal",
+          "visibility": "external",
+          "params": "address stakingManager, address[] validators, uint256[] withdrawalAmounts",
+          "modifiers": "whenNotPaused, nonReentrant, onlyRole(MANAGER_ROLE)",
+          "description": "Requests withdrawals from multiple validators"
+        },
+        {
+          "name": "closeRebalanceRequests",
+          "visibility": "external",
+          "params": "address stakingManager, address[] validators",
+          "modifiers": "whenNotPaused, nonReentrant, onlyRole(MANAGER_ROLE)",
+          "description": "Closes rebalance requests and triggers redelegation"
+        },
+        {
+          "name": "hasPendingRebalance",
+          "visibility": "external",
+          "params": "address validator",
+          "returns": "bool",
+          "description": "Checks if validator has pending rebalance"
+        },
+        {
+          "name": "updateValidatorPerformance",
+          "visibility": "external",
+          "params": "address validator, uint256 balance, uint256 uptimeScore, uint256 speedScore, uint256 integrityScore, uint256 selfStakeScore",
+          "modifiers": "whenNotPaused, onlyRole(ORACLE_MANAGER_ROLE)",
+          "description": "Updates validator performance scores"
+        },
+        {
+          "name": "reportRewardEvent",
+          "visibility": "external",
+          "params": "address validator, uint256 amount",
+          "modifiers": "onlyRole(ORACLE_MANAGER_ROLE)",
+          "description": "Reports reward event for validator"
+        },
+        {
+          "name": "reportSlashingEvent",
+          "visibility": "external",
+          "params": "address validator, uint256 amount",
+          "modifiers": "onlyRole(ORACLE_MANAGER_ROLE)",
+          "description": "Reports slashing event for validator"
+        },
+        {
+          "name": "setDelegation",
+          "visibility": "external",
+          "params": "address stakingManager, address validator",
+          "modifiers": "whenNotPaused, onlyRole(MANAGER_ROLE)",
+          "description": "Sets delegation target for staking manager"
+        },
+        {
+          "name": "getDelegation",
+          "visibility": "external",
+          "params": "address stakingManager",
+          "returns": "address",
+          "description": "Gets delegation target for staking manager"
+        },
+        {
+          "name": "validatorScores",
+          "visibility": "external",
+          "params": "address validator",
+          "returns": "uint256, uint256, uint256, uint256",
+          "description": "Gets validator performance scores"
+        },
+        {
+          "name": "validatorActiveState",
+          "visibility": "public",
+          "params": "address validator",
+          "returns": "bool",
+          "description": "Checks if validator is active"
+        },
+        {
+          "name": "validatorCount",
+          "visibility": "public",
+          "returns": "uint256",
+          "description": "Gets total validator count"
+        },
+        {
+          "name": "validatorInfo",
+          "visibility": "public",
+          "params": "address validator",
+          "returns": "Validator",
+          "description": "Gets validator information"
+        }
+      ],
+      "dependencies": {
+        "external_contracts": [
+          "IValidatorManager",
+          "IPauserRegistry",
+          "IStakingManager",
+          "AccessControlEnumerableUpgradeable",
+          "ReentrancyGuardUpgradeable",
+          "EnumerableMap",
+          "EnumerableSet"
+        ],
+        "external_calls": [
+          "pauserRegistry.isPaused()",
+          "IStakingManager(stakingManager).processValidatorWithdrawals()",
+          "IStakingManager(stakingManager).processValidatorRedelegation()"
+        ]
+      },
+      "access_control": {
+        "roles": [
+          {
+            "role": "DEFAULT_ADMIN_ROLE",
+            "permissions": [
+              "General admin functions"
+            ]
+          },
+          {
+            "role": "MANAGER_ROLE",
+            "permissions": [
+              "activateValidator",
+              "deactivateValidator",
+              "reactivateValidator",
+              "rebalanceWithdrawal",
+              "closeRebalanceRequests",
+              "setDelegation"
+            ]
+          },
+          {
+            "role": "ORACLE_MANAGER_ROLE",
+            "permissions": [
+              "updateValidatorPerformance",
+              "reportRewardEvent",
+              "reportSlashingEvent"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contract_name": "OracleManager",
+      "file": "src/OracleManager.sol",
+      "purpose": "Manages oracle data updates with aggregation and challenge mechanism for validator performance metrics",
+      "state_variables": {
+        "roles": {
+          "MANAGER_ROLE": "bytes32",
+          "OPERATOR_ROLE": "bytes32"
+        },
+        "core": {
+          "pauserRegistry": "IPauserRegistry",
+          "validatorManager": "IValidatorManager",
+          "sanityChecker": "IValidatorSanityChecker"
+        },
+        "configuration": {
+          "maxPerformanceBound": "uint256",
+          "MIN_UPDATE_INTERVAL": "uint256",
+          "MAX_ORACLE_STALENESS": "uint256",
+          "MIN_VALID_ORACLES": "uint256"
+        },
+        "tracking": {
+          "lastValidatorUpdate": "mapping(address => uint256)",
+          "authorizedOracles": "EnumerableSet.AddressSet",
+          "activeOracles": "mapping(address => bool)"
+        }
+      },
+      "public_external_functions": [
+        {
+          "name": "initialize",
+          "visibility": "public",
+          "params": "address admin, address operator, address manager, address _pauserRegistry, address _validatorManager, uint256 _maxPerformanceBound",
+          "description": "Initializes contract with configuration and role setup"
+        },
+        {
+          "name": "authorizeOracleAdapter",
+          "visibility": "external",
+          "params": "address adapter",
+          "modifiers": "whenNotPaused, onlyRole(MANAGER_ROLE)",
+          "description": "Authorizes an oracle adapter"
+        },
+        {
+          "name": "deauthorizeOracle",
+          "visibility": "external",
+          "params": "address adapter",
+          "modifiers": "whenNotPaused, onlyRole(MANAGER_ROLE)",
+          "description": "Deauthorizes an oracle adapter"
+        },
+        {
+          "name": "setOracleActive",
+          "visibility": "external",
+          "params": "address adapter, bool active",
+          "modifiers": "whenNotPaused, onlyRole(MANAGER_ROLE)",
+          "description": "Sets oracle active/inactive state"
+        },
+        {
+          "name": "generatePerformance",
+          "visibility": "external",
+          "params": "address validator",
+          "modifiers": "whenNotPaused, onlyRole(OPERATOR_ROLE)",
+          "returns": "bool",
+          "description": "Aggregates oracle data and updates validator performance"
+        },
+        {
+          "name": "setMaxPerformanceBound",
+          "visibility": "external",
+          "params": "uint256 newBound",
+          "modifiers": "onlyRole(OPERATOR_ROLE)",
+          "description": "Sets maximum performance score bound"
+        },
+        {
+          "name": "setMinUpdateInterval",
+          "visibility": "external",
+          "params": "uint256 newInterval",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Sets minimum update interval"
+        },
+        {
+          "name": "setMaxOracleStaleness",
+          "visibility": "external",
+          "params": "uint256 newStaleness",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Sets maximum oracle data staleness"
+        },
+        {
+          "name": "setSanityChecker",
+          "visibility": "external",
+          "params": "address newChecker",
+          "modifiers": "onlyRole(DEFAULT_ADMIN_ROLE)",
+          "description": "Sets validator sanity checker contract"
+        },
+        {
+          "name": "setMinValidOracles",
+          "visibility": "external",
+          "params": "uint256 newMinimum",
+          "modifiers": "onlyRole(MANAGER_ROLE)",
+          "description": "Sets minimum required valid oracles"
+        },
+        {
+          "name": "isAuthorizedOracle",
+          "visibility": "public",
+          "params": "address adapter",
+          "returns": "bool",
+          "description": "Checks if oracle is authorized"
+        },
+        {
+          "name": "isActiveOracle",
+          "visibility": "public",
+          "params": "address adapter",
+          "returns": "bool",
+          "description": "Checks if oracle is active"
+        }
+      ],
+      "dependencies": {
+        "external_contracts": [
+          "IOracleManager",
+          "IPauserRegistry",
+          "IValidatorManager",
+          "IOracleAdapter",
+          "IValidatorSanityChecker",
+          "AccessControlEnumerableUpgradeable",
+          "EnumerableSet"
+        ],
+        "external_calls": [
+          "pauserRegistry.isPaused()",
+          "validatorManager.hasPendingRebalance()",
+          "IOracleAdapter.getPerformance()",
+          "sanityChecker.checkValidatorSanity()",
+          "validatorManager.updateValidatorPerformance()",
+          "validatorManager.reportRewardEvent()",
+          "validatorManager.reportSlashingEvent()",
+          "validatorManager.validatorSlashing()",
+          "validatorManager.validatorRewards()"
+        ]
+      },
+      "access_control": {
+        "roles": [
+          {
+            "role": "DEFAULT_ADMIN_ROLE",
+            "permissions": [
+              "setSanityChecker"
+            ]
+          },
+          {
+            "role": "OPERATOR_ROLE",
+            "permissions": [
+              "generatePerformance",
+              "setMaxPerformanceBound"
+            ]
+          },
+          {
+            "role": "MANAGER_ROLE",
+            "permissions": [
+              "authorizeOracleAdapter",
+              "deauthorizeOracle",
+              "setOracleActive",
+              "setMinUpdateInterval",
+              "setMaxOracleStaleness",
+              "setMinValidOracles"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contract_name": "PauserRegistry",
+      "file": "src/PauserRegistry.sol",
+      "purpose": "Registry contract that manages pause states for protocol contracts with role-based access control",
+      "state_variables": {
+        "roles": {
+          "PAUSER_ROLE": "bytes32",
+          "UNPAUSER_ROLE": "bytes32",
+          "PAUSE_ALL_ROLE": "bytes32"
+        },
+        "state": {
+          "isPaused": "mapping(address => bool)",
+          "_authorizedContracts": "EnumerableSet.AddressSet"
+        }
+      },
+      "public_external_functions": [
+        {
+          "name": "initialize",
+          "visibility": "public",
+          "params": "address admin, address pauser, address unpauser, address pauseAll, address[] contracts",
+          "description": "Initializes registry with role setup and authorized contracts"
+        },
+        {
+          "name": "pauseContract",
+          "visibility": "external",
+          "params": "address contractAddress",
+          "modifiers": "onlyRole(PAUSER_ROLE)",
+          "description": "Pauses a specific authorized contract"
+        },
+        {
+          "name": "unpauseContract",
+          "visibility": "external",
+          "params": "address contractAddress",
+          "modifiers": "onlyRole(UNPAUSER_ROLE)",
+          "description": "Unpauses a specific authorized contract"
+        },
+        {
+          "name": "emergencyPauseAll",
+          "visibility": "external",
+          "modifiers": "onlyRole(PAUSE_ALL_ROLE)",
+          "description": "Emergency function to pause all authorized contracts"
+        },
+        {
+          "name": "authorizeContract",
+          "visibility": "external",
+          "params": "address contractAddress",
+          "modifiers": "onlyRole(DEFAULT_ADMIN_ROLE)",
+          "description": "Authorizes a new contract to be pausable"
+        },
+        {
+          "name": "deauthorizeContract",
+          "visibility": "external",
+          "params": "address contractAddress",
+          "modifiers": "onlyRole(DEFAULT_ADMIN_ROLE)",
+          "description": "Removes authorization from a contract"
+        },
+        {
+          "name": "isAuthorizedContract",
+          "visibility": "external",
+          "params": "address contractAddress",
+          "returns": "bool",
+          "description": "Checks if contract is authorized"
+        },
+        {
+          "name": "getAuthorizedContracts",
+          "visibility": "external",
+          "returns": "address[]",
+          "description": "Gets all authorized contracts"
+        }
+      ],
+      "dependencies": {
+        "external_contracts": [
+          "IPauserRegistry",
+          "AccessControlEnumerableUpgradeable",
+          "EnumerableSet"
+        ]
+      },
+      "access_control": {
+        "roles": [
+          {
+            "role": "DEFAULT_ADMIN_ROLE",
+            "permissions": [
+              "authorizeContract",
+              "deauthorizeContract"
+            ]
+          },
+          {
+            "role": "PAUSER_ROLE",
+            "permissions": [
+              "pauseContract"
+            ]
+          },
+          {
+            "role": "UNPAUSER_ROLE",
+            "permissions": [
+              "unpauseContract"
+            ]
+          },
+          {
+            "role": "PAUSE_ALL_ROLE",
+            "permissions": [
+              "emergencyPauseAll"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contract_name": "DefaultOracle",
+      "file": "src/oracles/DefaultOracle.sol",
+      "purpose": "Oracle implementation for storing and retrieving validator performance metrics",
+      "state_variables": {
+        "constants": {
+          "BASIS_POINTS": "uint256 = 10000",
+          "OPERATOR_ROLE": "bytes32",
+          "MIN_UPDATE_INTERVAL": "uint256 = 1 hours"
+        },
+        "data": {
+          "validatorMetrics": "mapping(address => ValidatorMetrics)",
+          "_validators": "EnumerableSet.AddressSet"
+        }
+      },
+      "public_external_functions": [
+        {
+          "name": "constructor",
+          "visibility": "public",
+          "params": "address admin, address operator",
+          "description": "Initializes contract with admin and operator roles"
+        },
+        {
+          "name": "updateValidatorMetrics",
+          "visibility": "external",
+          "params": "address validator, uint256 balance, uint256 uptime, uint256 speed, uint256 integrity, uint256 stake, uint256 reward, uint256 slashing",
+          "modifiers": "onlyRole(OPERATOR_ROLE)",
+          "description": "Updates metrics for a validator (enforces 1-hour update interval)"
+        },
+        {
+          "name": "getValidatorMetrics",
+          "visibility": "external",
+          "params": "address validator",
+          "returns": "uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256",
+          "description": "Gets all metrics for a validator"
+        },
+        {
+          "name": "getValidators",
+          "visibility": "external",
+          "returns": "address[]",
+          "description": "Gets all validators with metrics"
+        },
+        {
+          "name": "hasMetrics",
+          "visibility": "external",
+          "params": "address validator",
+          "returns": "bool",
+          "description": "Checks if validator has metrics stored"
+        }
+      ],
+      "dependencies": {
+        "external_contracts": [
+          "AccessControl",
+          "EnumerableSet"
+        ]
+      },
+      "access_control": {
+        "roles": [
+          {
+            "role": "DEFAULT_ADMIN_ROLE",
+            "permissions": [
+              "Grant/revoke OPERATOR_ROLE"
+            ]
+          },
+          {
+            "role": "OPERATOR_ROLE",
+            "permissions": [
+              "updateValidatorMetrics"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "contract_name": "OracleAdapter",
+      "file": "src/oracles/DefaultAdapter.sol",
+      "purpose": "Adapter that bridges between OracleManager and DefaultOracle contracts, implementing IOracleAdapter interface",
+      "state_variables": {
+        "immutable": {
+          "defaultOracle": "address"
+        }
+      },
+      "public_external_functions": [
+        {
+          "name": "constructor",
+          "visibility": "public",
+          "params": "address _defaultOracle",
+          "description": "Initializes adapter with reference to external oracle"
+        },
+        {
+          "name": "getPerformance",
+          "visibility": "external",
+          "params": "address validator",
+          "returns": "uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256",
+          "description": "Reads validator performance data from DefaultOracle"
+        },
+        {
+          "name": "name",
+          "visibility": "external",
+          "returns": "string",
+          "description": "Returns adapter name"
+        },
+        {
+          "name": "version",
+          "visibility": "external",
+          "returns": "string",
+          "description": "Returns adapter version"
+        },
+        {
+          "name": "supportsInterface",
+          "visibility": "public",
+          "params": "bytes4 interfaceId",
+          "returns": "bool",
+          "description": "Checks interface support (IOracleAdapter)"
+        }
+      ],
+      "dependencies": {
+        "external_contracts": [
+          "IOracleAdapter",
+          "IERC165"
+        ],
+        "external_calls": [
+          "IDefaultOracle(defaultOracle).getValidatorMetrics()"
+        ]
+      },
+      "access_control": {
+        "permission_model": "No role-based access control; adapter is stateless read-only"
+      }
+    }
+  ],
+  "system_architecture": {
+    "description": "KINETIQ staking and delegation protocol",
+    "flow": {
+      "staking": "Users call StakingManager.stake() → kHYPE minted → delegated to validators via ValidatorManager",
+      "performance_tracking": "Oracles report metrics → OracleManager aggregates data → updates ValidatorManager",
+      "rewards_slashing": "Validators earn rewards/incur slashing → reported to ValidatorManager → reflected in exchange ratio",
+      "withdrawal": "Users call queueWithdrawal() → fees calculated → L1 operations queued → processed via L1Write"
+    },
+    "key_dependencies": {
+      "StakingManager": [
+        "KHYPE (minting/burning staked tokens)",
+        "ValidatorManager (delegation, performance)",
+        "StakingAccountant (exchange rates)",
+        "PauserRegistry (pause control)"
+      ],
+      "OracleManager": [
+        "ValidatorManager (performance updates)",
+        "Oracle adapters (data aggregation)"
+      ],
+      "ValidatorManager": [
+        "PauserRegistry (pause control)",
+        "StakingManager (rebalancing)"
+      ]
+    }
+  }
+}

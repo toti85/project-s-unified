@@ -1,0 +1,156 @@
+{
+  "timestamp": "2026-01-20T08:38:12.898067",
+  "project": "Uniswap V3",
+  "contracts": [
+    {
+      "name": "UniswapV3Pool",
+      "file": "UniswapV3Pool.sol",
+      "criticality": "CRITICAL",
+      "focus_areas": [
+        "Reentrancy в swap() и mint()",
+        "Integer overflow/underflow в liquidity management",
+        "Front-running opportunity в price calculation",
+        "Tick bitmap manipulation"
+      ]
+    },
+    {
+      "name": "UniswapV3Factory",
+      "file": "UniswapV3Factory.sol",
+      "criticality": "HIGH",
+      "focus_areas": [
+        "Access control vulnerabilities",
+        "Pool creation logic",
+        "Fee tier validation"
+      ]
+    },
+    {
+      "name": "LiquidityMath",
+      "file": "libraries/LiquidityMath.sol",
+      "criticality": "CRITICAL",
+      "focus_areas": [
+        "Mathematical precision",
+        "Rounding errors",
+        "Edge cases (1 wei, max uint256)"
+      ]
+    },
+    {
+      "name": "TickBitmap",
+      "file": "libraries/TickBitmap.sol",
+      "criticality": "HIGH",
+      "focus_areas": [
+        "Bitmap overflow",
+        "Tick index manipulation",
+        "Boundary conditions"
+      ]
+    },
+    {
+      "name": "SwapMath",
+      "file": "libraries/SwapMath.sol",
+      "criticality": "CRITICAL",
+      "focus_areas": [
+        "Price impact calculation",
+        "Slippage protection bypass",
+        "Precision loss"
+      ]
+    }
+  ],
+  "vulnerability_checklist": {
+    "reentrancy": {
+      "description": "Multiple calls return control before updating state",
+      "severity": "CRITICAL",
+      "check": [
+        "□ External calls made before state updates?",
+        "□ Multiple pools can call same contract?",
+        "□ Flash loan attack possible?",
+        "□ Cross-function reentrancy?"
+      ]
+    },
+    "integer_overflow": {
+      "description": "uint256 overflow/underflow",
+      "severity": "CRITICAL",
+      "check": [
+        "□ Addition without bounds check?",
+        "□ Multiplication overflow possible?",
+        "□ Liquidity calculations overflow?",
+        "□ Fee calculations safe?"
+      ]
+    },
+    "front_running": {
+      "description": "MEV/sandwich attacks",
+      "severity": "HIGH",
+      "check": [
+        "□ Price exposed in mempool?",
+        "□ Slippage parameter manipulable?",
+        "□ TWAP oracles safe?",
+        "□ Deadline check exists?"
+      ]
+    },
+    "access_control": {
+      "description": "Unauthorized function access",
+      "severity": "CRITICAL",
+      "check": [
+        "□ onlyOwner missing?",
+        "□ Public function should be private?",
+        "□ Admin functions protected?",
+        "□ Fee changes restricted?"
+      ]
+    },
+    "precision_loss": {
+      "description": "Mathematical rounding errors",
+      "severity": "HIGH",
+      "check": [
+        "□ Division before multiplication?",
+        "□ Rounding down causing issues?",
+        "□ Accumulated rounding errors?",
+        "□ Edge cases with 1 wei?"
+      ]
+    },
+    "oracle_manipulation": {
+      "description": "TWAP oracle attacks",
+      "severity": "HIGH",
+      "check": [
+        "□ Single block manipulation possible?",
+        "□ Large trade affecting TWAP?",
+        "□ Flash loan + large swap combo?",
+        "□ Time window too small?"
+      ]
+    }
+  },
+  "high_impact_findings": [
+    {
+      "id": "UNI-001",
+      "title": "Reentrancy in Pool Swap",
+      "severity": "CRITICAL",
+      "status": "TO_INVESTIGATE",
+      "description": "Check if external calls in swap() allow reentrancy"
+    },
+    {
+      "id": "UNI-002",
+      "title": "LiquidityMath Precision",
+      "severity": "HIGH",
+      "status": "TO_INVESTIGATE",
+      "description": "Edge cases in liquidity calculation with dust amounts"
+    },
+    {
+      "id": "UNI-003",
+      "title": "Tick Bitmap Overflow",
+      "severity": "HIGH",
+      "status": "TO_INVESTIGATE",
+      "description": "Can tick index manipulation overflow bitmap?"
+    },
+    {
+      "id": "UNI-004",
+      "title": "Flash Loan Attack Vector",
+      "severity": "CRITICAL",
+      "status": "TO_INVESTIGATE",
+      "description": "Combination of flash loan + large swap impact"
+    },
+    {
+      "id": "UNI-005",
+      "title": "MEV Sandwich Attack",
+      "severity": "HIGH",
+      "status": "TO_INVESTIGATE",
+      "description": "TWAP oracle manipulation via sandwich attacks"
+    }
+  ]
+}

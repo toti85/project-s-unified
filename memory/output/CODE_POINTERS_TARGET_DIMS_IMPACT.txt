@@ -1,0 +1,124 @@
+================================================================================
+GENERATION CHAIN: target_dims flow
+================================================================================
+
+Generation Call Site:
+[avail/runtime/src/kate/native.rs#L120](avail/runtime/src/kate/native.rs#L120)
+Function: native::multiproof()
+Code: let mp = poly.multiproof(srs, &cell, &grid, target_dims)?;
+Type: GMultiProof = (Vec<GRawScalar>, GProof)
+target_dims source: Dimensions::new(16, 64) [HARD-CODED at line 112]
+
+Wrapping Function:
+[avail/runtime/src/kate/runtime.rs#L45-L51](avail/runtime/src/kate/runtime.rs#L45-L51)
+Function: runtime::multiproof()
+Code: hosted_kate::multiproof(app_extrinsics, block_len, seed, cells)
+Return type: Result<Vec<(GMultiProof, GCellBlock)>, Error>
+
+RPC Endpoint:
+[avail/runtime/src/apis.rs#L72](avail/runtime/src/apis.rs#L72)
+RPC Method: fn multiproof(block_number: u32, extrinsics: Vec<OpaqueExtrinsic>, block_len: BlockLength, cells: Vec<(u32,u32)> )
+Return type: Result<Vec<(GMultiProof, GCellBlock)>, RTKateError>
+
+RPC Handler:
+[avail/rpc/kate-rpc/src/lib.rs#L295](avail/rpc/kate-rpc/src/lib.rs#L295)
+Function: query_multiproof()
+Code: api.multiproof(at, number, extrinsics, block_len, cells)
+Result: Vec<(GMultiProof, GCellBlock)>
+
+================================================================================
+VERIFICATION CHAIN: where target_dims dimensions DIVERGE
+================================================================================
+
+Verification Call Site:
+[avail/e2e/src/tests/rpc_queries.rs#L189](avail/e2e/src/tests/rpc_queries.rs#L189)
+[avail/e2e/src/tests/rpc_queries.rs#L232](avail/e2e/src/tests/rpc_queries.rs#L232)
+Function: kate_recovery::proof::verify()
+Code: verify(&pp, dim, &commitment, &dcell).unwrap()
+Dimensions used: dim = Dimensions::new(rows, cols).unwrap()
+Source of rows/cols: BlockLengthRows/BlockLengthColumns from HeaderExtension.commitment
+
+Verification Parameters:
+[avail/e2e/src/tests/rpc_queries.rs#L169](avail/e2e/src/tests/rpc_queries.rs#L169)
+SRS params: let pp = kate::couscous::public_params()
+[avail/e2e/src/tests/rpc_queries.rs#L174-L178](avail/e2e/src/tests/rpc_queries.rs#L174-L178)
+Commitment: commitment.rows and commitment.cols (extracted from header extension)
+Dimensions at verification: Dimensions::new(rows, cols) where rows/cols come from BlockLength (NOT hard-coded 16,64)
+
+================================================================================
+CRITICAL DIMENSION MISMATCH
+================================================================================
+
+Generation (multiproof creation):
+- target_dims = Dimensions::new(16, 64) [HARD-CODED]
+- grid.dims() = computed from BlockLength (can be 32-1024)
+- Bounds check uses grid.dims(): if cell.row >= grid.dims().height() ...
+- TODO at line 113: "This isn't correct, need to put in the correct mp grid dim"
+
+Verification (proof validation):
+- dim = Dimensions::new(rows, cols) [DYNAMIC from header/block_length]
+- kate_recovery::proof::verify() uses this dynamic dimension
+- NO hard-coded 16,64 in verification path
+
+MISMATCH IMPACT:
+- Generation creates multiproof with target_dims=16,64 regardless of actual grid
+- Verification checks proof against actual block dimensions (rows, cols)
+- If actual grid > 16 rows OR > 64 cols, verification dimensions ≠ generation dimensions
+- If actual grid < 16 rows OR < 64 cols, multiproof index range may exceed grid bounds
+
+================================================================================
+TARGET_DIMS USAGE LOCATIONS
+================================================================================
+
+[avail/runtime/src/kate/native.rs#L112](avail/runtime/src/kate/native.rs#L112)
+Code: let target_dims = Dimensions::new(16, 64).expect("16,64>0");
+
+[avail/runtime/src/kate/native.rs#L113](avail/runtime/src/kate/native.rs#L113)
+Comment: // TODO: This isn't correct, need to put in the correct mp grid dim
+
+[avail/runtime/src/kate/native.rs#L120](avail/runtime/src/kate/native.rs#L120)
+Code: let mp = poly.multiproof(srs, &cell, &grid, target_dims)?;
+
+NO OTHER OCCURRENCES of "16, 64" or "target_dims" in workspace.
+
+================================================================================
+GRID DIMENSIONS AT GENERATION
+================================================================================
+
+[avail/runtime/src/kate/native.rs#L100-L106](avail/runtime/src/kate/native.rs#L100-L106)
+Function: multiproof()
+Code:
+  let (max_width, max_height) = to_width_height(&block_len);
+  let grid = EGrid::from_extrinsics(extrinsics, MIN_WIDTH, max_width, max_height, seed)?
+    .extend_columns(NonZeroU16::new(2).expect("2>0"))
+  let poly = grid.make_polynomial_grid()?;
+
+Grid dimensions set from: BlockLength -> to_width_height() conversion
+Extended grid dims: (actual_rows, actual_cols) where cols extended by factor 2
+
+[avail/runtime/src/kate/native.rs#L115-L116](avail/runtime/src/kate/native.rs#L115-L116)
+Bounds check: 
+  if cell.row.0 >= grid.dims().height() as u32 || cell.col.0 >= grid.dims().width() as u32
+  [Uses actual grid.dims(), NOT target_dims]
+
+================================================================================
+EXTERNAL KATE_RECOVERY VERIFICATION INTERFACE
+================================================================================
+
+Import:
+[avail/e2e/src/tests/rpc_queries.rs#L20](avail/e2e/src/tests/rpc_queries.rs#L20)
+use kate_recovery::{matrix::Dimensions, proof::verify};
+
+Function signature (inferred from usage):
+verify(&PublicParams, dimensions: Dimensions, &commitment: [u8; 48], &cell: kate_recovery::data::Cell)
+
+Parameters:
+- PublicParams: kate::couscous::public_params()
+- dimensions: constructed from actual block rows/cols (NOT 16,64)
+- commitment: extracted from header extension
+- cell: single cell data to verify
+
+Return: Result<bool, Error>
+
+CONCLUSION: kate_recovery::proof::verify() receives actual block dimensions, not hard-coded target_dims.
+Verification operates on full block grid, multiproof generation operates on fixed 16x64 dimensions.

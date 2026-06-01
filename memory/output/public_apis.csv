@@ -1,0 +1,6 @@
+name,url,auth,ratelimit
+GitHub REST API,https://api.github.com,Token,60 req/hour (public)
+OpenWeatherMap API,https://openweathermap.org/api,API Key,1000 calls/day (free)
+JSONPlaceholder,https://jsonplaceholder.typicode.com,None,No limits
+Open-Meteo Weather,https://open-meteo.com,None,No limits
+REST Countries,https://restcountries.com,None,No limits

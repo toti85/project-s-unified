@@ -1,0 +1,387 @@
+{
+  "project_s_codebase_index": {
+    "timestamp": "2026-02-18",
+    "total_python_files": 308,
+    "scan_scope": "complete recursive scan",
+    "classification_system": {
+      "production": "Active, wired into current execution paths",
+      "experimental": "Works but not core path, POC or feature-test",
+      "deprecated": "Known broken or superseded",
+      "duplicate": "Replicated functionality or backups",
+      "unknown": "Unclear purpose or context"
+    },
+    "major_systems": [
+      {
+        "system": "ORGANISM (Meta Layer v2)",
+        "path": "organism/",
+        "type": "production",
+        "status": "ACTIVE",
+        "purpose": "Decision tracking, task prioritization, meta-layer governance with evidence escalation, intelligent resistance categorization",
+        "components": [
+          "organism/core/loop.py - main orchestration",
+          "organism/core/observer.py - task detection",
+          "organism/core/prioritizer.py - scoring + context classification + kill list protection",
+          "organism/core/proposer.py - proposal generation with escalation + intelligent reasons",
+          "organism/core/taste_model.py - decision history tracking",
+          "organism/evidence/ - decision logs + artifact storage"
+        ],
+        "risk": "low",
+        "notes": "Most advanced subsystem. Handles evidence protection, deferral tracking, intelligent categorization."
+      },
+      {
+        "system": "SRC CORE (Pre-Meta Layer)",
+        "path": "src/core/",
+        "type": "production",
+        "status": "ACTIVE but legacy",
+        "purpose": "Super intelligent AI, state management, tool integration, LangGraph orchestration",
+        "components": [
+          "src/core/super_intelligent_ai.py - main AI interface",
+          "src/core/strategic_overlay.py - strategy layer",
+          "src/core/state/ - persistent state management",
+          "src/core/meta/ - decision making (validator, strategist, council)",
+          "src/core/cognitive/ - semantic reasoning and analysis",
+          "src/core/orchestration/ - workflow execution (LangGraph + custom)",
+          "src/core/tools/ - tool registry and implementations"
+        ],
+        "risk": "medium",
+        "notes": "Complex pre-meta architecture. Multiple tool implementations causing duplication."
+      },
+      {
+        "system": "Browser Automation Tools",
+        "path": "src/core/tools/implementations/",
+        "type": "duplicate",
+        "status": "PARTIALLY_REDUNDANT",
+        "purpose": "Web interaction and browser control",
+        "components": [
+          "browser_automation_tool.py - base implementation",
+          "browser_automation_tool_backup.py - BACKUP",
+          "browser_automation_tool_new.py - experimental variant",
+          "ultra_optimized_browser_automation_tool.py - optimized variant",
+          "optimized_browser_automation_tool.py - another variant"
+        ],
+        "risk": "high",
+        "notes": "At least 4-5 versions. Unclear which is production. CRITICAL redundancy issue."
+      },
+      {
+        "system": "Test Suite (Distributed)",
+        "path": "test_*.py, tests/",
+        "type": "experimental",
+        "status": "ACTIVE",
+        "purpose": "System validation, regression testing, feature verification",
+        "components": [
+          "test_meta_*.py - meta layer tests (~10 files)",
+          "test_browser_*.py - browser automation tests",
+          "test_kill_list_*.py - kill list protection tests",
+          "test_evidence_*.py - evidence escalation tests",
+          "tests/ - formal test suite",
+          "docs/archiv/ - archived test scenarios"
+        ],
+        "risk": "low",
+        "notes": "Comprehensive. Tests verify meta layer safety, evidence protection, resistance logic."
+      },
+      {
+        "system": "Archive Directory",
+        "path": "archive/",
+        "type": "deprecated",
+        "status": "INACTIVE",
+        "purpose": "Old orchestrators, deprecated agents, superseded implementations",
+        "components": [
+          "autonomous_github_analyzer.py",
+          "autonomous_facebook_analyzer.py",
+          "agent_launcher.py",
+          "advanced_autonomous_launcher.py",
+          "browser_automation_test.py - OLD",
+          "coder_template_complete_demo.py",
+          "game.py - game builder POC",
+          "fiverr_profile_*.py - DEPRECATED"
+        ],
+        "risk": "high (integration risk)",
+        "notes": "Contains legacy orchestrators from pre-meta era. Do NOT reactivate without audit."
+      },
+      {
+        "system": "Docs/Archiv Directory",
+        "path": "docs/archiv/",
+        "type": "experimental",
+        "status": "MIXED",
+        "purpose": "Historical artifacts, POCs, audit reports, analysis tools",
+        "components": [
+          "testnet_fork_setup.py - integration test harness",
+          "audit_semantic_analyzer.py - analysis tool",
+          "full_automation_demo.py - demo",
+          "verify_*.py - verification scripts",
+          "generate_*.py - report generation",
+          "automatic_game_builder.py",
+          "uniswap_position_pool_tracker.py - DeFi tracking"
+        ],
+        "risk": "medium",
+        "notes": "High-value artifacts. Some are POCs (game builder, DeFi tracking), some are historical."
+      },
+      {
+        "system": "Tool Registry",
+        "path": "tools/",
+        "type": "production",
+        "status": "ACTIVE",
+        "purpose": "Tool interface definitions, system tools, specialized tools",
+        "components": [
+          "tools/tool_interface.py - abstract base",
+          "tools/system_tools.py - OS-level tools",
+          "tools/file_tools.py - file operations",
+          "tools/pdf_generator.py - PDF creation",
+          "tools/roblox_apply_patch.py - Roblox patching"
+        ],
+        "risk": "low",
+        "notes": "Stable interface layer. Duplicated in src/core/tools/ (REDUNDANCY ISSUE)."
+      },
+      {
+        "system": "Resource Management",
+        "path": "src/core/resource_management/",
+        "type": "production",
+        "status": "ACTIVE",
+        "purpose": "System resource monitoring, allocation, memory optimization",
+        "components": [
+          "resource_manager.py - main interface",
+          "system_monitor.py - runtime monitoring",
+          "resource_predictor.py - estimation",
+          "memory_optimizer.py - optimization",
+          "task_resource_allocator.py - task-level allocation"
+        ],
+        "risk": "low",
+        "notes": "Well-structured subsystem for intelligent resource handling."
+      },
+      {
+        "system": "Event Bus & Infrastructure",
+        "path": "src/core/infrastructure/",
+        "type": "production",
+        "status": "ACTIVE",
+        "purpose": "Event dispatch, error handling, execution monitoring",
+        "components": [
+          "event_bus.py - event dispatch",
+          "execution_events.py - event definitions",
+          "error_handler.py - error management"
+        ],
+        "risk": "low",
+        "notes": "Critical infrastructure for async operations."
+      },
+      {
+        "system": "LangGraph Integration",
+        "path": "src/core/orchestration/langgraph_engine.py",
+        "type": "deprecated",
+        "status": "POSSIBLY_BROKEN",
+        "purpose": "LangGraph-based workflow orchestration (v2 architecture)",
+        "components": [
+          "langgraph_engine.py - LangGraph wrapper",
+          "workflow_engine.py - custom workflow engine",
+          "golden_age/advanced_langgraph_workflow.py - experimental LangGraph"
+        ],
+        "risk": "high",
+        "notes": "Known complexity. Partially superseded by organism meta layer. Verify before use."
+      },
+      {
+        "system": "Research Loop",
+        "path": "src/core/meta/research/",
+        "type": "experimental",
+        "status": "RESEARCH_PHASE",
+        "purpose": "Self-improving agent research, goal-driven exploration",
+        "components": [
+          "research_loop.py - main loop",
+          "research_goal.py - goal definitions",
+          "research_state.py - state tracking",
+          "test_research_loop.py - tests"
+        ],
+        "risk": "medium",
+        "notes": "Advanced concept. Explores self-improvement patterns."
+      },
+      {
+        "system": "Cognitive Core",
+        "path": "src/core/cognitive/",
+        "type": "experimental",
+        "status": "RESEARCH",
+        "purpose": "Advanced semantic reasoning, analysis, enhancement",
+        "components": [
+          "cognitive_core.py - main interface",
+          "semantic_reasoning.py - reasoning engine",
+          "enhanced_processor.py - processing",
+          "advanced_analyzer.py - analysis automation"
+        ],
+        "risk": "medium",
+        "notes": "Sophisticated but research-grade. May not be production-ready."
+      },
+      {
+        "system": "Root-Level Test Scripts",
+        "path": "test_*.py",
+        "type": "experimental",
+        "status": "ACTIVE",
+        "purpose": "One-off testing, validation, proof-of-concept",
+        "components": [
+          "test_meta_integration.py - meta layer wiring",
+          "test_fresh_organism.py - organism validation",
+          "test_system_stability.py - stability checks",
+          "test_real_execution.py - real-world scenarios",
+          "verify_system.py - system health",
+          "stability_report.py - stability metrics"
+        ],
+        "risk": "low",
+        "notes": "Comprehensive validation coverage."
+      },
+      {
+        "system": "Standalone Utilities",
+        "path": "Root-level .py files",
+        "type": "unknown",
+        "status": "MIXED",
+        "purpose": "Various utilities and demos",
+        "components": [
+          "ai_interactive.py - interactive AI mode",
+          "ai_no_meta.py - AI without meta layer",
+          "bounty_hunter_starter.py - bounty automation POC",
+          "feladat.py - task execution utility",
+          "super_intelligent_launcher.py - launcher demo",
+          "startup.py - startup sequence",
+          "task.py, task_demo.py - task utilities",
+          "web_task.py - web task runner"
+        ],
+        "risk": "medium",
+        "notes": "Utility collection. Some are entry points, some are POCs."
+      },
+      {
+        "system": "V4 Contracts",
+        "path": "v4-core/",
+        "type": "external",
+        "status": "NOT_ANALYZED",
+        "purpose": "Solidity smart contracts for v4 protocol",
+        "components": [
+          "lib/forge-std/ - testing framework",
+          "contracts/ - smart contract code"
+        ],
+        "risk": "unknown",
+        "notes": "Out of scope for this archaeology. External project."
+      },
+      {
+        "system": "Integration Points",
+        "path": "src/integrations/",
+        "type": "production",
+        "status": "ACTIVE",
+        "purpose": "External API integrations, routing, AI clients",
+        "components": [
+          "ai_models/multi_model_ai_client.py - multi-AI support",
+          "copilot_client.py - Copilot integration",
+          "decision_routing/ - decision routing system",
+          "resource_management.py - resource integration"
+        ],
+        "risk": "low",
+        "notes": "Clean integration layer."
+      }
+    ],
+    "critical_findings": {
+      "duplicate_systems": [
+        {
+          "area": "Browser Automation",
+          "versions": 5,
+          "files": [
+            "src/core/tools/implementations/browser_automation_tool.py",
+            "src/core/tools/implementations/browser_automation_tool_backup.py",
+            "src/core/tools/implementations/browser_automation_tool_new.py",
+            "src/core/tools/implementations/ultra_optimized_browser_automation_tool.py",
+            "src/core/tools/implementations/optimized_browser_automation_tool.py"
+          ],
+          "risk": "CRITICAL - unclear which is canonical",
+          "recommendation": "Audit to determine production vs experimental versions"
+        },
+        {
+          "area": "Tool Registry",
+          "versions": 2,
+          "files": [
+            "tools/tool_interface.py + tools/system_tools.py + tools/file_tools.py",
+            "src/core/tools/implementations/ (all tools)"
+          ],
+          "risk": "MEDIUM - parallel interfaces",
+          "recommendation": "Consolidate interfaces, single source of truth"
+        },
+        {
+          "area": "Meta Layer Council",
+          "versions": 2,
+          "files": [
+            "src/core/meta/strategy_council.py - original",
+            "src/core/meta/meta_controller.py - newer"
+          ],
+          "risk": "MEDIUM - unclear responsibility separation",
+          "recommendation": "Document authority boundaries"
+        },
+        {
+          "area": "Orchestrators",
+          "versions": 3,
+          "files": [
+            "src/core/orchestration/langgraph_engine.py (LangGraph v2)",
+            "organism/ (Meta layer)",
+            "archive/autonomous_*.py (deprecated)"
+          ],
+          "risk": "HIGH - multiple orchestration approaches",
+          "recommendation": "Verify current execution path, audit alternatives"
+        }
+      ],
+      "deprecated_areas": [
+        "archive/ - legacy orchestrators should not be reactivated",
+        "src/core/orchestration/langgraph_engine.py - verify if still used",
+        "fiverr_profile_*.py - known deprecated",
+        "facebook_*.py - known deprecated"
+      ],
+      "high_value_experimental": [
+        "docs/archiv/automatic_game_builder.py - interesting POC",
+        "docs/archiv/uniswap_position_pool_tracker.py - DeFi domain knowledge",
+        "src/core/meta/research/research_loop.py - self-improvement patterns",
+        "src/core/cognitive/cognitive_core.py - semantic reasoning tech"
+      ],
+      "most_advanced_subsystems": [
+        "organism/ - decision tracking with evidence protection, deferral tracking, intelligent categorization",
+        "src/core/meta/ - strategy council, validation, decision making",
+        "src/core/cognitive/ - semantic reasoning and analysis",
+        "src/core/resource_management/ - intelligent allocation and monitoring"
+      ]
+    },
+    "execution_path_analysis": {
+      "standard_path": {
+        "entry": "startup.py or super_intelligent_launcher.py",
+        "flow": "super_intelligent_ai.py -> orchestration -> meta_controller -> tool execution",
+        "status": "ACTIVE",
+        "risk": "medium (complexity)"
+      },
+      "meta_path": {
+        "entry": "organism/core/loop.py",
+        "flow": "observer -> prioritizer -> proposer -> taste_model decision tracking",
+        "status": "ACTIVE",
+        "risk": "low (well-tested, evidence protected)"
+      },
+      "research_path": {
+        "entry": "src/core/meta/research/research_loop.py",
+        "flow": "research_goal -> exploration -> learning",
+        "status": "EXPERIMENTAL",
+        "risk": "high (research phase)"
+      },
+      "v2_langgraph_path": {
+        "entry": "src/core/orchestration/langgraph_engine.py",
+        "flow": "LangGraph workflow -> node execution",
+        "status": "POSSIBLY_BROKEN",
+        "risk": "high (verify before use)"
+      }
+    },
+    "critical_assets": {
+      "must_preserve": [
+        "organism/ - core decision layer with evidence escalation",
+        "src/core/meta/ - strategy council and validation",
+        "src/core/tools/tool_registry_golden.py - golden tool definitions",
+        "src/core/state/ - persistent state management",
+        "tests/ - test suite for regression prevention"
+      ],
+      "must_audit": [
+        "archive/ before any reactivation",
+        "src/core/orchestration/langgraph_engine.py - is it still used?",
+        "Browser automation tools - which is canonical?",
+        "src/core/cognitive/ - production readiness"
+      ],
+      "should_eventually_consolidate": [
+        "Browser automation tools into single canonical version",
+        "Tool registries (tools/ vs src/core/tools/) into single interface",
+        "Multiple orchestrators into single execution path"
+      ]
+    }
+  }
+}

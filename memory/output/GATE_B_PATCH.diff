@@ -1,0 +1,143 @@
+--- a/hardhat-poc/test/fork.test.js
++++ b/hardhat-poc/test/fork.test.js
+@@ -1,20 +1,36 @@
+ const { expect } = require("chai");
+ const { ethers } = require("hardhat");
++const fs = require("fs");
++const path = require("path");
+ 
+ describe("Uniswap V3 Reentrancy - Fork Test (GATE B)", function () {
+     
+     this.timeout(30000);
+     
+     let pool, attacker;
+     let rpcUrl = process.env.FORK_RPC_URL;
++    let proofData = {
++        timestamp: new Date().toISOString(),
++        rpc_set: !!rpcUrl,
++        blockNumber: null,
++        factory_code_len: null,
++        error: null
++    };
+     
+     before(async function () {
+-        // GATE B: Check for RPC endpoint
++        // GATE B: Hard fail if RPC endpoint missing
+         if (!rpcUrl) {
+-            this.skip();
+-            console.log("\n[GATE B] SKIPPED: FORK_RPC_URL not provided");
++            proofData.error = "FORK_RPC_URL not set";
++            throw new Error("[GATE B] CRITICAL: FORK_RPC_URL environment variable is required.\nSet it: $env:FORK_RPC_URL=\"https://sepolia.infura.io/v3/YOUR_KEY\"");
++        }
++        
++        console.log("\n[GATE B] RPC: " + rpcUrl.substring(0, 60) + "...");
++        
++        // Get block number
++        try {
++            proofData.blockNumber = await ethers.provider.getBlockNumber();
++            console.log("[GATE B] Block: " + proofData.blockNumber);
++        } catch (err) {
++            proofData.error = "Failed to get block number: " + err.message;
++            throw err;
+         }
+-        console.log("  export FORK_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY");
+-        console.log("Then run: npx hardhat test test/fork.test.js --network hardhat");
+-        const factoryAddress = "0x1F98431c8aD98523631AE4a59f267346ea31F984";
++        
++        const factoryAddress = "0x0227628f3F023bb0B980b67D528571c95c6DaC1c";
+         
+         try {
+             const factory = await ethers.getContractAt(
+@@ -23,47 +39,26 @@
+                 ],
+                 factoryAddress
+             );
+             
+-            console.log("[GATE B] Factory accessible: " + factoryAddress);
++            const code = await ethers.provider.getCode(factoryAddress);
++            proofData.factory_code_len = code.length;
++            console.log("[GATE B] Factory: " + factoryAddress);
++            console.log("[GATE B] Code length: " + code.length);
+             
+         } catch (err) {
+-            console.log("[GATE B] WARNING: Could not verify factory on fork");
+-            console.log("[GATE B] Error: " + err.message);
++            proofData.error = "Factory verification failed: " + err.message;
++            throw new Error("[GATE B] CRITICAL: Could not access factory on fork.\n" + err.message);
+         }
+         
+         // Deploy attacker contract
+         const Attacker = await ethers.getContractFactory("FlashSwapAttacker");
+         attacker = await Attacker.deploy(ethers.ZeroAddress);
++        
++        // Write proof after tests
++        this._writeProof = () => {
++            const proofPath = path.join(__dirname, "..", "..", "memory", "output", "poc_fork_proof.json");
++            fs.mkdirSync(path.dirname(proofPath), { recursive: true });
++            fs.writeFileSync(proofPath, JSON.stringify(proofData, null, 2));
++        };
+      });
+      
+-    it("[GATE B] Should detect if fork is active", async function () {
+-        if (!rpcUrl) {
+-            this.skip();
+-            return;
+-        }
+-        
+-        // Check block number to verify fork is working
+-        const blockNumber = await ethers.provider.getBlockNumber();
+-        console.log("\n[GATE B] Fork block number: " + blockNumber);
+-        
+-        expect(blockNumber).to.be.greaterThan(0);
++    after(function() {
++        // Ensure proof is written
++        const proofPath = path.join(__dirname, "..", "..", "memory", "output", "poc_fork_proof.json");
++        fs.mkdirSync(path.dirname(proofPath), { recursive: true });
++        fs.writeFileSync(proofPath, JSON.stringify(proofData, null, 2));
+      });
+      
++    it("[GATE B] Should detect if fork is active", async function () {
++        const blockNumber = await ethers.provider.getBlockNumber();
++        expect(blockNumber).to.be.greaterThan(0);
+      });
+      
+-    it("[GATE B] Should verify Uniswap V3 Factory exists on fork", async function () {
+-        if (!rpcUrl) {
+-            this.skip();
+-            return;
+-        }
+-        
+-        const factoryAddress = "0x1F98431c8aD98523631AE4a59f267346ea31F984";
+-        const code = await ethers.provider.getCode(factoryAddress);
+-        
+-        console.log("[GATE B] Factory code length: " + code.length);
+-        
+-        if (code === "0x") {
+-            console.log("[GATE B] WARNING: Factory not found on fork");
+-            console.log("[GATE B] This may indicate fork is not working or factory not deployed");
+-            expect(code).to.not.equal("0x");
+-        } else {
+-            console.log("[GATE B] Factory code found on fork");
+-            expect(code).to.not.equal("0x");
+-        }
++    it("[GATE B] Should verify Uniswap V3 Factory exists on fork", async function () {
++        const factoryAddress = "0x0227628f3F023bb0B980b67D528571c95c6DaC1c";
++        const code = await ethers.provider.getCode(factoryAddress);
++        
++        expect(code).to.not.equal("0x");
+      });
+      
+-    it("[GATE B] Should fail gracefully if RPC is invalid", async function () {
+-        if (!rpcUrl) {
+-            this.skip();
+-            return;
+-        }
+-        
+-        // This test only reaches here if RPC is valid
+-        console.log("[GATE B] RPC endpoint is accessible");
+-        expect(rpcUrl).to.be.a("string");
++    it("[GATE B] Should confirm fork is operational", async function () {
++        const blockNumber = await ethers.provider.getBlockNumber();
++        expect(blockNumber).to.be.greaterThan(0);
+      });
+ });

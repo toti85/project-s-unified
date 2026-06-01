@@ -1,0 +1,5 @@
+=== Testing LAN WinRM ===
+LAN OK: SHAYANSKA-DL380
+=== Testing External WinRM ===
+EXT FAIL: Connecting to remote server 46.253.140.72 failed with the following error message : A celszamitogep (46.253.140.72:15985) kiszolgaloi tanusitvanyaban a kovetkezo hibak vannak:       
+Belso hiba lepett fel az SSL-konyvtarban. For more information, see the about_Remote_Troubleshooting Help topic.

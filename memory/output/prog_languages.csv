@@ -1,0 +1,7 @@
+name,year,category,popularity
+Python,1991,High-level,Very High
+JavaScript,1995,Web,Very High
+Java,1995,Enterprise,High
+C++,1985,Systems,High
+Go,2009,Systems,Medium
+Rust,2010,Systems,Medium

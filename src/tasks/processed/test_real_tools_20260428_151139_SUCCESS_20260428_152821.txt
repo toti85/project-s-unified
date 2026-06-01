@@ -1,0 +1,16 @@
+﻿Search the Project-S workspace for all Python files that contain the string PersistentStateManager as a class definition or instantiation.
+
+Specifically:
+1. Use FileSearchTool or FileContentSearchTool to find these files
+2. List the file paths and line numbers where matches occur
+3. Group them by directory
+4. Output a structured report
+
+Search root: C:\ProjectS-Unified\src
+Search pattern: PersistentStateManager
+Expected: at least 3 files (the manager itself, base_state, and at least one user)
+
+Report format:
+- File path (relative to ProjectS-Unified)
+- Line number(s)
+- Context (the matching line, trimmed)

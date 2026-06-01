@@ -1,0 +1,8 @@
+ZIP integrity: OK
+Total entries: 811
+Cred files: NONE-OK
+Dirs: ['interactive_layer', 'orchestrator_runtime', 'reports', 'scripts', 'src']
+self_state.json present: True
+self_state.json valid JSON: True
+.git present: False
+__pycache__ present: False

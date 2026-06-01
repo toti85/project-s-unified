@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MS-FA1 Verdict Schema",
+  "description": "Verdict schema for the Filesystem Automation Pipeline runs",
+  "type": "object",
+  "required": [
+    "run_id",
+    "goal",
+    "status",
+    "confidence",
+    "summary",
+    "created_at"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "pattern": "^FA\\d+_[0-9]{3}$",
+      "description": "Unique run identifier (e.g., FA1_001)"
+    },
+    "goal": {
+      "type": "string",
+      "description": "What was the task trying to achieve"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "FIX", "STOP", "NEEDS_HUMAN", "ERROR"],
+      "description": "Run verdict status"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Evaluator confidence in the verdict (0.0 to 1.0)"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Human-readable verdict summary"
+    },
+    "evidence_files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Paths to files that support the verdict"
+    },
+    "files_changed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Files modified during this run"
+    },
+    "tests_run": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tests executed and their outcomes"
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Identified risks or concerns"
+    },
+    "next_action": {
+      "type": "string",
+      "description": "Recommended next step"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of verdict creation"
+    }
+  },
+  "additionalProperties": false
+}

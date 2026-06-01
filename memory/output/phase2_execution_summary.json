@@ -1,0 +1,12 @@
+{
+  "total_tests": 6,
+  "verified_exploits": 3,
+  "failed_tests": 3,
+  "success_rate": 0.5,
+  "verified_findings": [
+    "ACC-004.test",
+    "FLASH-003.test",
+    "reentrancy.test"
+  ],
+  "timestamp": "2026-01-20T10:46:35.877175"
+}

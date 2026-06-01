@@ -1,0 +1,21 @@
+{
+  "task": "Research current 2026 browser automation and agentic web interaction tools using search plus real browser inspection whe",
+  "output_file": "C:\\ProjectS-Unified\\reports\\GAP_023_BROWSER_SCOPED_SUBTASK_LIVE_20260514.md",
+  "success": false,
+  "elapsed_s": 247.3,
+  "file_exists": false,
+  "file_size_bytes": 0,
+  "section_score": "1/5",
+  "section_results": {
+    "Tool comparison (at least 3 tools mentioned)": false,
+    "Recommendation section": false,
+    "Primary or secondary capability": false,
+    "Non-empty content": false,
+    "Not raw tool output dump": true
+  },
+  "gap023_scope_isolation_fired": true,
+  "gap023_passthrough_fired": false,
+  "browser_automation_selected": true,
+  "gap019_synthesis_fired": false,
+  "verdict": "PARTIAL"
+}
