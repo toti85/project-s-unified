@@ -7,6 +7,10 @@
 .env.development
 .env.*
 *.env
+*.key
+*.pem
+secrets/
+credentials/
 **/credentials.json
 **/service_account.json
 **/api_key*
@@ -20,6 +24,7 @@
 # ============================================
 __pycache__/
 *.py[cod]
+*$py.class
 *.pyc
 *.pyo
 *.so
@@ -72,6 +77,7 @@ desktop.ini
 # TESTING
 # ============================================
 .pytest_cache/
+.mypy_cache/
 .coverage
 htmlcov/
 .tox/
@@ -143,4 +149,5 @@ orchestrator_runtime/cline_outbox/*
 # ============================================
 # Uncomment if reports contain secrets:
 # reports/*_credentials*
-# reports/*_secret*
+# reports/*_secret*memory/intelligence/meta_evidence.jsonl
+memory/intelligence/learning.jsonl
