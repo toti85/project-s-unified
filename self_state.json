@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
-  "last_updated": "2026-06-01T12:28:00+00:00",
-  "updated_by": "MS-AO4 AO4.1 closeout",
+  "last_updated": "2026-06-02T08:10:00+00:00",
+  "updated_by": "MS-AO4 closeout",
   "identity": {
     "what_i_am": "Project-S вЂ” egy kontrollГЎlt autonГіm AI governance rendszer, persistent file-based self-model-lal. SAI (SuperIntelligentAI) az egyetlen aktГ­v Doer runtime, MetaController aktГ­v a SAI-en belГјl use_meta_controller=True Гєton, Interactive Layer v1 a verified operator-facing entry surface.",
     "what_i_am_not": [
@@ -445,7 +445,7 @@
       "active": 0,
       "accepted": 1
     },
-    "next_concrete_step": "MS-AO3 COMPLETE. Begin MS-AO4 scope draft.",
+    "next_concrete_step": "MS-AO5: Production deployment. Governance stack goes live.",
     "minor_todos": [
       {
         "id": "TODO_001",
@@ -1245,6 +1245,28 @@
         "bug_fix": "parallel_loop_manager static->dynamic touches loading",
         "deferred_MS_AO3_tests": "ALL COMPLETE"
       }
+    },
+    {
+      "milestone": "MS-AO4 AO4.2 COMPLETE",
+      "date": "2026-06-02",
+      "evidence": {
+        "file_watcher": "file_watcher.py created, dry_run CLI verified",
+        "webhook": "webhook_receiver.py created, POST /goal smoke test verified",
+        "unit_tests": "6/6 PASS (test_ao4_triggers.py)",
+        "rate_limiting": "file_watcher 5/min, webhook 10/min/IP",
+        "kill_switch": "integrated in both components",
+        "HIGH_gate": "HIGH risk → pending_human_approval.json"
+      }
+    },
+    {
+      "milestone": "MS-AO4 COMPLETE",
+      "date": "2026-06-02",
+      "evidence": {
+        "AO4_1": "T5+T7 live validation complete",
+        "AO4_2": "file_watcher+webhook, 6/6 tests, smoke verified",
+        "AO4_3": "improvement_analyzer, 6/6 tests, AO3_HARD_T4_FAIL suggestion",
+        "AO4_4": "dashboard.py, 5/5 tests, CLI smoke verified"
+      }
     }
   ],
   "bridges": {
@@ -1618,6 +1640,6 @@
       "mitigation_validated": "2026-06-01"
     }
   ],
-  "active_focus": "MS-AO4 AO4.2 - External Goal Triggers",
-  "next_concrete_step": "AO4.1 COMPLETE. Begin AO4.2 file watcher + webhook design."
+  "active_focus": "MS-AO5 planning or production deployment",
+  "next_concrete_step": "MS-AO4 COMPLETE. All 4 milestones done. Evaluate production readiness."
 }

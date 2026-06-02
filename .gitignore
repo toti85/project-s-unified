@@ -149,5 +149,35 @@ orchestrator_runtime/cline_outbox/*
 # ============================================
 # Uncomment if reports contain secrets:
 # reports/*_credentials*
-# reports/*_secret*memory/intelligence/meta_evidence.jsonl
+# reports/*_secret*
+
+# ============================================
+# LARGE INTELLIGENCE FILES (>100MB)
+# ============================================
+memory/intelligence/meta_evidence.jsonl
 memory/intelligence/learning.jsonl
+
+# ============================================
+# Runtime state files — Project-S
+# ============================================
+orchestrator_runtime/governance/trigger_log.jsonl
+orchestrator_runtime/governance/trigger_queue.json
+orchestrator_runtime/governance/improvement_suggestions.json
+orchestrator_runtime/governance/daily_budget.json
+orchestrator_runtime/governance/cycle_log.jsonl
+orchestrator_runtime/governance/approval_log.json
+orchestrator_runtime/governance/escalation_queue.json
+orchestrator_runtime/governance/retry_state.json
+orchestrator_runtime/governance/pending_human_approval.json
+orchestrator_runtime/notifications/feed.jsonl
+orchestrator_runtime/cline_inbox/next_prompt.md
+orchestrator_runtime/cline_inbox/prompt_ready.json
+orchestrator_runtime/cline_outbox/last_output.md
+orchestrator_runtime/cline_outbox/output_ready.json
+
+# Self-state backups — keep on filesystem, not in Git
+self_state.json.bak*
+self_state.json.backup*
+
+# Temp / dryrun outputs
+reports/dryrun_*

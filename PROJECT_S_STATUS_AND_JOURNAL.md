@@ -912,3 +912,92 @@ The two deferred MS-AO3 hardening tests (T5 + T7) now completed with real execut
 **Reports:**
 - `reports/MS_AO4_T7_PARALLEL_PREP_20260601.md`
 - `reports/MS_AO4_AO4_1_CLOSEOUT_20260601.md`
+
+---
+
+## 2026-06-02: MS-AO4 AO4.2 COMPLETE — External Goal Triggers
+
+### MS-AO4 AO4.2 Closeout
+
+**Status:** COMPLETE
+**Completion date:** 2026-06-02
+
+**Summary:**
+External goal trigger system built and validated. Two components (file watcher + webhook) with rate limiting, kill switch integration, and HIGH risk human gate. 6/6 unit tests pass, smoke tests verified via real CLI.
+
+**Components:**
+
+| Component | File | Features |
+|-----------|------|----------|
+| File Watcher | `orchestrator_runtime/governance/file_watcher.py` | Watches goal_queue.json, SHA-256 change detection, rate limit 5/min, kill switch check, dry_run mode |
+| Webhook Receiver | `orchestrator_runtime/governance/webhook_receiver.py` | HTTP POST /goal, localhost:8765, rate limit 10/min/IP, kill switch check, validation |
+
+**Safety:**
+- HIGH risk goals → `pending_human_approval.json` (NOT auto-processed)
+- Kill switch checked before every file watcher scan and webhook request
+- Rate limiting prevents flood attacks
+- localhost only for webhook (no external exposure)
+
+**Tests:**
+- 6/6 unit tests pass (`orchestrator_runtime/sandbox/test_ao4_triggers.py`)
+- File watcher dry_run CLI verified (5s timeout)
+- Webhook POST /goal smoke test verified (SMOKE_001 accepted)
+
+**Classification:** External trigger infrastructure. NOT full autonomy.
+
+**Safety:** 0 safety violations. No src/ modifications. self_state.json updated via atomic method with backup.
+
+**Next milestone:** MS-AO4 AO4.3 — Self-Improvement Suggestion Loop
+
+**Reports:**
+- `reports/MS_AO4_AO4_2_TRIGGERS_20260601.md`
+- `reports/MS_AO4_AO4_2_CLOSEOUT_20260602.md`
+
+---
+
+## 2026-06-02: MS-AO4 COMPLETE — All 4 Milestones Done
+
+### MS-AO4 Closeout
+
+**Status:** COMPLETE
+**Completion date:** 2026-06-02
+**Milestones delivered:** 4/4
+
+**Summary:**
+MS-AO4 governance production hardening complete. All 4 milestones delivered with unit tests, smoke tests, and zero safety violations.
+
+**4 Milestones:**
+
+| Milestone | Component | Tests | Status |
+|-----------|-----------|-------|--------|
+| AO4.1 | T5 + T7 live validation (deferred MS-AO3) | Real executor | COMPLETE |
+| AO4.2 | file_watcher + webhook_receiver | 6/6 unit + smoke | COMPLETE |
+| AO4.3 | improvement_analyzer + threshold adjustments | 6/6 unit + smoke | COMPLETE |
+| AO4.4 | dashboard.py (status, --json, watch) | 5/5 unit + smoke | COMPLETE |
+
+**Components:**
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| File Watcher | `orchestrator_runtime/governance/file_watcher.py` | goal_queue.json change detection, rate limit 5/min |
+| Webhook Receiver | `orchestrator_runtime/governance/webhook_receiver.py` | HTTP POST /goal, localhost:8765, rate limit 10/min/IP |
+| Improvement Analyzer | `orchestrator_runtime/governance/improvement_analyzer.py` | Post-execution failure analysis, suggestions only |
+| Dashboard | `orchestrator_runtime/governance/dashboard.py` | Single-command governance state overview |
+| Risk Classifier (extended) | `orchestrator_runtime/governance/risk_classifier.py` | load_threshold_adjustments() for human-approved overrides |
+
+**Safety:**
+- 0 safety violations
+- No src/ modifications
+- self_state.json updated via atomic method with backup
+- auto_apply always false in improvement suggestions
+- requires_human_approval always true
+
+**Classification:** Governance production hardening. NOT full autonomy.
+
+**Next milestone:** MS-AO5 planning or production deployment
+
+**Reports:**
+- `reports/MS_AO4_AO4_1_CLOSEOUT_20260601.md`
+- `reports/MS_AO4_AO4_2_CLOSEOUT_20260602.md`
+- `reports/MS_AO4_AO4_3_IMPROVEMENT_20260602.md`
+- `reports/MS_AO4_AO4_4_DASHBOARD_20260602.md`

@@ -213,6 +213,54 @@ def list_approved():
     return [e for e in log_data.get("entries", []) if e.get("decision") == "APPROVED"]
 
 
+# Approved adjustments file for threshold overrides
+_APPROVED_ADJUSTMENTS_PATH = Path(__file__).parent / "approved_adjustments.json"
+# Default thresholds
+_DEFAULT_THRESHOLDS = {
+    "MEDIUM_AUTO_APPROVE": False,
+    "LOW_AUTO_APPROVE": True,
+}
+
+
+def load_threshold_adjustments():
+    """
+    Load threshold adjustments from approved_adjustments.json.
+    If file doesn't exist, returns defaults (no change).
+    Logs applied adjustments to trigger_log.jsonl.
+    """
+    # Default thresholds
+    thresholds = dict(_DEFAULT_THRESHOLDS)
+
+    if not _APPROVED_ADJUSTMENTS_PATH.exists():
+        return thresholds
+
+    try:
+        with open(_APPROVED_ADJUSTMENTS_PATH, "r", encoding="utf-8") as f:
+            adjustments = json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return thresholds
+
+    # Apply approved adjustments
+    approved = adjustments.get("approved", [])
+    for adj in approved:
+        key = adj.get("key", "")
+        value = adj.get("value")
+        if key in thresholds and value is not None:
+            thresholds[key] = value
+
+    # Log applied adjustments to trigger_log.jsonl
+    try:
+        from orchestrator_runtime.governance.file_watcher import _log_event as _fw_log
+        _fw_log("threshold_adjustments_applied", {
+            "source": "approved_adjustments.json",
+            "adjustments": {k: v for k, v in thresholds.items() if k in _DEFAULT_THRESHOLDS and v != _DEFAULT_THRESHOLDS.get(k)},
+        })
+    except ImportError:
+        pass
+
+    return thresholds
+
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1:
