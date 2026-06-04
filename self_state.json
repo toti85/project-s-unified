@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
-  "last_updated": "2026-06-05T00:34:00+00:00",
-  "updated_by": "AO5_T2 closeout",
+  "last_updated": "2026-06-05T01:03:00+00:00",
+  "updated_by": "AO5_T3 scope definition",
   "identity": {
     "what_i_am": "Project-S вЂ” egy kontrollГЎlt autonГіm AI governance rendszer, persistent file-based self-model-lal. SAI (SuperIntelligentAI) az egyetlen aktГ­v Doer runtime, MetaController aktГ­v a SAI-en belГјl use_meta_controller=True Гєton, Interactive Layer v1 a verified operator-facing entry surface.",
     "what_i_am_not": [
@@ -1289,6 +1289,12 @@
         "encoding_verified": "UTF-8 write paths verified",
         "RISK_008": "MITIGATED - Cline prep + human CLI verification"
       }
+    },
+    {
+      "milestone": "AO5_T3 scope definition selected: Travel Price Monitor v1",
+      "date": "2026-06-05",
+      "status": "SCOPE_ONLY",
+      "note": "No implementation started. RISK_008 preserved."
     }
   ],
   "bridges": {
@@ -1663,5 +1669,5 @@
     }
   ],
   "active_focus": "MS-AO5 scope formation through real missions",
-  "next_concrete_step": "AO5_T3: first external-value mission. Options: travel monitor / NVR / weekly digest"
+  "next_concrete_step": "AO5_T3_IMPL_PREP: prepare config template + handoff for Travel Price Monitor v1 (not implementation complete)"
 }
