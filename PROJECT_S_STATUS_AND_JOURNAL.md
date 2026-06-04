@@ -1001,3 +1001,88 @@ MS-AO4 governance production hardening complete. All 4 milestones delivered with
 - `reports/MS_AO4_AO4_2_CLOSEOUT_20260602.md`
 - `reports/MS_AO4_AO4_3_IMPROVEMENT_20260602.md`
 - `reports/MS_AO4_AO4_4_DASHBOARD_20260602.md`
+
+---
+
+## 2026-06-03: First Real Run COMPLETE — AO5_T1 Self-Narrative
+
+### AO5_T1 Closeout
+
+**Status:** COMPLETE
+**Completion date:** 2026-06-03
+
+**Summary:**
+First real mission for Project-S. Cline generated handoff files (PREP-only), Copilot executor generated the actual self-narrative document. FA1_HANDOFF_V1 protocol used for handoff.
+
+**Mission:** Project-S 6-Month Self-Narrative (2025-12 — 2026-06)
+
+**Output:**
+- `orchestrator_runtime/sandbox/self_narrative/PROJECT_S_HISTORY_SELF_NARRATIVE_20260602.md`
+
+**Handoff Process:**
+1. Cline created `cline_inbox/next_prompt.md` (mission prompt)
+2. Cline created `cline_inbox/prompt_ready.json` (FA1_HANDOFF_V1 metadata)
+3. Copilot executor consumed handoff, read sources (READ ONLY), generated narrative
+4. Output delivered to sandbox directory
+
+**Safety:**
+- No src/ modifications
+- No self_state.json modifications by executor
+- Sandbox-only output
+- Sources read in READ ONLY mode
+
+**Classification:** First real autonomous mission. NOT governance infrastructure.
+
+**Next step:** Run 1-2 more real missions before defining MS-AO5 scope
+
+**Reports:**
+- `reports/AO5_T1_HANDOFF_GENERATION_20260602.md`
+
+---
+
+## 2026-06-04: MS-AO5 AO5_T2 COMPLETE — Governance Health Remediation
+
+### AO5_T2 Closeout
+
+**Status:** COMPLETE
+**Completion date:** 2026-06-04
+
+**Summary:**
+AO5_T2 governance health check + remediation accepted after real CLI dashboard verification. Not a Cline self-claim.
+
+**Health check findings:**
+- Stale escalation (AO3_HARD_T4_FAIL)
+- Pending improvement suggestion (AO3_HARD_T4_FAIL retry_strategy)
+- Notification/log hygiene risk
+- SMOKE_001 trigger queue artifact
+- Budget visibility bug (dashboard showed 0/0)
+
+**Remediation Round 1:**
+- AO3_HARD_T4_FAIL → RESOLVED_WONTFIX (hardening test artifact)
+- Improvement suggestion reviewed (NOTED, not auto-applied)
+- Budget reset_time added
+- notify_cli.py bug fixes (missing cmd_clear, import path)
+- notifier.py encoding fix (demo block)
+
+**Remediation Fix2:**
+- Dashboard budget field mapping corrected (`daily_goal_limit`→`daily_limit`, `used`→`count`, `reset_at`→`reset_time`)
+- SMOKE_001 trigger artifact cleared
+- UTF-8 write paths verified (notifier.py, bridge_runner.py)
+
+**Final dashboard verification (real CLI output):**
+- budget: daily_limit=10, used=1, remaining=9
+- trigger_queue_pending: 0
+- pending_human_approval: 0
+- escalation_queue_unresolved: 0
+- improvement_suggestions_pending: 0
+- last_notifications: []
+
+**RISK_008 pattern reaffirmed:** Cline prep only + human CLI verification. AO5_T2 accepted only after real dashboard --json output, not Cline self-claim.
+
+**Next step:** AO5_T3 — first external-value mission (travel monitor / NVR / weekly digest)
+
+**Reports:**
+- `reports/MS_AO5_AO5_T2_PREP_20260604.md`
+- `reports/MS_AO5_AO5_T2_REMEDIATION_20260604.md`
+- `reports/MS_AO5_AO5_T2_REMEDIATION_FIX2_20260604.md`
+- `reports/MS_AO5_AO5_T2_CLOSEOUT_20260604.md`

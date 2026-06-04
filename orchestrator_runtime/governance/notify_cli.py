@@ -9,6 +9,10 @@ Usage:
 
 import sys
 import json
+import os
+
+# Ensure project root is in path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from orchestrator_runtime.governance.notifier import Notifier
 
 
@@ -76,6 +80,13 @@ def cmd_resume():
     ks = KillSwitch()
     result = ks.deactivate()
     print(f"Kill switch: {result['status']}")
+
+
+def cmd_clear():
+    n = Notifier()
+    result = n.mark_all_read()
+    cleared = result if isinstance(result, int) else result.get('cleared', 0)
+    print(f"Cleared: {cleared} notifications marked as read")
 
 
 def main():

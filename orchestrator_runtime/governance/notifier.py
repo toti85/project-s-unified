@@ -211,7 +211,7 @@ if __name__ == "__main__":
     n.notify("ESCALATION", goal_id="GOAL_004", message="HIGH risk goal requires human review")
     n.notify("SELF_STATE_UPDATED", message="Milestone #36 added via apply_updates()")
 
-    print("Feed entries:", sum(1 for _ in open(FEED_PATH)))
+    print("Feed entries:", sum(1 for _ in open(FEED_PATH, encoding="utf-8")))
     print("Unread:", len(n.get_unread()))
 
     stats = n.summary()

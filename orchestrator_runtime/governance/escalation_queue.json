@@ -6,7 +6,9 @@
       "feedback": "FAILED: retry also failed. Error: dependencies still missing.",
       "attempts": 3,
       "escalated_at": "2026-06-01T08:37:05.885216+00:00",
-      "status": "ESCALATED"
+      "status": "RESOLVED_WONTFIX",
+      "resolved_at": "2026-06-04T20:31:05.362526+00:00",
+      "resolution": "Hardening test artifact — intentional failure scenario, not a real production goal"
     }
   ]
 }

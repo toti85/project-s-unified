@@ -59,10 +59,10 @@ def _get_budget_state():
     config = _load_json(BUDGET_CONFIG_PATH, {})
     daily = _load_json(DAILY_BUDGET_PATH, {})
 
-    daily_limit = config.get("daily_goal_limit", daily.get("daily_limit", 0))
-    used = daily.get("used", 0)
+    daily_limit = config.get("daily_limit", daily.get("limit", 0))
+    used = daily.get("count", 0)
     remaining = max(0, daily_limit - used)
-    reset_time = daily.get("reset_at", "")
+    reset_time = daily.get("reset_time", "")
 
     return {
         "daily_limit": daily_limit,
