@@ -82,3 +82,5 @@
 {"event": "bridge_reject_consumed", "run_id": "AO5_T7_CWI", "logged_at": "2026-06-09T11:25:12.651293+00:00"}
 {"event": "bridge_consumed", "run_id": "AO5_T8_CWI_PLAN", "iteration": 1, "checksum": "c0be47ad5561d0ce", "logged_at": "2026-06-09T11:37:15.899721+00:00"}
 {"event": "verdict", "run_id": "AO5_T8_CWI_PLAN", "result": {"goal_id": "AO5_T8_CWI_PLAN", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-09T11:37:15.915353+00:00"}, "logged_at": "2026-06-09T11:37:15.931521+00:00"}
+{"event": "bridge_consumed", "run_id": "AO5_T9_CWI_SANDBOX", "iteration": 1, "checksum": "a13312aa5036033a", "logged_at": "2026-06-09T13:01:09.299899+00:00"}
+{"event": "verdict", "run_id": "AO5_T9_CWI_SANDBOX", "result": {"goal_id": "AO5_T9_CWI_SANDBOX", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-09T13:01:09.313992+00:00"}, "logged_at": "2026-06-09T13:01:09.331822+00:00"}
