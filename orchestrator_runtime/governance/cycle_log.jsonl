@@ -84,3 +84,6 @@
 {"event": "verdict", "run_id": "AO5_T8_CWI_PLAN", "result": {"goal_id": "AO5_T8_CWI_PLAN", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-09T11:37:15.915353+00:00"}, "logged_at": "2026-06-09T11:37:15.931521+00:00"}
 {"event": "bridge_consumed", "run_id": "AO5_T9_CWI_SANDBOX", "iteration": 1, "checksum": "a13312aa5036033a", "logged_at": "2026-06-09T13:01:09.299899+00:00"}
 {"event": "verdict", "run_id": "AO5_T9_CWI_SANDBOX", "result": {"goal_id": "AO5_T9_CWI_SANDBOX", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-09T13:01:09.313992+00:00"}, "logged_at": "2026-06-09T13:01:09.331822+00:00"}
+{"event": "bridge_reject_run_id", "expected": "AO5_T10_CWI_PATCH_PREP", "got": "AO5_T9_CWI_SANDBOX", "logged_at": "2026-06-09T13:22:22.968268+00:00"}
+{"event": "bridge_consumed", "run_id": "AO5_T10_CWI_PATCH_PREP", "iteration": 1, "checksum": "6173768cccbf1588", "logged_at": "2026-06-09T14:39:26.784394+00:00"}
+{"event": "verdict", "run_id": "AO5_T10_CWI_PATCH_PREP", "result": {"goal_id": "AO5_T10_CWI_PATCH_PREP", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-09T14:39:26.807449+00:00"}, "logged_at": "2026-06-09T14:39:26.901807+00:00"}

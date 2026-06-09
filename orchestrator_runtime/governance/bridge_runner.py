@@ -37,6 +37,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 import argparse
 import hashlib
 import json
+import logging
 from datetime import datetime, timezone
 
 
@@ -88,6 +89,11 @@ STATUS_REJECTED_CHECKSUM = "REJECTED_CHECKSUM"
 STATUS_REJECTED_RUN_ID = "REJECTED_RUN_ID"
 STATUS_REJECTED_CONSUMED = "REJECTED_CONSUMED"
 STATUS_BLOCKED_KILL_SWITCH = "BLOCKED_KILL_SWITCH"
+
+# ── CWI Advisory Feature Flag ─────────────────────────────────────────
+# Default False: CWI remains disabled until explicit opt-in.
+# Set to True to enable advisory-only cognitive analysis pre-consumption.
+CWI_ADVISORY_ENABLED = False
 
 # ── Notification (lazy) ───────────────────────────────────────────────
 
@@ -247,6 +253,44 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
             return base
     except ImportError:
         pass  # Kill switch not available, proceed
+
+    # ── CWI ADVISORY pre-consume hook (advisory-only, feature-flagged) ──
+    # Only runs if CWI_ADVISORY_ENABLED is True.
+    # Never raises, never blocks, never changes verdict or checksum logic.
+    if CWI_ADVISORY_ENABLED:
+        try:
+            from orchestrator_runtime.sandbox.cwi_advisory_wrapper import get_cwi_advisory_safe
+            # Extract task description from goal_queue if available
+            task_desc = ""
+            try:
+                gq_path = Path(__file__).parent.parent.parent / "goal_queue.json"
+                if gq_path.exists():
+                    with open(gq_path, "r", encoding="utf-8-sig") as gf:
+                        gq = json.load(gf)
+                    for g in gq.get("goals", []):
+                        if g.get("id") == run_id:
+                            task_desc = g.get("description", g.get("title", run_id))
+                            break
+            except Exception:
+                pass
+            if not task_desc:
+                task_desc = run_id  # Fallback to run_id
+            _cwi_advisory = get_cwi_advisory_safe(
+                task_description=task_desc,
+                context={"integration": "bridge_runner_pre_consume", "run_id": run_id},
+                user_id="ao5_system"
+            )
+            if _cwi_advisory.get("status") == "OK":
+                _intent = _cwi_advisory.get("advisory", {}).get("intent_analysis", {}).get("intent_type", "unknown")
+                logger = logging.getLogger(__name__)
+                logger.info(f"CWI advisory for {run_id}: intent={_intent}")
+            else:
+                logger = logging.getLogger(__name__)
+                logger.warning(f"CWI advisory for {run_id}: {_cwi_advisory.get('status')} — {_cwi_advisory.get('error')}")
+        except Exception as _e:
+            logger = logging.getLogger(__name__)
+            logger.error(f"CWI pre-analysis unexpected error for {run_id}: {_e}")
+    # If CWI_ADVISORY_ENABLED is False, skip entirely — no behavior change
 
     ready_path = _output_ready()
     if not ready_path.exists():
