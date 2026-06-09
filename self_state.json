@@ -447,7 +447,7 @@
       "active": 0,
       "accepted": 1
     },
-    "next_concrete_step": "TOP 3 ghost candidate egyikét bekötni, VAGY Compute Arbiter router",
+    "next_concrete_step": "TOP 3 ghost candidate bekötése VAGY Compute Arbiter router",
     "minor_todos": [
       {
         "id": "TODO_001",
@@ -522,9 +522,9 @@
       "file_writer": "VERIFIED",
       "ilo_server_control": "VERIFIED вЂ” read-only access to DL380 Gen9 (serial CZ3733LABY) via iLO 4 Redfish API. Power management methods available but NOT exercised. NAT redirect workaround confirmed essential and working."
     },
-    "active_focus": "Sz - Ghost Branch v0.2 vagy Compute Arbiter döntés",
-    "last_updated": "2026-06-09T07:38:13.545077+00:00",
-    "updated_by": "AO5_T6 Ghost Branch closeout"
+    "active_focus": "Sz - Ghost Branch v0.2 vagy Compute Arbiter",
+    "last_updated": "2026-06-09T09:51:44.330229+00:00",
+    "updated_by": "Sz name + AO5_T6 closeout"
   },
   "memory_index": {
     "meta_evidence": {
@@ -1314,6 +1314,24 @@
           "orchestrator/verdict_evaluator.py (false negative ghost)",
           "core/cognitive_workflow_integration.py (high-value ghost)",
           "core/agents/overseer_agent.py (monitoring ghost)"
+        ]
+      },
+      "achieved_at": "2026-06-09T10:30:00Z"
+    },
+    {
+      "id": 38,
+      "date": "2026-06-09",
+      "title": "AO5_T6 Ghost Branch v0.1 COMPLETE — Sz név rögzítve",
+      "description": "Ghost Branch analysis: 93 files scanned, 45 active, 30 ghost candidates, TOP 3 resurrection candidates identified. Sz identity registered.",
+      "evidence": {
+        "total_py_files": 93,
+        "active_files": 45,
+        "ghost_files": 30,
+        "empty_files": 6,
+        "top_candidates": [
+          "orchestrator/verdict_evaluator.py",
+          "core/cognitive_workflow_integration.py",
+          "core/agents/overseer_agent.py"
         ]
       },
       "achieved_at": "2026-06-09T10:30:00Z"

@@ -1,0 +1,30 @@
+# Project-S Cline Rules
+
+## CRITICAL CHECKSUM RULE (RISK_010)
+
+After writing last_output.md, you MUST NOT modify it again.
+
+**Mandatory order:**
+1. Write `last_output.md` (FINAL — no more edits)
+2. Compute checksum from file bytes
+3. Write `output_ready.json` LAST
+4. STOP — never touch `last_output.md` after step 3
+
+**Violation pattern:** Cline writes `output_ready.json` with checksum X,
+then makes a final formatting pass on `last_output.md`, producing checksum Y.
+Bridge_runner rejects.
+
+**Fix:** Mandatory order:
+  1. Write `last_output.md` (FINAL — no more edits)
+  2. Compute checksum from file bytes
+  3. Write `output_ready.json` LAST
+  4. STOP — never touch `last_output.md` after step 3
+
+## Workspace Rules
+
+- Scripts ONLY in: `orchestrator_runtime/sandbox/`
+- Reports ONLY in: `reports/`
+- NO files in project root
+- NO src/ modifications
+- NO self_state.json modifications without explicit approval
+- PREP ONLY unless told otherwise

@@ -76,3 +76,9 @@
 {"event": "bridge_reject_checksum", "run_id": "AO5_T6", "expected": "9b66ddcf8d688329", "actual": "fca2aab9f9fff70a", "logged_at": "2026-06-09T07:20:17.848743+00:00"}
 {"event": "bridge_consumed", "run_id": "AO5_T6", "iteration": 1, "checksum": "2be5351019aa1ad5", "logged_at": "2026-06-09T07:25:10.003869+00:00"}
 {"event": "verdict", "run_id": "AO5_T6", "result": {"goal_id": "AO5_T6", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-09T07:25:10.063049+00:00"}, "logged_at": "2026-06-09T07:25:10.110822+00:00"}
+{"event": "bridge_reject_checksum", "run_id": "AO5_T7_CWI", "expected": "53a9e5a66e9d22c2", "actual": "557533a5c47f286f", "logged_at": "2026-06-09T10:20:23.067281+00:00"}
+{"event": "bridge_consumed", "run_id": "AO5_T7_CWI", "iteration": 1, "checksum": "557533a5c47f286f", "logged_at": "2026-06-09T10:53:53.114591+00:00"}
+{"event": "verdict", "run_id": "AO5_T7_CWI", "result": {"goal_id": "AO5_T7_CWI", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-09T10:53:53.114591+00:00"}, "logged_at": "2026-06-09T10:53:53.138844+00:00"}
+{"event": "bridge_reject_consumed", "run_id": "AO5_T7_CWI", "logged_at": "2026-06-09T11:25:12.651293+00:00"}
+{"event": "bridge_consumed", "run_id": "AO5_T8_CWI_PLAN", "iteration": 1, "checksum": "c0be47ad5561d0ce", "logged_at": "2026-06-09T11:37:15.899721+00:00"}
+{"event": "verdict", "run_id": "AO5_T8_CWI_PLAN", "result": {"goal_id": "AO5_T8_CWI_PLAN", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-09T11:37:15.915353+00:00"}, "logged_at": "2026-06-09T11:37:15.931521+00:00"}
