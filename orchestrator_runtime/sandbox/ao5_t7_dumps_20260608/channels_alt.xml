@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<InputProxyChannel version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<id>1</id>
+<name>1</name>
+<sourceInputPortDescriptor>
+<proxyProtocol>HIKVISION</proxyProtocol>
+<addressingFormatType>ipaddress</addressingFormatType>
+<ipAddress>192.168.1.60</ipAddress>
+<managePortNo>8000</managePortNo>
+<srcInputPort>1</srcInputPort>
+<userName>admin</userName>
+<streamType>auto</streamType>
+<model>DS-2CD2T42WD-I8</model>
+<serialNumber>DS-2CD2T42WD-I820170623BBWR780993765</serialNumber>
+<firmwareVersion>V5.5.53 build 180730</firmwareVersion>
+<deviceID></deviceID>
+</sourceInputPortDescriptor>
+<certificateValidationEnabled>false</certificateValidationEnabled>
+<defaultAdminPortEnabled>false</defaultAdminPortEnabled>
+<enableAnr>false</enableAnr>
+<enableTiming>true</enableTiming>
+<devIndex>eabe4001-a9bc-4fd6-8091-9ec66a159d97</devIndex>
+</InputProxyChannel>

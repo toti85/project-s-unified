@@ -1,0 +1,1 @@
+AO4 T5 Goal B output — budget exhaustion test goal B completed successfully.

@@ -1,0 +1,1175 @@
+@media (max-width: 1400px) {
+
+   /*---------- Promo --------*/
+   .promo .container {
+      min-height: 650px;
+   }
+}
+
+@media (max-width: 1200px) {
+
+   /*---------- General --------*/
+   main {
+      margin-top: 80px;
+   }
+   .section{
+      padding-top: 70px;
+      padding-bottom: 70px;
+   }
+   .section__title{
+      font-size: 30px;     
+   }
+   .section__sub-title{
+      margin-bottom: 60px;
+      font-size: 16px;
+   }
+
+   /*---------- Header --------*/
+   .header {
+      height: 80px;
+   }
+   .header .row {
+      height: 80px;
+   }
+   .header .nav .nav-menu li > a {
+      font-size: 15px;
+   }
+   .header .nav .nav-menu li > a.header__button {
+      font-size: 15px;
+      padding: 10px 20px;
+   }
+   .header .nav .nav-menu li > a.header__button i {
+      font-size: 14px;
+   }
+   .header .nav .nav-menu li > a.header__logo {
+      height: 55px;
+   }
+
+   /*---------- Promo --------*/
+   .promo .container {
+      min-height: 600px;
+   }
+   .promo .promo__title {
+      font-size: 36px;
+   }
+   .promo .promo__description {
+      font-size: 18px;
+   }
+   
+
+   /*---------- Products --------*/
+   .products__box{
+      margin-left: -15px;
+      margin-right: -15px;
+   }
+   .products__box .col{
+      padding-left: 15px;
+      padding-right: 15px;
+   }
+
+   /*---------- Delivery --------*/
+   .delivery__content a.button{
+      font-size: 15px;
+   }
+
+   /*---------- Advantage --------*/
+   .adventage__image{
+      width: 150px;
+      height: 150px;
+      margin-bottom: 25px;
+   }
+
+   /*---------- Info Card --------*/
+   .info-card__title{
+      font-size: 22px;
+   }
+}
+
+@media (max-width: 1100px){
+
+   /*---------- General --------*/
+   main {
+      margin-top: 80px;
+   }
+   .section{
+      padding-top: 65px;
+      padding-bottom: 65px;
+   }
+   .section__title {
+      font-size: 28px;
+   }
+
+   /*---------- Header --------*/
+   .header__language{
+      margin: 0;
+   }
+   .nav-menu__item-promo{
+      margin-right: 25px;
+      order: -1;
+   }
+   .nav-menu__item-phone{
+      order: 1;
+   }
+   .header__phone{
+      border: 2px solid #0b78ba;
+      height: 42px;
+      width: 42px;
+      color: #0b78ba !important;
+   }
+   .header__phone:hover{
+      background: #0b78ba !important;
+   }
+   .header__phone:hover i{
+      color: #fff !important; 
+   }
+   .header__phone i{
+      margin: 0 !important;
+   }
+   .header__phone span{
+      display: none;
+   }
+   .nav-menu__item-phone .dropdown-content{
+      left: auto;
+      right: 0;
+      width: max-content;
+   }
+   .header__language-item{
+      font-size: 14px;
+   }
+
+
+   /*---------- Products --------*/
+   .product-item__name{
+      padding: 15px;
+      font-size: 16px;
+   }
+
+   /*---------- Advantages --------*/
+   .adventage__image{
+      width: 145px;
+      height: 145px;
+   }
+   .adventage__title{
+      font-size: 18px;
+   }
+
+   /*---------- Utility --------*/
+   .utility__image{
+      width: 130px;
+   }
+   
+   /*---------- About Card --------*/
+   .about-card__content.pr-5{
+      padding-right: 30px !important;
+   }
+   .about-card__content.pl-5{
+      padding-left: 30px !important;
+   }
+   .about-card__title{
+      font-size: 22px;
+   }
+}
+
+
+@media (max-width: 991px) {
+   
+   /*---------- General --------*/
+   body a {
+      font-size: 15px;
+   }
+   main {
+      margin-top: 60px;
+   }
+   .container {
+      padding-left: 25px;
+      padding-right: 25px;
+   }
+   .section__title {
+      font-size: 26px;
+   }
+
+   /*---------- Header --------*/
+   .header {
+      height: auto;
+   }
+   .header .row {
+      height: 60px;
+   }
+   .header .col-12{
+      position: inherit;
+   }
+   .header .row .nav {
+      display: none;
+   }
+   .header .row .nav-mobile{
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flex;
+      display: -o-flex;
+      display: flex;
+      align-items: center;
+      height: 100%;
+   }
+   .header .row .nav-mobile .nav-mobile__burger {
+      position: relative;
+      display: flex;
+      width: 24px;
+      height: 18px;
+      border: 0;
+      outline: 0 !important;
+      background: transparent;
+      z-index: 9;
+   }
+   .header .row .nav-mobile .nav-mobile__burger span {
+      background-color: black;
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      top: 50%;
+      margin-top: -1px;
+      transition: all 0.3s ease 0s;
+   }
+   .header .row .nav-mobile .nav-mobile__burger:before {
+      content: '';
+      background-color: black;
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      top: 0;
+      z-index: 3;
+      transition: all 0.3s ease 0s;
+   }
+   .header .row .nav-mobile .nav-mobile__burger:after {
+      content: '';
+      background-color: black;
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: 0;
+      transition: all 0.3s ease 0s;
+   }
+   .header .row .nav-mobile .nav-mobile__burger.active span {
+      transform: scale(0);
+      transition: all 0.3s ease 0s;
+   }
+   .header .row .nav-mobile .nav-mobile__burger.active:before {
+      transform: rotate(45deg);
+      top: 50%;
+      margin-top: -1px;
+   }
+   .header .row .nav-mobile .nav-mobile__burger.active:after {
+      transform: rotate(-45deg);
+      bottom: 50%;
+      margin-bottom: -1px;
+   }
+   .header .row .nav-mobile .nav-mobile__logo img {
+      height: 40px;
+   }
+   .header .row .nav-mobile .nav-mobile__phone {
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flex;
+      display: -o-flex;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 2px solid #0b78ba;
+      font-size: 13px;
+      color: #0b78ba;
+      -webkit-border-radius: 100%;
+      -moz-border-radius: 100%;
+      -ms-border-radius: 100%;
+      -o-border-radius: 100%;
+      border-radius: 100%;
+   }
+   .header .row .nav-mobile .nav-mobile__phone:hover {
+      background: #0b78ba;
+      color: #fff;
+   }
+   .nav-mobile__button{
+      margin: 0 25px 0 auto;
+      padding: .5em 1em;
+      font-size: 14px;
+   }
+   .nav-mobile__button i{
+      margin-left: 7px;
+   }
+   .nav-mobile .header__language{
+      margin: 0 25px 0 5px;
+   }
+
+   /*---------- Promo --------*/
+   .promo .container {
+      min-height: 500px;
+   }
+   .promo .promo__title {
+      font-size: 30px;
+   }
+   .promo .promo__description {
+      font-size: 16px;
+      line-height: 24px;
+   }
+
+   /*---------- Products --------*/
+   .product-item__name{
+      font-size: 15px;
+      flex-direction: column;
+      align-items: center;
+   }
+   .product-item__name span{   
+      margin-bottom: 1em;
+      text-align: center;
+   }
+   .product-item__name a.button{
+      font-size: 14px;
+      padding: .4em 2em
+   }
+   
+   /*---------- Advantages --------*/
+   .adventage__image {
+      width: 130px;
+      height: 130px;
+   }
+   .adventage__title{
+      font-size: 17px;
+   }
+   .adventage__sub-title{
+      font-size: 14px;
+   }
+   
+   /*---------- Info Card --------*/
+   .info-card__item{
+      padding: 20px;
+   }
+   .info-card__title{
+      font-size: 20px;
+   }
+   
+   /*---------- Utility --------*/
+   .utility__wrapper{
+      padding: 50px 0;
+   }
+   .utility__item{
+      height: 100px;
+   }
+   .utility__image {
+      width: 110px;
+      margin: 0 25px;
+   }
+
+   /*---------- About Card --------*/
+   .about-card__content.pr-5{
+      padding-right: 25px !important;
+   }
+   .about-card__content.pl-5{
+      padding-left: 25px !important;
+   }
+   .about-card{
+      padding: 30px 25px;
+   }
+   .about-card:not(:last-child){
+      margin-bottom: 30px;  
+   }
+   .about-card__title{
+      font-size: 20px;
+   }
+   .about-card__text{
+      font-size: 14px;  
+      margin-bottom: 30px; 
+   }
+
+
+   /*---------- Contacts --------*/
+   .contacts .section__sub-title{
+      margin-bottom: 40px;
+   }
+   .contacts-form{
+      max-width: 450px;
+   }
+   .contacts-list{
+      padding-left: 15px;
+   }
+   .contacts-map{
+      margin-top: 50px;
+   }
+
+   
+   /*---------- About Page --------*/
+   .about-page .container{
+      max-width: 650px;
+   }
+   .about-page .section__title {
+      margin-bottom: 1.2em;
+   }
+   .about-page a.button{
+      font-size: 15px;
+   }
+   
+   /*---------- Footer --------*/
+   .footer__content{
+      padding-bottom: 0px;
+   }
+   .footer__content .row{
+      justify-content: flex-start;
+   }
+   .footer__col{
+      -ms-flex: 0 0 33.333333%;
+       flex: 0 0 33.333333%;
+       max-width: 33.333333%;
+       margin-bottom: 30px;
+   }
+
+
+   /*---------- Whater Product Tabs --------*/
+   .water .col-5 {
+      -ms-flex: 0 0 38%;
+      flex: 0 0 38%;
+      max-width: 38%;
+   }
+   .water .col-7{
+      -ms-flex: 0 0 58%;
+      flex: 0 0 58%;
+      max-width: 58%;
+   }
+   .water__sub-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+   }
+   .water__text{
+      font-size: 15px;
+   }
+}
+
+@media (max-width: 767px) {
+   
+   /*---------- General --------*/   
+   .section {
+      padding-top: 55px;
+      padding-bottom: 55px;
+   }
+   .section__sub-title{
+      margin-bottom: 50px;
+   }
+   
+   /*---------- Promo --------*/
+   .promo .container {
+      padding-top: 60px;
+      padding-bottom: 60px;
+      min-height: 400px;
+   }
+   .promo .promo__title {
+      max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 28px;
+      text-align: center;
+   }
+   .promo .promo__title br {
+      display: none;
+   }
+   .promo .promo__description {
+      text-align: center;
+      font-size: 16px;
+      line-height: 24px;
+   }
+   .promo .promo__image {
+      padding-top: 40px;
+   }
+   .promo .promo__image img {
+      max-width: 250px;
+   }
+
+   /*---------- Products --------*/
+   .products__box .col{
+      -ms-flex: 0 0 50%;
+       flex: 0 0 50%;
+       max-width: 50%;
+   }
+   .products__box .col:not(:last-child){
+      margin-bottom: 30px;
+   }
+
+   /*---------- Delivery --------*/
+   .delivery__image{
+      justify-content: center;
+   }
+   .delivery__image img{
+      max-width: 450px;
+   }
+   .delivery__content a.button{
+      font-size: 14px;
+   }
+   
+   /*---------- Advantages --------*/
+   .adventages__box{
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flex;
+      display: -o-flex;
+      display: flex;
+      justify-content: center;
+   }
+   .adventage{
+      -ms-flex: 0 0 50%;
+       flex: 0 0 50%;
+       max-width: 50%;
+   }
+   .adventage:not(:last-child){
+      margin-bottom: 30px;
+   }
+   .adventage__image {
+      width: 120px;
+      height: 120px;
+   }
+
+   /*---------- Info Crads --------*/
+   .info-card__item{
+      padding: 15px;
+   }
+   .info-card__image{
+      margin-bottom: 20px;
+   }
+   .info-card__title{
+      font-size: 17px;
+      margin-bottom: .4em;
+   }
+   .info-card__text{
+      font-size: 13px;
+   }
+   .info-card__item a.button{
+      font-size: 12px;
+      padding: .5em 1.2em;
+   }
+
+   /*---------- Social --------*/
+   .social__wrapper{
+      grid-template-columns: 100%;
+   }
+   .social__wrapper .section__title br{
+      display: none;
+   }
+
+   /*---------- Utility --------*/
+   .utility__wrapper {
+      padding: 40px 0;
+   }
+   .utility__image {
+      width: 100px;
+      margin: 0 10px;
+   }
+   .utility__item{
+      height: 110px;
+      margin: 10px 0;
+      width: 150px;
+   }
+   .utility__text{
+      font-size: 15px;
+   }
+   .utility__number{
+      width: 36px;
+      height: 36px;
+      font-size: 15px;
+      margin-bottom: 7px;
+   }
+
+   /*---------- About Card --------*/
+   .about-card {
+      padding: 25px 20px;
+   }
+   .about-card:not(:last-child){
+      margin-bottom: 20px;  
+   }
+   .about-card__content{
+      -ms-flex: 0 0 55%;
+      flex: 0 0 55%;
+      max-width: 55%;
+   }
+   .about-card__title {
+      font-size: 20px;
+   }
+   .about-card__text{
+      margin-bottom: 20px;
+   }
+   .about-card__image{
+      -ms-flex: 0 0 45%;
+      flex: 0 0 45%;
+      max-width: 45%;
+   }
+   .about-card__content a.button{
+      font-size: 13px;
+   }
+
+   /*---------- Contacts --------*/
+   .contacts-form {
+      max-width: 310px;
+   }
+   .contacts-list{
+      padding-left: 0;
+   }
+
+   /*---------- Footer --------*/
+   .footer__col{
+      -ms-flex: 0 0 50%;
+      flex: 0 0 50%;
+      max-width: 50%;
+   }
+   .footer__col_contacts{
+      order: 1;
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+   }
+   .footer__title{
+      font-size: 15px;
+   }
+   .footer__adress{
+      font-size: 13px;
+   }
+   .footer__content ul li a{
+      font-size: 13px;
+   }
+
+   
+   /*---------- Whater Product Tabs --------*/
+   .product-tabs__nav li{
+      padding: 0 15px;
+   }
+   .water .col-5 {
+      -ms-flex: 0 0 34%;
+      flex: 0 0 34%;
+      max-width: 34%;
+   }
+   .water .col-7{
+      -ms-flex: 0 0 62%;
+      flex: 0 0 62%;
+      max-width: 62%;
+   }
+   .water__sub-title {
+      font-size: 18px;
+      margin-bottom: 20px;
+   }
+   .water__ingradient{
+      margin-top: 15px;
+   }
+   .water__text{
+      font-size: 14px;
+   }
+   .packing-item__title{
+      font-size: 15px;
+   }
+
+}
+
+@media (max-width: 575px){
+   
+   /*---------- General --------*/
+   .container {
+      padding-left: 20px;
+      padding-right: 20px;
+   }
+   .row{
+      margin-left: -10px;
+      margin-right: -10px;
+   }
+   [class*="col"]{
+      padding-left: 10px;
+      padding-right: 10px;
+   }
+   .section{
+      padding-top: 50px;
+      padding-bottom: 50px;
+   }
+   .section__title{
+      font-size: 24px;
+   }
+   .section__sub-title{
+      font-size: 15px;
+      margin-bottom: 45px;
+   }
+   .section__text{
+      font-size: 15px;
+   }
+
+   /*---------- Header --------*/
+   .nav-mobile__button{
+      margin: 0 20px 0 auto;
+   }
+   .nav-mobile .header__language{
+      margin: 0 15px 0 0;
+   }
+   .nav-mobile .header__language span{
+      margin: 0 10px;
+      width: 2px;
+   }
+
+
+
+   .promo__description span{
+      display: none;
+   }
+   /*---------- Products --------*/
+   .products__box .col{
+      padding-left: 10px;
+      padding-right: 10px;
+   }
+   .products__box .col:not(:last-child){
+      margin-bottom: 20px;
+   }
+   
+   /*---------- Delivery --------*/
+   .delivery__image{
+      margin-bottom: 20px;
+   }
+   .delivery__image img{
+      max-width: 100%
+   }
+   
+   /*---------- Advantages --------*/
+   .adventage__image {
+      width: 110px;
+      height: 110px;
+      margin-bottom: 20px;
+   }
+   .adventage__title{
+      font-size: 16px;
+   }
+
+   /*---------- Info Crads --------*/
+   .info-card__item{
+      padding: 10px;
+   }
+   .info-card__image{
+      margin-bottom: 20px;
+   }
+   .info-card__title{
+      font-size: 16px;
+      margin-bottom: .4em;
+   }
+   .info-card__text{
+      margin-bottom: 1.2em;
+   }
+   
+   /*---------- Utility --------*/
+   .utility__wrapper {
+      padding: 35px 0;
+   }
+   .utility__box{
+      justify-content: flex-start;
+      flex-direction: column;
+      align-items: flex-start;
+      background-image: url(../img/water/syla1-5.png);
+      background-repeat: no-repeat;
+      background-position: 95%;
+      background-size: auto 85%;
+   }
+   .utility__box .col-auto {
+      -ms-flex: 0 0 100%;
+      flex: 0 0 65%;
+      max-width: 65%;
+   }
+   .utility__item{
+      height: auto;
+      width: auto;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 12px 0;
+   }
+   .utility__number{
+      width: 34px;
+      height: 34px;
+      font-size: 14px;
+      margin-right: 15px;
+      margin-bottom: 0;
+   }
+   .utility__text{
+      text-align: left;
+      -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+   }
+   .utility__image{
+      display: none;
+   }
+
+   /*---------- About Card --------*/
+   .about-card {
+      flex-direction: column;
+      padding: 20px;
+   }
+   .about-card:nth-child(odd){
+      flex-direction: column-reverse;
+   }
+   .about-card__content.pl-5,
+   .about-card__content.pr-5{
+      padding: 0 !important;
+   }
+   .about-card:not(:last-child){
+      margin-bottom: 30px;  
+   }
+   .about-card__content{
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+   }
+   .about-card__image{
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+      margin-bottom: 25px;
+      padding-top: 50%;
+   }
+   .about-card__title {
+      font-size: 19px;
+   }
+
+
+   /*---------- Contacts --------*/
+   .contacts .section__sub-title{
+      margin-bottom: 30px;
+   }
+   .contacts-form {
+      max-width: 100%;
+      margin-bottom: 40px;
+   }
+   .contacts-list{
+      padding-left: 0;
+   }
+   .contacts-map__box{
+      padding-top: 100%;
+   }
+
+   /*---------- About Page --------*/
+   .about-page a.button{
+      font-size: 14px;
+   }
+
+   /*---------- Whater Product Tabs --------*/
+   .product-tabs__nav{
+      border: 0;
+      flex-wrap: wrap;
+      margin-bottom: 50px;
+   }
+   .product-tabs__nav li{
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flex;
+      display: -o-flex;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      -ms-flex: 0 0 50%;
+      flex: 0 0 50%;
+      max-width: 50%;
+   }
+   .product-tabs__nav li:not(:last-child){
+      margin-bottom: 25px;
+   }
+   .product-tabs__nav li a{
+      padding: 8px 0px;
+   }
+   .product-tabs__nav li a:after{
+      opacity: .2
+   }
+
+   /*---------- Whater Product Tabs --------*/
+   .product-tabs__nav li{
+      padding: 0 15px;
+   }
+   .water .col-5 {
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+   }
+   .water .col-7{
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+   }
+   .water__image{
+      height: 80vw;
+      margin-bottom: 7vw;
+   }
+   .water__title{
+      text-align: center;
+   }
+   .water__sub-title{
+      text-align: center;
+   }
+   .packing-item__title{
+      font-size: 14px;
+   }
+   .water__text {
+      font-size: 13px;
+   }
+}
+
+@media (max-width: 400px) {
+   
+   /*---------- General --------*/
+   .section{
+      padding-top: 45px;
+      padding-bottom: 45px;
+   }
+   .section__title{
+      font-size: 22px;
+   }
+   .section__sub-title{
+      font-size: 14px;
+      margin-bottom: 40px;
+   }
+   .section__text{
+      font-size: 14px;
+   }
+   .promo__description span{
+      display: none;
+   }
+
+   
+   .nav-mobile .header__language-item {
+      font-size: 12px;
+   }
+   .nav-mobile .header__language span{
+      margin: 0 8px;
+   }
+   .nav-mobile__button{
+      font-size: 13px;
+   }
+
+   /*---------- Promo --------*/
+   .promo .container {
+      padding-top: 50px;
+      padding-bottom: 50px;
+      min-height: 300px;
+   }
+   .promo .promo__title {
+      max-width: 300px;
+      font-size: 22px;
+   }
+   .promo .promo__description {
+      font-size: 13px;
+      line-height: 20px;
+   }
+   .promo .promo__description br {
+      display: none;
+   }
+   .promo .promo__image img {
+      max-width: 200px;
+   }
+   
+   /*---------- Products --------*/
+   .products .section__title{
+      text-align: center;
+   }
+   .products .section__sub-title{
+      text-align: center;
+      padding: 0 10px;
+   }
+   .products__box .col {
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+   }
+   .product-item{
+      width: 240px;
+   }
+   .product-item__name{
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+   }
+   .product-item__name span{
+      margin: 0;
+   }
+   .product-item__name a.button{
+      font-size: 13px;
+      padding: .5em 1.2em;
+   }
+
+   /*---------- Advantages --------*/
+   .adventage {
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+   }
+   .adventage:not(:last-child){
+      margin-bottom: 35px;
+   }
+   .adventage__image{
+      width: 100px;
+      height: 100px;
+      margin-bottom: 15px;
+   }
+
+   /*---------- Info Cards --------*/
+   .info-card{
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flex;
+      display: -o-flex;
+      display: flex;
+      justify-content: center;
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+   }
+   .info-card:not(:last-child) .info-card__item{
+      margin-bottom: 35px;
+   }
+   .info-card__item{
+      width: 240px;
+   }
+
+   /*---------- Social --------*/
+   .social .section__title
+   .social .section__sub-title{
+      text-align: center;
+   }
+   
+   /*---------- Utility --------*/
+   .utility__box{
+      background-size: auto 80%;
+   }
+   .utility__number {
+      width: 30px;
+      height: 30px;
+      font-size: 12px;
+      margin-right: 10px;
+   }
+   .utility__text{
+      font-size: 14px;
+      font-weight: 400;
+   }
+
+   /*---------- About Card --------*/
+   .about-card{
+      padding: 15px;
+   }
+   .about-card__title{
+      font-size: 18px;
+      margin-bottom: .5em;
+   }
+
+   /*---------- Contacts --------*/
+   .contacts-form .form__group input, 
+   .contacts-form .form__group textarea{
+      padding: 10px 12px;
+   }
+   .contacts .section__sub-title{
+      margin-bottom: 20px;
+   }
+
+   /*---------- Whater Product Tabs --------*/
+   .product-tabs__nav li a{
+      font-size: 13px;
+   }
+   .product-tabs__nav li:not(:last-child) {
+      margin-bottom: 20px;
+   }
+   .water__title{
+      margin-bottom: 0;
+   }
+   .water__sub-title{
+      font-size: 16px;
+      margin-bottom: 15px;
+   }
+   .water__ingradient{
+      margin-top: 10px;
+      width: 31%;
+   }
+
+}
+@media (max-width: 359px){
+
+   /*---------- General --------*/
+   .section{
+      padding-top: 40px;
+      padding-bottom: 40px;
+   }
+   .section__title{
+      font-size: 20px;
+   }
+   .section__sub-title{
+      font-size: 13px;
+      margin-bottom: 35px;
+   }
+   .promo__description span{
+      display: none;
+   }
+
+   .header .col-12{
+      padding: 0 7px;
+   }
+   .header .row .nav-mobile .nav-mobile__logo img {
+      height: 34px;
+   }
+   .nav-mobile__button {
+      font-size: 12px;
+   }
+   .nav-mobile .header__language {
+      margin: 0 18px 0 0;
+   }
+   .nav-mobile .header__language-item{
+      font-size: 11px;
+   }
+   .nav-mobile__toggle{
+      width: 25px;
+   }
+   .nav-mobile__toggle span{
+      right: 0;
+   }
+   
+   /*---------- Mobile Menu--------*/
+   .nav-mobile__menu{
+      padding: 5px 15px;
+   }
+   .nav-mobile__menu a{
+      font-size: 14px;
+   }
+   .nav-mobile__menu a.contact{
+      font-size: 13px;
+   }
+   .nav-mobile__menu ul a{
+      font-size: 13px;
+   }
+
+
+   /*---------- Info Cards --------*/
+   .info-card__title{
+      font-size: 16px;
+   }
+   
+   /*---------- About Card --------*/
+   .about-card__text{
+      font-size: 13px;
+   }
+
+   /*---------- Footer --------*/
+   .footer__col{
+      -ms-flex: 0 0 100%;
+      flex: 0 0 100%;
+      max-width: 100%;
+   }
+   .footer__license{
+      font-size: 12px;
+   }
+
+   
+   /*---------- Whater Product Tabs --------*/
+   .product-tabs__nav li a{
+      padding: 6px 0;
+      font-size: 12px;
+   }
+   .product-tabs__nav li:not(:last-child) {
+      margin-bottom: 15px;
+   }
+   .packing-item__title{
+      font-size: 13px;
+   }
+   .water__text {
+      font-size: 12px;
+   }
+}

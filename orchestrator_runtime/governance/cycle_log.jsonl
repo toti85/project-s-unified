@@ -69,3 +69,10 @@
 {"event": "verdict", "run_id": "AO5_T1", "result": {"goal_id": "AO5_T1", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-03T05:10:23.813077+00:00"}, "logged_at": "2026-06-03T05:10:23.872976+00:00"}
 {"event": "bridge_consumed", "run_id": "AO5_T2", "iteration": 1, "checksum": "2044f28c05f559cc", "logged_at": "2026-06-04T20:11:38.388000+00:00"}
 {"event": "verdict", "run_id": "AO5_T2", "result": {"goal_id": "AO5_T2", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-04T20:11:38.403022+00:00"}, "logged_at": "2026-06-04T20:11:38.420027+00:00"}
+{"event": "bridge_consumed", "run_id": "AO5_T3", "iteration": 1, "checksum": "52e3c73ca5aa4b3f", "logged_at": "2026-06-05T06:34:12.254589+00:00"}
+{"event": "verdict", "run_id": "AO5_T3", "result": {"goal_id": "AO5_T3", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-05T06:34:12.290376+00:00"}, "logged_at": "2026-06-05T06:34:12.415239+00:00"}
+{"event": "bridge_consumed", "run_id": "AO5_T4", "iteration": 1, "checksum": "761cbf0dcb2990c6", "logged_at": "2026-06-05T07:11:09.876570+00:00"}
+{"event": "verdict", "run_id": "AO5_T4", "result": {"goal_id": "AO5_T4", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-05T07:11:09.914844+00:00"}, "logged_at": "2026-06-05T07:11:10.024343+00:00"}
+{"event": "bridge_reject_checksum", "run_id": "AO5_T6", "expected": "9b66ddcf8d688329", "actual": "fca2aab9f9fff70a", "logged_at": "2026-06-09T07:20:17.848743+00:00"}
+{"event": "bridge_consumed", "run_id": "AO5_T6", "iteration": 1, "checksum": "2be5351019aa1ad5", "logged_at": "2026-06-09T07:25:10.003869+00:00"}
+{"event": "verdict", "run_id": "AO5_T6", "result": {"goal_id": "AO5_T6", "status": "PASS", "action": "DONE", "reason": "Goal passed. Marked DONE in approval log.", "timestamp": "2026-06-09T07:25:10.063049+00:00"}, "logged_at": "2026-06-09T07:25:10.110822+00:00"}

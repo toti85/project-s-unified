@@ -1,0 +1,605 @@
+
+/* ----- Шрифты -----*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* Цветовая схема */
+:root{
+
+  /* Полоса прокрутки меню */
+  --u-menu-scroll-track-color: #f2f2f2;
+  --u-menu-scroll-thumb-color: #cccccc;
+  
+  /* Меню */
+  --u-menu-body-color: #ffffff;
+  --u-menu-border-color: #ebebeb;
+  --u-menu-text-color: #333;
+  --u-menu-text-second-color: #111;
+  
+  
+  /* Група кнопок (Корзина, Сравнение, Избраное) - :active, :hover, :focus */
+  --u-menu-button-color-active: #f2f2f2;
+  --u-menu-button-text-color-active: #fff;
+  --u-menu-button-border-color-active: #dadada;
+
+  
+  /* Ссылки - :active, :hover, :focus */
+  --u-menu-link-color-active: #f2f2f2;
+  --u-menu-link-text-color-active: #111;
+  --u-menu-link-border-color-active: #dadada;
+  --u-menu-link-icon-color-active: #0b78ba;
+
+
+  /* Основной цвет (для кнопок)*/
+  --u-menu-theme-color: #0b78ba;
+  --u-menu-theme-text-color: #fff;
+
+  /* Основной цвет (для кнопок) - :active, :hover, :focus */
+  --u-menu-theme-color-active: #07659e;
+  --u-menu-theme-text-color-active: #fff;
+  
+  /* Подсветка пункта меню */
+  --u-highlight-color: #0b78ba;
+  --u-highlight-border-color: #0b78ba;
+  --u-highlight-text-color: #fff;
+  
+  /* Подсветка пункта меню - :active, :hover, :focus */
+  --u-highlight-color-active: #07659e;
+  --u-highlight-border-color-active: #07659e;
+  --u-highlight-text-color-active: #fff; 
+}
+
+
+*, ::after, ::before{
+	box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body{
+	margin: 0;
+	padding: 0;
+}
+
+/* Overlay */
+.u-menu-overlay{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: none;
+	z-index: 9990;
+}
+
+/* ---------- Открытое меню ---------- */
+body.u-mobile-menu-open{
+  overflow: hidden;
+  width: 100%;
+  min-height: 100%;
+}
+body.u-mobile-menu-open .u-menu-overlay{
+	display: block;
+}
+body.u-mobile-menu-open .u-mobile-menu{
+	-webkit-transform: translate3d(0, 0, 0);
+	-ms-transform: translate3d(0, 0, 0);
+	-o-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+}
+
+/* -------------------- Меню -------------------- */
+.u-mobile-menu *{
+	font-family: 'Montserrat', arial, sans-serif;
+}
+.u-mobile-menu .fa, .u-mobile-menu .far, .u-mobile-menu .fas{
+	font-family: "Font Awesome 5 Free";
+}
+.u-mobile-menu a, .u-mobile-menu button{
+	-webkit-transition: all .3s;
+	-o-transition: all .3s;
+	transition: all .3s;
+	outline: 0 !important;
+}
+.u-mobile-menu{
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+	max-height: 100vh;
+	/* width: 300px; */
+	width: 100%;
+	max-width: 100vw;
+	z-index: 9998;
+	-webkit-transition: .5s;
+	-o-transition: .5s;
+	transition: .5s;
+	-webkit-transform: translate3d(-102%, 0, 0);
+	-ms-transform: translate3d(-102%, 0, 0);
+	-o-transform: translate3d(-102%, 0, 0);
+	transform: translate3d(-102%, 0, 0);
+	-webkit-box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+.u-mobile-menu__wrapper{
+	width: 100%;
+  height: 100%;
+  max-height: 100vh;
+  background: var(--u-menu-body-color);
+  transition: -webkit-transform .4s ease;
+  transition: transform .4s ease;
+  transition: transform .4s ease, -webkit-transform .4s ease;
+  z-index: 9998;
+}
+.u-mobile-menu__content{
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 45px);
+	overflow: scroll;
+  overflow-x: visible;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: auto;
+  padding-bottom: 65px;  
+}
+
+/* ----- Кнопка закрыть меню ----- */
+.u-mobile-menu__close{
+	position: absolute;
+	bottom: 0;
+  width: 100%;
+  height: 45px;
+  background: var(--u-menu-theme-color);
+  border: 0;
+  color: var(--u-menu-theme-text-color);
+  font-size: 15px;
+  font-weight: 600;	
+  cursor: pointer;
+}
+.u-mobile-menu__close:active, .u-mobile-menu__close:focus{
+	background: var(--u-menu-theme-color-active);
+  color: var(--u-menu-theme-text-color-active);
+}
+
+/* ----- Логотип ----- */
+.u-logo{
+	position: relative;
+	padding: 20px;
+	display: block;
+	border-bottom: 1px solid var(--u-menu-border-color);
+	text-align: center;
+}
+.u-logo img{
+	max-width: 100%;
+  max-height: 60px;
+}
+.u-logo:active img{
+	opacity: .6;
+}
+
+/* ----- Контакты ----- */
+.u-contacts{
+	border-bottom: 1px solid var(--u-menu-border-color);
+}
+.u-contacts__item{
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	align-items: center;
+	padding: 15px;
+	text-decoration: none;
+	font-size: 13px;
+	color: var(--u-menu-text-second-color);
+	font-weight: 600;
+}
+.u-contacts__item i{
+	margin-right: 7px;
+	color: var(--u-menu-theme-color);
+	font-size: 12px;
+	display: block;
+	-webkit-transition: .3s;
+	-o-transition: .3s;
+	transition: .3s;
+}		
+.u-contacts__item:active, 
+.u-contacts__item:focus{
+	background: var(--u-menu-link-color-active);
+	color: var(--u-menu-link-text-color-active);
+} 
+.u-contacts__item:active i, 
+.u-contacts__item:focus i{
+	color: var(--u-menu-link-icon-color-active);
+} 
+
+/* ----- Группа кнопок - (Сравнение, Избранное, Корзина) ----- */
+.u-action-buttons{
+	display: block;
+	border-bottom: 1px solid var(--u-menu-border-color);
+}
+.u-action-buttons__item{
+	position: relative;
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	border: 0;
+	justify-content: center;
+	align-items: center;
+	height: 75px;
+	width: 33.33333%;
+	float: left;
+	background: transparent;
+	outline: 0 !important;
+	border-right: 1px solid var(--u-menu-border-color);
+	color: var(--u-menu-text-color);
+	cursor: pointer;
+}
+.u-action-buttons__item img{
+	max-width: 28px;
+	max-height: 28px;
+	opacity: .7;
+}
+.u-action-buttons__item span.u-counter{
+	position: absolute;
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	background: #e82517;
+	color: #fff;
+	font-weight: 600;
+	font-size: 10px;
+	margin-top: -12px;
+	margin-left: 18px;
+	border: 2px solid var(--u-menu-body-color);
+	-webkit-border-radius: 100%;
+	-moz-border-radius: 100%;
+	-ms-border-radius: 100%;
+	-o-border-radius: 100%;
+	border-radius: 100%;
+	-webkit-transition: border .3s;
+	-o-transition: border .3s;
+	transition: border .3s;
+}
+.u-action-buttons__item:active, 
+.u-action-buttons__item:focus{
+	background: var(--u-menu-button-color-active);
+	color: var(--u-menu-button-text-color-active);
+	border-color: var(--u-menu-button-border-color-active);
+}
+.u-action-buttons__item:active span.u-counter, 
+.u-action-buttons__item:focus span.u-counter{
+	border-color: var(--u-menu-button-color-active);
+}
+
+/* ----- Вход - Регестрация ----- */
+.u-login-action{
+	display: block;
+	padding: 12px 12px 15px;
+	font-size: 12px;
+	color: var(--u-menu-text-color);
+	border-bottom: 1px solid var(--u-menu-border-color);
+	text-decoration: none;
+}
+.u-login-action span{
+	font-weight: 500;
+	border-bottom: 1px dotted var(--u-menu-text-color);
+}
+.u-login-action span:first-child{
+	margin-right: 5px;
+}
+.u-login-action:active, 
+.u-login-action:focus{
+	background: var(--u-menu-link-color-active);
+	color: var(--u-menu-link-text-color-active);
+	border-color: var(--u-menu-link-border-color-active);
+}
+.u-login-action:active span, 
+.u-login-action:focus span{
+	border-color: var(--u-menu-link-text-color-active);
+}
+
+
+/* ----- Меню списоком ----- */
+.u-nav-group, .u-nav{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.u-nav__item{
+	margin: 0;	
+}
+.u-nav__item-title{
+	font-size: 14px;
+  font-weight: 600;
+  margin-top: 30px;
+  padding: 12px 15px 12px;
+  color: var(--u-menu-text-color);
+  border-bottom: 1px solid var(--u-menu-border-color);
+}
+
+/* ----- Подсветка пункта меню другим цветом класс активации .u-highlight ----- */
+.u-nav__item.u-highlight > a.u-nav__link{
+	background: var(--u-highlight-color);
+	color: var(--u-highlight-text-color);
+	border-color: var(--u-highlight-border-color);	
+}
+.u-nav__item.u-highlight > a.u-nav__link span.u-nav__next{
+	border-color: var(--u-highlight-border-color);	
+}
+.u-nav__item.u-highlight .u-nav__back{
+	background: var(--u-highlight-color);
+	color: var(--u-highlight-text-color);
+}
+
+/* ----- Подсветка пункта меню другим цветом - :active, focus ----- */
+.u-nav__item.u-highlight > a.u-nav__link:active,
+.u-nav__item.u-highlight > a.u-nav__link:focus{
+	background: var(--u-highlight-color-active);
+	color: var(--u-highlight-text-color-active);
+	border-color: var(--u-highlight-border-color-active);	
+}
+.u-nav__item.u-highlight > a.u-nav__link:active span.u-nav__next,
+.u-nav__item.u-highlight > a.u-nav__link:focus span.u-nav__next{
+	border-color: var(--u-highlight-border-color-active);	
+}
+.u-nav__item.u-highlight .u-nav__back:active,
+.u-nav__item.u-highlight .u-nav__back:focus{
+	background: var(--u-highlight-color-active);
+	color: var(--u-highlight-text-color-active);
+}
+
+a.u-buy-button{
+	font-weight: 600;
+}
+a.u-buy-button i{
+	margin-right: 10px;
+} 
+
+/*----- Пункт меню  -----*/
+.u-nav__link{
+	position: relative;
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	align-items: center;
+	padding: 15px 15px;
+	padding-right: 55px;
+	font-weight: 500;
+	font-size: 13px;
+	text-decoration: none;
+	color: var(--u-menu-text-color);
+	border-bottom: 1px solid var(--u-menu-border-color);
+	-webkit-transition: .3s;
+	-o-transition: .3s;
+	transition: .3s;
+}
+.u-nav__link svg{
+	width: 16px;
+	height: 16px;
+	margin-right: 12px;
+}
+.u-nav__link img{
+	max-width: 20px;
+	margin-right: 12px;
+}
+.u-nav__next{
+	position: absolute;
+	right: 0;
+  top: 0;  
+  width: 45px;
+  height: 100%;
+  display: -webkit-flex !important;
+  display: -moz-flex !important;
+  display: -ms-flex !important;
+  display: -o-flex !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  border-left: 1px solid var(--u-menu-border-color);
+  font-size: 15px;
+  -webkit-transition: border .3s;
+  -o-transition: border .3s;
+  transition: border .3s;
+}
+
+/*----- Пункт меню - :focus, :active -----*/
+.u-nav__link:active, 
+.u-nav__link:focus{
+	background: var(--u-menu-link-color-active);
+	color: var(--u-menu-link-text-color-active);
+	border-color: var(--u-menu-link-border-color-active);
+}
+.u-nav__link:active span.u-nav__next, 
+.u-nav__link:focus span.u-nav__next{
+	border-color: var(--u-menu-link-border-color-active);
+} 
+
+
+/* ------------------- Подменю ------------------- */
+.u-nav-wrapper{
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 280px;
+	height: 100%;
+	background: var(--u-menu-body-color);
+	z-index: 9999;
+	-webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
+	visibility: hidden;
+  transition: visibility 0s ease .4s, -webkit-transform .4s ease;
+  transition: visibility 0s ease .4s, transform .4s ease;
+  transition: visibility 0s ease .4s, transform .4s ease, -webkit-transform .4s ease;
+  -webkit-box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+ 	pointer-events: none;
+}
+.u-nav-wrapper.active{
+	visibility: visible;
+  transition: -webkit-transform .4s ease;
+  transition: transform .4s ease; 
+  transition: transform .4s ease, -webkit-transform .4s ease;
+  pointer-events: auto;
+}
+.u-mobile-menu__wrapper.open:after, .u-nav-wrapper.open:after{
+  visibility: visible;
+  opacity: 1;
+  transition-delay: .05s;
+}
+.u-mobile-menu__wrapper:after, .u-nav-wrapper:after{
+	content: '';
+  position: fixed;
+  z-index: 9990;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  -ms-scroll-chaining: none;
+  overscroll-behavior: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s ease .4s, opacity .4s ease;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* ----- Контейнер подменю ----- */
+.u-nav-content{
+	height: 100%;
+  max-height: calc(100vh - 35px);
+  overflow: scroll;
+  overflow-x: visible;
+  overflow-y: auto;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: auto;
+}
+
+/* ----- Заголовок подменю -----*/
+.u-nav__title{
+	margin: 0;
+	font-size: 20px;
+	padding: 20px 15px;
+	font-weight: 500;
+	color: var(--u-menu-text-second-color);
+}
+
+/* ----- Кнопка Назад -----*/
+.u-nav__back{
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px;
+	background: var(--u-menu-theme-color);
+	color: var(--u-menu-theme-text-color);
+	text-decoration: none;
+	font-weight: 600;
+	font-size: 14px;
+	border-bottom: 0 !important;
+}
+.u-nav__back:active, .u-nav__back:focus{
+	background: var(--u-menu-theme-color-active);
+	color: var(--u-menu-theme-text-color-active);
+}
+
+
+@media only screen and (min-width: 991px){
+	
+	/* Кастомная полоса прокрутки */
+	.u-mobile-menu ::-webkit-scrollbar {
+	  width: 7px;
+	}
+	.u-mobile-menu ::-webkit-scrollbar-track {
+	  background: var(--u-menu-scroll-track-color); 
+	}
+	.u-mobile-menu ::-webkit-scrollbar-thumb {
+	  background: var(--u-menu-scroll-thumb-color); 
+	}
+	
+	/* Highlight - :hover */
+	.u-nav__item.u-highlight > a.u-nav__link:hover{
+		background: var(--u-highlight-color-active);
+		color: var(--u-highlight-text-color-active);
+		border-color: var(--u-highlight-border-color-active);	
+	}
+	.u-nav__item.u-highlight > a.u-nav__link:hover span.u-nav__next{
+		border-color: var(--u-highlight-border-color-active);	
+	}
+	.u-nav__item.u-highlight .u-nav__back:hover{
+		background: var(--u-highlight-color-active);
+		color: var(--u-highlight-text-color-active);
+	}	
+	
+	/* Вход - :hover */
+	.u-login-action:hover{
+		background: var(--u-menu-link-color-active);
+		color: var(--u-menu-link-text-color-active);
+		border-color: var(--u-menu-link-border-color-active);
+	}
+	.u-login-action:hover span{
+		border-color: var(--u-menu-link-text-color-active);
+	}
+ 
+ 	/* Ссылки контактов - :hover */
+	.u-contacts__item:hover{
+		background: var(--u-menu-link-color-active);
+		color: var(--u-menu-link-text-color-active);
+	} 
+	.u-contacts__item:hover i{
+		color: var(--u-menu-link-icon-color-active);
+	} 
+	
+	/* Кнопки (Корзина, Сравнение, Избранное) - :hover */
+	.u-action-buttons__item:hover{
+		background: var(--u-menu-button-color-active);
+		color: var(--u-menu-button-text-color-active);
+		border-color: var(--u-menu-button-border-color-active);
+	}
+	.u-action-buttons__item:hover span.u-counter{
+		border-color: var(--u-menu-button-color-active);
+	}
+
+	/* Ссылки - :hover */
+	.u-nav__link:hover{
+		background: var(--u-menu-link-color-active);
+		color: var(--u-menu-link-text-color-active);
+		border-color: var(--u-menu-link-border-color-active);
+	}
+	.u-nav__link:hover span.u-nav__next{
+		border-color: var(--u-menu-link-border-color-active);
+	}
+
+	/* Кнопка назад - :hover */
+	.u-nav__back:hover{
+		background: var(--u-menu-theme-color-active);
+		color: var(--u-menu-theme-text-color-active);
+	}
+
+	/* Кнопка закрыть - :hover */
+	.u-mobile-menu__close:hover{
+		background: var(--u-menu-theme-color-active);
+	  color: var(--u-menu-theme-text-color-active);
+	}
+}
+
+
+
+

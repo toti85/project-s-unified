@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<DeviceInfo version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<deviceName>Network Video Recorder</deviceName>
+<deviceID>48373739-3836-3330-3133-1868cb925611</deviceID>
+<model>DS-7632NI-I2</model>
+<serialNumber>DS-7632NI-I21620170618CCRR779863013WCVU</serialNumber>
+<macAddress>18:68:cb:92:56:11</macAddress>
+<firmwareVersion>V4.61.025</firmwareVersion>
+<firmwareReleasedDate>build 220905</firmwareReleasedDate>
+<encoderVersion>V5.0</encoderVersion>
+<encoderReleasedDate>build 220905</encoderReleasedDate>
+<deviceType>NVR</deviceType>
+<telecontrolID>255</telecontrolID>
+<hardwareVersion>0100054103000000</hardwareVersion>
+<decordChannelNums>16</decordChannelNums>
+<VGANums>1</VGANums>
+<USBNums>2</USBNums>
+<auxoutNums>0</auxoutNums>
+<regionVersion>basic</regionVersion>
+</DeviceInfo>

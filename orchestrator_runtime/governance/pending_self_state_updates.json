@@ -1,31 +1,23 @@
 {
-  "updates": [
-    {
-      "type": "milestone_update",
-      "milestone_id": 35,
-      "fields": {
-        "status": "verified",
-        "note": "MS-AO1 infrastructure complete"
-      },
-      "prepared_at": "2026-05-26T22:46:14.557634+00:00",
-      "approved": true,
-      "applied": true,
-      "applied_at": "2026-05-26T22:57:51.947316+00:00"
-    },
-    {
-      "type": "evidence_addition",
-      "category": "MS-AO1",
-      "evidence_items": [
-        "parallel_loop_manager.py created",
-        "self_state_updater.py created",
-        "All 8 goals processed through governance pipeline"
-      ],
-      "prepared_at": "2026-05-26T22:46:14.658342+00:00",
-      "approved": true,
-      "applied": true,
-      "applied_at": "2026-05-26T22:57:51.947316+00:00"
-    }
-  ],
-  "last_updated": "2026-05-26T22:57:51.947316+00:00",
-  "requires_human_approval": true
+  "approved": true,
+  "date": "2026-06-09",
+  "applied_to_self_state": true,
+  "context": "AO5_T6 Ghost Branch v0.1 COMPLETE",
+  "identity": {
+    "name_address": "Sz",
+    "metaphor_primary": "Kognitív Mícelium"
+  },
+  "ghost_branch_result": {
+    "files_scanned": 93,
+    "active": 45,
+    "inactive": 30,
+    "empty": 6,
+    "init": 12,
+    "top_3_candidates": [
+      "verdict_evaluator.py",
+      "cognitive_workflow_integration.py",
+      "overseer_agent.py"
+    ],
+    "checksum": "2be5351019aa1ad5"
+  }
 }

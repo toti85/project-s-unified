@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<NetworkInterface version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<id>1</id>
+<IPAddress>
+<ipVersion>dual</ipVersion>
+<addressingType>static</addressingType>
+<ipAddress>192.168.1.111</ipAddress>
+<subnetMask>255.255.255.0</subnetMask>
+<ipv6Address>::</ipv6Address>
+<bitMask>0</bitMask>
+<Ipv6Mode>
+<ipV6AddressingType>ra</ipV6AddressingType>
+<ipv6AddressList>
+</ipv6AddressList>
+</Ipv6Mode>
+<DefaultGateway>
+<ipAddress>192.168.1.1</ipAddress>
+<ipv6Address>::</ipv6Address>
+</DefaultGateway>
+<PrimaryDNS>
+<ipAddress>192.168.1.1</ipAddress>
+</PrimaryDNS>
+<SecondaryDNS>
+<ipAddress>192.168.1.88</ipAddress>
+</SecondaryDNS>
+<DNSEnable>false</DNSEnable>
+</IPAddress>
+<Discovery>
+<UPnP>
+<enabled>false</enabled>
+</UPnP>
+<Zeroconf>
+<enabled>false</enabled>
+</Zeroconf>
+</Discovery>
+<Link>
+<MACAddress>18:68:cb:92:56:11</MACAddress>
+<autoNegotiation>true</autoNegotiation>
+<speed>0</speed>
+<duplex>half</duplex>
+<MTU min="500" max="1500">1500</MTU>
+</Link>
+</NetworkInterface>

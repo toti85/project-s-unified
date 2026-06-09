@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UserList version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<User>
+<id>1</id>
+<userName>admin</userName>
+<bondIpAddressList>
+<bondIpAddress>
+<id>1</id>
+<ipAddress>0.0.0.0</ipAddress>
+<ipv6Address>::</ipv6Address>
+</bondIpAddress>
+</bondIpAddressList>
+<bondMacAddressList>
+<bondMacAddress>
+<id>1</id>
+<macAddress>00:00:00:00:00:00</macAddress>
+</bondMacAddress>
+</bondMacAddressList>
+<userLevel>Administrator</userLevel>
+<attribute>
+<inherent>false</inherent>
+</attribute>
+</User>
+</UserList>

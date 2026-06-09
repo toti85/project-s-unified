@@ -1,0 +1,42 @@
+
+/* ----- Прелоадер ----- */
+.preloader{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+    z-index: 9999;
+    visibility: visible;
+}
+.spinner{
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #0b78ba;
+    border-radius: 100%;
+    position: absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right: 0;
+    margin: auto;
+    animation: spin 1s infinite linear;
+    -webkit-animation: spin 1s infinite linear;
+}
+@keyframes spin {
+    from{
+        transform: rotate(0deg);
+    }to{
+        transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    from{
+        transform: rotate(0deg);
+    }to{
+        transform: rotate(360deg);
+    }
+}
+

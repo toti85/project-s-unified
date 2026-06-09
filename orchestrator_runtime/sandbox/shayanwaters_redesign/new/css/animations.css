@@ -1,0 +1,170 @@
+/* ============================================================
+   SHAYANWATERS.COM — ANIMATIONS
+   AOS (Animate on Scroll) Customization
+   Date: 2026-06-03
+   ============================================================ */
+
+/* Override AOS defaults for smoother feel */
+[data-aos] {
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* Custom stagger delays for grid items */
+[data-aos-delay="100"] { transition-delay: 100ms !important; }
+[data-aos-delay="200"] { transition-delay: 200ms !important; }
+[data-aos-delay="300"] { transition-delay: 300ms !important; }
+[data-aos-delay="400"] { transition-delay: 400ms !important; }
+[data-aos-delay="500"] { transition-delay: 500ms !important; }
+
+/* Hero entrance animations (no AOS, pure CSS) */
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hero__title {
+  animation: heroFadeUp 0.8s ease-out 0.2s both;
+}
+
+.hero__subtitle {
+  animation: heroFadeUp 0.8s ease-out 0.4s both;
+}
+
+.hero__brands {
+  animation: heroFadeUp 0.8s ease-out 0.6s both;
+}
+
+.hero__buttons {
+  animation: heroFadeUp 0.8s ease-out 0.8s both;
+}
+
+.hero__scroll {
+  animation: heroFadeIn 1s ease-out 1.2s both, scrollBounce 2s ease-in-out 1.2s infinite;
+}
+
+/* Product card hover animation */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+}
+
+/* Parallax storytelling layers */
+.story__layer--content {
+  transition: transform 0.1s linear;
+}
+
+/* Button ripple effect */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Dark mode transition */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth image loading */
+img {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Mobile menu animation */
+.mobile-menu {
+  transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.mobile-menu__overlay {
+  transition: opacity 0.3s ease;
+}
+
+/* Hamburger animation */
+.hamburger__line {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Scroll indicator */
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* Cookie banner slide up */
+@keyframes cookieSlideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.cookie-banner.visible {
+  animation: cookieSlideUp 0.4s ease-out;
+}
+
+/* Theme toggle icon rotation */
+.theme-toggle {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.theme-toggle:active {
+  transform: rotate(30deg);
+}
+
+/* Nav link underline animation */
+.header__nav-link::after {
+  transition: width 0.3s ease;
+}
+
+/* Social item overlay */
+.social__item-overlay {
+  transition: opacity 0.3s ease;
+}
+
+/* Info card text clamp animation */
+.info-card__text {
+  transition: max-height 0.3s ease;
+}

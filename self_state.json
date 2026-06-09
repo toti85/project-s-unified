@@ -424,7 +424,9 @@
         "resolved_at": "2026-05-20",
         "resolution": "Hybrid prompt-class-aware routing layer implemented in interactive_layer/prompt_router.py. Route classes: DIRECT_LIGHTWEIGHT_RESPONSE, TRUTHFUL_UNCERTAINTY_RESPONSE, INTERNAL_PROJECT_DOC_REASONING, EXTERNAL_RESEARCH_SYNTHESIS, FULL_AGENTIC_META_CONTROLLER, CLARIFICATION_NEEDED. Hungarian normalization included. Route metadata persisted into mission records. Phase 1 (direct/internal/truthfulness): 22/22 tests PASS, 7/8 live matrix. Phase 2 (EXTERNAL_RESEARCH_SYNTHESIS via DDGS): 31/31 tests PASS, 8/8 live PASS. TEST_5: route=EXTERNAL_RESEARCH_SYNTHESIS, state=COMPLETE, elapsed=4.4s, 8 real web results."
       }
-    ]
+    ],
+    "name_address": "Sz",
+    "metaphor_primary": "Kognitív Mícelium"
   },
   "current_state": {
     "last_active_run": "2026-04-26T23:33:15Z",
@@ -445,7 +447,7 @@
       "active": 0,
       "accepted": 1
     },
-    "next_concrete_step": "MS-AO5: Production deployment. Governance stack goes live.",
+    "next_concrete_step": "TOP 3 ghost candidate egyikét bekötni, VAGY Compute Arbiter router",
     "minor_todos": [
       {
         "id": "TODO_001",
@@ -520,7 +522,9 @@
       "file_writer": "VERIFIED",
       "ilo_server_control": "VERIFIED вЂ” read-only access to DL380 Gen9 (serial CZ3733LABY) via iLO 4 Redfish API. Power management methods available but NOT exercised. NAT redirect workaround confirmed essential and working."
     },
-    "active_focus": "MS-AO4 scope planning + MS-AO3 deferred tests"
+    "active_focus": "Sz - Ghost Branch v0.2 vagy Compute Arbiter döntés",
+    "last_updated": "2026-06-09T07:38:13.545077+00:00",
+    "updated_by": "AO5_T6 Ghost Branch closeout"
   },
   "memory_index": {
     "meta_evidence": {
@@ -1295,6 +1299,24 @@
       "date": "2026-06-05",
       "status": "SCOPE_ONLY",
       "note": "No implementation started. RISK_008 preserved."
+    },
+    {
+      "id": 37,
+      "date": "2026-06-09",
+      "title": "AO5_T6 Ghost Branch v0.1 COMPLETE",
+      "description": "Ghost Branch analysis: 93 files scanned, 45 active, 30 ghost candidates, TOP 3 resurrection candidates identified",
+      "evidence": {
+        "total_py_files": 93,
+        "active_files": 45,
+        "inactive_files": 30,
+        "empty_files": 6,
+        "top_candidates": [
+          "orchestrator/verdict_evaluator.py (false negative ghost)",
+          "core/cognitive_workflow_integration.py (high-value ghost)",
+          "core/agents/overseer_agent.py (monitoring ghost)"
+        ]
+      },
+      "achieved_at": "2026-06-09T10:30:00Z"
     }
   ],
   "bridges": {

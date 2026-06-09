@@ -1,0 +1,159 @@
+/* ============ LETTER REVEAL ============ */
+@keyframes letterReveal {
+    from {
+        opacity: 0;
+        transform: translateY(100%) rotateX(90deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
+}
+
+/* ============ WATER PULSE ============ */
+@keyframes waterPulse {
+    0%, 100% {
+        opacity: 0.2;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        opacity: 0.6;
+        stroke-dashoffset: 200;
+    }
+}
+
+/* ============ DEPTH NUMBER COUNTER ============ */
+@keyframes countUp {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.depth-animate {
+    animation: countUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* ============ CURSOR GLOW ============ */
+.cursor-glow {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 255, 229, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s;
+}
+
+/* ============ SCROLL REVEAL (CUSTOM - NOT AOS) ============ */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ============ PRODUCT CARD HOVER ============ */
+.product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 229, 0.03), transparent);
+    transition: left 0.6s;
+    z-index: 1;
+}
+
+.product-card:hover::before {
+    left: 100%;
+}
+
+/* ============ NAV LINK UNDERLINE ============ */
+@keyframes underlineGrow {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* ============ STORY LAYER PARALLAX ============ */
+.story__layer--bg {
+    transition: transform 0.1s linear;
+}
+
+/* ============ BUTTON MAGNETIC HOVER ============ */
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* ============ SOCIAL ITEM HOVER ============ */
+.social__item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.social__item:hover::after {
+    border-color: var(--color-accent);
+}
+
+/* ============ FOOTER COLUMN HOVER ============ */
+.footer__col {
+    position: relative;
+}
+
+.footer__col::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-accent);
+    transition: width 0.3s;
+}
+
+.footer__col:hover::before {
+    width: 100%;
+}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
