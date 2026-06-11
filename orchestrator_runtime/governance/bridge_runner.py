@@ -32,12 +32,17 @@ Returns dict with keys:
 import sys
 from pathlib import Path
 # Add project root so orchestrator_runtime package is importable
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+project_root = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(project_root))
+# Add src/ so core.* modules are importable (CWI dependency)
+sys.path.insert(0, str(project_root / "src"))
 
 import argparse
 import hashlib
 import json
 import logging
+import os
+import time
 from datetime import datetime, timezone
 
 
@@ -94,6 +99,13 @@ STATUS_BLOCKED_KILL_SWITCH = "BLOCKED_KILL_SWITCH"
 # Default False: CWI remains disabled until explicit opt-in.
 # Set to True to enable advisory-only cognitive analysis pre-consumption.
 CWI_ADVISORY_ENABLED = False
+
+# ── Overseer Advisory Feature Flag ────────────────────────────────────
+# Default False: OverseerAgent remains disabled until explicit opt-in.
+# Can be enabled via env var: $env:OVERSEER_ADVISORY = "true"
+OVERSEER_ADVISORY_ENABLED = (
+    os.environ.get("OVERSEER_ADVISORY", "false").lower() == "true"
+)
 
 # ── Notification (lazy) ───────────────────────────────────────────────
 
@@ -292,12 +304,64 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
             logger.error(f"CWI pre-analysis unexpected error for {run_id}: {_e}")
     # If CWI_ADVISORY_ENABLED is False, skip entirely — no behavior change
 
+    # ── OVERSEER ADVISORY pre-consume hook (advisory-only, feature-flagged) ──
+    # Only runs if OVERSEER_ADVISORY_ENABLED is True.
+    # Never raises, never blocks, never changes verdict or checksum logic.
+    _overseer_start = time.perf_counter() if OVERSEER_ADVISORY_ENABLED else None
+    _overseer_advisory_status = "SKIPPED"
+    _overseer_advisory_output = ""
+    if OVERSEER_ADVISORY_ENABLED:
+        try:
+            import asyncio
+            from core.agents.overseer_agent import OverseerAgent
+            from core.infrastructure.event_bus import EventBus
+            _event_bus = EventBus()
+            _overseer = OverseerAgent(_event_bus, memory_db_path=":memory:")
+            _health = asyncio.run(_overseer.get_system_health())
+            _overseer_advisory_status = "OK"
+            _overseer_advisory_output = str(_health)[:200]
+            logger = logging.getLogger(__name__)
+            logger.info(f"Overseer advisory for {run_id}: health={_health}")
+        except Exception as _e:
+            _overseer_advisory_status = "ERROR"
+            _overseer_advisory_output = str(_e)[:200]
+            logger = logging.getLogger(__name__)
+            logger.error(f"Overseer advisory error for {run_id}: {_e}")
+    _overseer_latency_ms = round((time.perf_counter() - _overseer_start) * 1000, 2) if _overseer_start else 0
+    # If OVERSEER_ADVISORY_ENABLED is False, skip entirely — no behavior change
+
+    # ── Telemetry: append to overseer_observation.jsonl (ALL verdicts) ──
+    _total_start = time.perf_counter()
+
+    def _write_telemetry(errors=None):
+        """Write telemetry line for ANY verdict (not just ACCEPTED)."""
+        try:
+            _lat = round((time.perf_counter() - _total_start) * 1000, 2)
+            _obs_path = Path(__file__).parent / "overseer_observation.jsonl"
+            _obs_line = {
+                "ts": datetime.now(timezone.utc).isoformat(),
+                "run_id": run_id,
+                "iteration": expected_iteration,
+                "advisory_enabled": OVERSEER_ADVISORY_ENABLED,
+                "advisory_status": _overseer_advisory_status,
+                "advisory_output_first_200": _overseer_advisory_output,
+                "latency_ms_total": _lat,
+                "latency_ms_advisory_only": _overseer_latency_ms,
+                "verdict": base["status"],
+                "errors": errors or []
+            }
+            with open(_obs_path, "a", encoding="utf-8") as _f:
+                _f.write(json.dumps(_obs_line, ensure_ascii=False) + "\n")
+        except Exception:
+            pass  # Telemetry failure must never block consumption
+
     ready_path = _output_ready()
     if not ready_path.exists():
         base["status"] = STATUS_WAITING_FOR_EXECUTOR
         base["error"] = "output_ready.json not found"
         _log_cycle({"event": "bridge_wait", "run_id": run_id, "reason": "no_output_ready"})
         _notify("BRIDGE_WAIT", f"Waiting for executor output: {run_id}")
+        _write_telemetry()
         return base
 
     try:
@@ -307,6 +371,7 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
         base["status"] = STATUS_WAITING_FOR_EXECUTOR
         base["error"] = f"Cannot read output_ready.json: {e}"
         _log_cycle({"event": "bridge_error", "run_id": run_id, "error": str(e)})
+        _write_telemetry([str(e)])
         return base
 
     # run_id
@@ -315,6 +380,7 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
         base["error"] = f"run_id mismatch: expected {run_id}, got {ready.get('run_id')}"
         _log_cycle({"event": "bridge_reject_run_id", "expected": run_id, "got": ready.get("run_id")})
         _notify("BRIDGE_REJECT", f"Run ID mismatch for {run_id}")
+        _write_telemetry()
         return base
 
     # iteration
@@ -323,6 +389,7 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
         base["error"] = f"iteration mismatch: expected {expected_iteration}, got {ready.get('iteration')}"
         _log_cycle({"event": "bridge_reject_iteration", "expected": expected_iteration, "got": ready.get("iteration")})
         _notify("BRIDGE_REJECT", f"Iteration mismatch for {run_id}")
+        _write_telemetry()
         return base
 
     # already consumed?
@@ -330,6 +397,7 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
         base["status"] = STATUS_REJECTED_CONSUMED
         base["error"] = "Output already consumed (no double-consume)"
         _log_cycle({"event": "bridge_reject_consumed", "run_id": run_id})
+        _write_telemetry()
         return base
 
     # last_output.md
@@ -338,6 +406,7 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
         base["status"] = STATUS_WAITING_FOR_EXECUTOR
         base["error"] = "last_output.md not found"
         _log_cycle({"event": "bridge_wait", "run_id": run_id, "reason": "no_last_output"})
+        _write_telemetry()
         return base
 
     try:
@@ -347,6 +416,7 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
         base["status"] = STATUS_WAITING_FOR_EXECUTOR
         base["error"] = f"Cannot read last_output.md: {e}"
         _log_cycle({"event": "bridge_error", "run_id": run_id, "error": str(e)})
+        _write_telemetry([str(e)])
         return base
 
     # checksum
@@ -358,6 +428,7 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
         _log_cycle({"event": "bridge_reject_checksum", "run_id": run_id,
                      "expected": expected, "actual": actual})
         _notify("BRIDGE_REJECT", f"Checksum mismatch for {run_id}")
+        _write_telemetry()
         return base
 
     # ── All checks passed ──
@@ -365,11 +436,15 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
     ready["consumed_at"] = datetime.now(timezone.utc).isoformat()
     _atomic_write_output_ready(ready)
 
+
     base["status"] = STATUS_ACCEPTED
     base["content"] = content
     _log_cycle({"event": "bridge_consumed", "run_id": run_id,
                 "iteration": expected_iteration, "checksum": actual})
     _notify("BRIDGE_CONSUMED", f"Consumed output for {run_id} iter {expected_iteration}")
+
+    _write_telemetry()
+
     return base
 
 

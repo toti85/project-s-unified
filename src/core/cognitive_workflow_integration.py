@@ -381,6 +381,18 @@ class CognitiveWorkflowIntegration:
             }
         }
     
+    @staticmethod
+    def _workflow_result_to_dict(result):
+        """Normalize workflow result to dict for safe .get() access."""
+        if result is None:
+            return {}
+        if isinstance(result, dict):
+            return result
+        # WorkflowResult dataclass: status, data, metadata, execution_time, error
+        if hasattr(result, "__dict__"):
+            return result.__dict__
+        return {"raw_result": str(result)}
+
     async def _post_process_and_learn(
         self,
         execution_result: Dict[str, Any],
@@ -402,12 +414,15 @@ class CognitiveWorkflowIntegration:
         
         execution_duration = (datetime.now() - start_time).total_seconds()
         
+        # Normalize workflow result (may be WorkflowResult dataclass or dict)
+        wf_result = self._workflow_result_to_dict(execution_result["workflow_execution"])
+        
         # Extract learning patterns
         learning_insights = {
             "execution_pattern": {
                 "intent_type": cognitive_analysis["intent_analysis"]["intent_type"],
                 "complexity": cognitive_analysis["task_decomposition"]["total_complexity"],
-                "strategy_effectiveness": execution_result["workflow_execution"].get("success", False),
+                "strategy_effectiveness": wf_result.get("success", wf_result.get("status") == "completed" if isinstance(wf_result.get("status"), str) else bool(wf_result.get("status"))),
                 "duration": execution_duration
             },
             "cognitive_accuracy": {
