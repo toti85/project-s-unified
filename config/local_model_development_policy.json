@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "default_profile": "coder",
+  "profiles": {
+    "coder": {
+      "model": "Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf",
+      "endpoint": "http://127.0.0.1:8098/v1",
+      "context_tokens": 8192,
+      "recommended_max_output_tokens": 1200,
+      "thinking": false,
+      "allowed": [
+        "code_explanation",
+        "first_pass_review",
+        "test_ideas",
+        "small_fix_draft",
+        "documentation_draft"
+      ],
+      "requires_human_review": true,
+      "requires_patch_validation": true,
+      "may_modify_production": false
+    },
+    "planner": {
+      "model": "Qwen3.6-35B-A3B-Q4_K_M.gguf",
+      "endpoint": "http://127.0.0.1:8097/v1",
+      "context_tokens": 16384,
+      "recommended_max_output_tokens": 2000,
+      "thinking": false,
+      "allowed": [
+        "architecture_draft",
+        "task_decomposition",
+        "research_synthesis",
+        "risk_brainstorm",
+        "long_form_plan"
+      ],
+      "requires_human_review": true,
+      "requires_patch_validation": true,
+      "may_modify_production": false
+    }
+  },
+  "cloud_required": [
+    "autonomous_multi_file_edit",
+    "governance_verdict",
+    "security_critical_change",
+    "production_patch_application",
+    "instruction_sensitive_executor_handoff"
+  ],
+  "promotion_gate": {
+    "minimum_isolated_cases": 10,
+    "minimum_pass_rate": 0.9,
+    "maximum_critical_failures": 0,
+    "required_checks": [
+      "syntax_or_compile",
+      "tests",
+      "patch_apply_check",
+      "human_review"
+    ]
+  }
+}

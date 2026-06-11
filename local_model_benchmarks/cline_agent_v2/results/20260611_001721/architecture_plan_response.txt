@@ -1,0 +1,84 @@
+### Implementation Plan for RelayBox with TaskAdvisor Integration
+
+#### 1. **Hook Location**
+The `consume_result(job_id)` method will be the primary hook location for integrating the `TaskAdvisor.analyze(description)` API. This method is responsible for consuming worker results and should remain synchronous to maintain the existing API contract.
+
+#### 2. **Sync/Async Boundary**
+- **Synchronous `consume_result`**: The `consume_result` method will remain synchronous to avoid changing the public API contract.
+- **Asynchronous `TaskAdvisor.analyze`**: The `TaskAdvisor.analyze` method will be called asynchronously within the `consume_result` method to ensure that the added latency does not exceed two seconds.
+
+#### 3. **Failure Behavior**
+- **Timeout**: If `TaskAdvisor.analyze` takes longer than two seconds, it will be terminated, and the `consume_result` method will proceed without the advisory metadata.
+- **Exception Handling**: Any exceptions raised by `TaskAdvisor.analyze` will be caught and logged, but the `consume_result` method will continue execution without the advisory metadata.
+- **Unavailability**: If `TaskAdvisor.analyze` is unavailable, the `consume_result` method will proceed without the advisory metadata.
+
+#### 4. **Telemetry**
+- **Status**: Track the status of the `TaskAdvisor.analyze` call (success, timeout, exception, unavailability) and log it.
+- **Latency**: Measure and log the latency of the `TaskAdvisor.analyze` call.
+
+#### 5. **Tests**
+- **Unit Tests**: Write unit tests for the `consume_result` method to ensure that it handles different scenarios (success, timeout, exception, unavailability) correctly.
+- **Integration Tests**: Write integration tests to ensure that the `TaskAdvisor.analyze` call does not affect the checksum validation, consumption, or verdicts.
+
+#### 6. **Rollback Mechanism**
+- **No Rollback Needed**: Since the `TaskAdvisor.analyze` call is advisory-only and does not affect the core functionality of `consume_result`, there is no need for a rollback mechanism.
+
+### Detailed Steps
+
+1. **Modify `consume_result` Method**:
+   - Add a new parameter `use_advisory` to the `consume_result` method, defaulting to `False`.
+   - Introduce a new method `get_advisory_metadata` that will call `TaskAdvisor.analyze` asynchronously.
+
+2. **Implement `get_advisory_metadata` Method**:
+   - Use a timeout of two seconds for the `TaskAdvisor.analyze` call.
+   - Handle exceptions and log them.
+   - Return the advisory metadata or `None` if the call fails.
+
+3. **Integrate `get_advisory_metadata` in `consume_result`**:
+   - Call `get_advisory_metadata` only if `use_advisory` is `True`.
+   - Log the status and latency of the `TaskAdvisor.analyze` call.
+
+4. **Telemetry**:
+   - Use a logging framework to log the status and latency of the `TaskAdvisor.analyze` call.
+
+5. **Testing**:
+   - Write unit tests to verify the behavior of `consume_result` with different scenarios.
+   - Write integration tests to ensure that the `TaskAdvisor.analyze` call does not affect the core functionality.
+
+6. **Documentation**:
+   - Update the documentation to reflect the new `use_advisory` parameter and the advisory-only nature of the `TaskAdvisor.analyze` call.
+
+### Example Code Snippet
+
+```python
+import asyncio
+import logging
+from concurrent.futures import TimeoutError
+
+class RelayBox:
+    def __init__(self, task_advisor):
+        self.task_advisor = task_advisor
+        self.logger = logging.getLogger(__name__)
+
+    async def get_advisory_metadata(self, description):
+        try:
+            advisory_metadata = await asyncio.wait_for(self.task_advisor.analyze(description), timeout=2)
+            self.logger.info("Advisory metadata retrieved successfully")
+            return advisory_metadata
+        except TimeoutError:
+            self.logger.warning("TaskAdvisor.analyze timed out")
+        except Exception as e:
+            self.logger.error(f"TaskAdvisor.analyze raised an exception: {e}")
+        return None
+
+    def consume_result(self, job_id, use_advisory=False):
+        # Existing code for emergency stop, validation, marking result consumed, and sending to verdict engine
+        if use_advisory:
+            advisory_metadata = asyncio.run(self.get_advisory_metadata(description))
+            if advisory_metadata:
+                self.logger.info("Using advisory metadata")
+                # Process advisory metadata
+        # Continue with existing logic
+```
+
+This plan ensures that the `TaskAdvisor.analyze` integration is advisory-only, does not affect the core functionality of `consume_result`, and provides observable status and latency.

@@ -132,11 +132,24 @@ def get_cwi_advisory(
                 return await result
             return result
 
-        advisory = asyncio.run(_run_async())
+        raw_advisory = asyncio.run(_run_async())
 
         # Validate advisory structure
-        if not isinstance(advisory, dict):
-            raise ValueError(f"CWI returned non-dict: {type(advisory)}")
+        if not isinstance(raw_advisory, dict):
+            raise ValueError(f"CWI returned non-dict: {type(raw_advisory)}")
+
+        # ── T24 Adapter: normalize CWI output shape ──
+        # CWI process_task_cognitively returns:
+        #   {success, results, cognitive_analysis, learning_insights, execution_metrics, timestamp}
+        # Bridge_runner telemetry expects flat keys:
+        #   {success, intent_analysis, task_decomposition, semantic_reasoning, processing_context}
+        # Adapter promotes cognitive_analysis sub-keys to top level.
+        advisory = dict(raw_advisory)  # shallow copy
+        ca = raw_advisory.get("cognitive_analysis")
+        if isinstance(ca, dict):
+            for key in ("intent_analysis", "task_decomposition", "semantic_reasoning", "processing_context"):
+                if key in ca and key not in advisory:
+                    advisory[key] = ca[key]
 
         # Required top-level keys (advisory may have more)
         required_keys = [

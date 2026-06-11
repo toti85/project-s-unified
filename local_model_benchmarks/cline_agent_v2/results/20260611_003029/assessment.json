@@ -1,0 +1,67 @@
+{
+  "model": "Qwen3.6-35B-A3B-Q4_K_M.gguf",
+  "profile": "planner",
+  "endpoint": "DL380 loopback port 8097 through non-thinking proxy",
+  "configuration_verdict": "PASS",
+  "configuration_evidence": {
+    "content_smoke": "PLANNER_OK",
+    "reasoning_content_exposed": false,
+    "upstream_bind": "127.0.0.1:8096",
+    "proxy_bind": "127.0.0.1:8097",
+    "persistent_processes": true
+  },
+  "cases": {
+    "architecture_plan": {
+      "verdict": "FAIL_STRICT_SUPERVISED_USABLE",
+      "strengths": [
+        "Respected plan-only format",
+        "Included feature flag, rollback, timeout, telemetry, and failure tests",
+        "Preserved the synchronous public API"
+      ],
+      "failures": [
+        "Placed the hook after consumption instead of after emergency stop and before validation",
+        "Recommended fire-and-forget behavior that cannot feed advisory metadata to the same flow"
+      ]
+    },
+    "code_review": {
+      "verdict": "SUPERVISED_USABLE",
+      "strengths": [
+        "Precisely explained the save-outside-lock race",
+        "Recommended atomic replace persistence",
+        "Identified corrupt JSON and cross-process locking risks"
+      ],
+      "failures": [
+        "Response reached the 1000-token limit and was truncated",
+        "Did not complete every rubric item before truncation"
+      ]
+    },
+    "patch_generation": {
+      "verdict": "FAIL",
+      "strengths": [
+        "Used a context manager for the file",
+        "Added the requested ValueError guard"
+      ],
+      "failures": [
+        "Wrapped the response in a Markdown fence despite ONLY unified diff instruction",
+        "Generated incorrect hunk line counts",
+        "git apply --check returned exit code 128: corrupt patch"
+      ]
+    }
+  },
+  "overall": {
+    "verdict": "PLANNING_AND_REVIEW_ASSISTANT_ONLY",
+    "best_uses": [
+      "Architecture alternatives for human review",
+      "Task decomposition",
+      "Long-form synthesis",
+      "Second-opinion code review"
+    ],
+    "not_approved": [
+      "Autonomous patch generation or application",
+      "Exact hook selection without human verification",
+      "Governance verdicts",
+      "Replacing an instruction-sensitive executor"
+    ],
+    "recommended_output_tokens": 2000
+  }
+}

@@ -1,0 +1,63 @@
+### Implementation Plan: RelayBox TaskAdvisor Integration
+
+#### 1. Core Design Principles
+The integration must strictly adhere to the "advisory-only" and "non-blocking" constraints. The `consume_result` function remains a synchronous public API. The `TaskAdvisor` is an internal, optional dependency that must never influence the primary data path (checksum validation, consumption, or verdicts).
+
+#### 2. Hook Location and Sync/Async Boundary
+**Hook Location:** Inside `consume_result(job_id)`, specifically after Step 4 (Mark result consumed) and before Step 5 (Send to verdict engine).
+
+**Boundary Strategy:**
+- The `consume_result` method remains **synchronous**.
+- We introduce a lightweight, synchronous wrapper that initiates an asynchronous task in the background.
+- To avoid converting `consume_result` into an async API, we will use a thread pool executor or a dedicated background task queue (e.g., `concurrent.futures.ThreadPoolExecutor` or a lightweight async loop runner if the environment supports it, but wrapped in a sync call).
+- **Critical Constraint:** The sync call to `consume_result` must return immediately after Step 4. The advisor call is fire-and-forget.
+
+#### 3. Failure Behavior and Timeout Handling
+- **Timeout:** The advisor call must be wrapped with a strict 2-second timeout. If the `TaskAdvisor.analyze(description)` call exceeds this limit, it is silently discarded.
+- **Exceptions:** Any exception raised by `TaskAdvisor` (network error, timeout, internal error) must be caught and logged at the `WARNING` level. It must **not** propagate to the caller of `consume_result`.
+- **Availability:** If `TaskAdvisor` is unavailable (e.g., service down), the system must degrade gracefully. The advisor feature is disabled by default; if enabled but unreachable, it falls back to no-op without erroring the main flow.
+
+#### 4. Telemetry and Observability
+- **Latency Tracking:** Measure the time taken for the advisor call (if it occurs) and log it. Use a histogram metric for advisor latency (only when successful) and a counter for advisor timeouts/failures.
+- **Status Indicator:** Expose a boolean flag or metric `task_advisor_enabled` to indicate if the feature is active.
+- **Logging:** Log advisor results (if any) at `DEBUG` level, including job ID and advisor metadata, to aid in debugging without cluttering production logs.
+
+#### 5. Configuration and Rollback Mechanism
+- **Feature Flag:** Introduce a configuration setting `task_advisor_enabled` (default: `False`). This allows easy rollback by simply toggling the flag.
+- **Rollback Strategy:**
+  1. **Immediate:** Disable via config flag.
+  2. **Code-Level:** If the feature causes issues, the integration point is isolated in a single module/class (`TaskAdvisorIntegration`). Removing or disabling this module restores the original behavior.
+  3. **No State Change:** Since the advisor is advisory-only, no database or state changes are made by it, ensuring rollback is safe and instantaneous.
+
+#### 6. Test Plan
+- **Unit Tests:**
+  - Test `consume_result` with `task_advisor_enabled=False` (advisor not called).
+  - Test `consume_result` with `task_advisor_enabled=True` and successful advisor response.
+  - Test `consume_result` with advisor timeout (>2s) â verify main flow completes and timeout is logged.
+  - Test `consume_result` with advisor exception â verify main flow completes and exception is caught/logged.
+  - Test schema validation and checksum validation still work correctly regardless of advisor status.
+- **Integration Tests:**
+  - Simulate `TaskAdvisor` unavailability and verify graceful degradation.
+  - Verify that `consume_result` returns within expected time bounds even when advisor is slow (due to async nature).
+- **Performance Tests:**
+  - Measure added latency to `consume_result` to ensure it remains negligible (<1ms overhead for the sync wrapper).
+
+#### 7. Implementation Steps
+1. **Create `TaskAdvisorIntegration` Class:**
+   - Encapsulates all logic for calling `TaskAdvisor.analyze`.
+   - Handles timeout, exception catching, and telemetry.
+   - Provides a `is_enabled` check.
+2. **Modify `consume_result`:**
+   - After Step 4, check if `TaskAdvisorIntegration.is_enabled`.
+   - If enabled, call `TaskAdvisorIntegration.analyze_async(job_id, description)`.
+   - Ensure this call does not block the return of `consume_result`.
+3. **Add Configuration:**
+   - Add `task_advisor_enabled` to system config.
+4. **Add Telemetry:**
+   - Implement metrics for advisor latency and failure rates.
+5. **Write Tests:**
+   - Cover all failure modes and happy paths.
+6. **Documentation:**
+   - Document the feature flag, rollback procedure, and telemetry metrics.
+
+This plan ensures the feature is isolated, observable, and easily reversible, while strictly maintaining the synchronous nature of the public API and the integrity of the primary data flow.

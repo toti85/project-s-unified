@@ -1,0 +1,19 @@
+```diff
+--- patch_module.py
++++ patch_module.py
+@@ -4,7 +4,7 @@
+ 
+ def read_first_line(path: Path) -> str:
+     handle = path.open("r", encoding="utf-8")
+-    return handle.readline().strip()
++    try:
++        return handle.readline().strip()
++    finally:
++        handle.close()
+ 
+ def ratio(completed: int, total: int) -> float:
+-    return completed / total
++    if total == 0:
++        raise ValueError("Total cannot be zero.")
++    return completed / total
+```

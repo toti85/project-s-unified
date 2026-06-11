@@ -1,0 +1,225 @@
+﻿[
+    {
+        "id":  "architecture_plan",
+        "passed":  false,
+        "required_passed":  6,
+        "required_total":  7,
+        "forbidden_hits":  [
+                               "```python",
+                               "def consume_result"
+                           ],
+        "latency_seconds":  85.61,
+        "completion_tokens":  996,
+        "checks":  [
+                       {
+                           "alternatives":  [
+                                                "after emergency stop",
+                                                "after the emergency stop",
+                                                "before validation",
+                                                "before ready.json"
+                                            ],
+                           "passed":  false,
+                           "matched":  [
+
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "asyncio.run",
+                                                "thread",
+                                                "executor",
+                                                "sync/async"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "asyncio.run",
+                                           "sync/async"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "timeout",
+                                                "2 second",
+                                                "two second"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "timeout",
+                                           "two second"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "non-blocking",
+                                                "continue",
+                                                "advisory-only"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "continue",
+                                           "advisory-only"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "telemetry",
+                                                "latency",
+                                                "status"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "telemetry",
+                                           "latency",
+                                           "status"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "feature flag",
+                                                "disabled by default",
+                                                "rollback"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "rollback"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "test",
+                                                "failure path"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "test"
+                                       ]
+                       }
+                   ],
+        "response_file":  "architecture_plan_response.txt"
+    },
+    {
+        "id":  "code_review",
+        "passed":  false,
+        "required_passed":  3,
+        "required_total":  4,
+        "forbidden_hits":  [
+
+                           ],
+        "latency_seconds":  68.38,
+        "completion_tokens":  772,
+        "checks":  [
+                       {
+                           "alternatives":  [
+                                                "lock",
+                                                "race",
+                                                "outside the lock",
+                                                "concurrent"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "lock",
+                                           "race"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "atomic",
+                                                "temporary file",
+                                                "replace"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "atomic",
+                                           "temporary file",
+                                           "replace"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "jsondecodeerror",
+                                                "invalid json",
+                                                "corrupt"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "jsondecodeerror"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "parent",
+                                                "directory",
+                                                "mkdir"
+                                            ],
+                           "passed":  false,
+                           "matched":  [
+
+                                       ]
+                       }
+                   ],
+        "response_file":  "code_review_response.txt"
+    },
+    {
+        "id":  "patch_generation",
+        "passed":  false,
+        "required_passed":  4,
+        "required_total":  5,
+        "forbidden_hits":  [
+
+                           ],
+        "latency_seconds":  14.38,
+        "completion_tokens":  127,
+        "checks":  [
+                       {
+                           "alternatives":  [
+                                                "--- a/patch_module.py",
+                                                "--- patch_module.py"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "--- patch_module.py"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "+++ b/patch_module.py",
+                                                "+++ patch_module.py"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "+++ patch_module.py"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "with path.open",
+                                                "with open"
+                                            ],
+                           "passed":  false,
+                           "matched":  [
+
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "if total == 0",
+                                                "if not total"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "if total == 0"
+                                       ]
+                       },
+                       {
+                           "alternatives":  [
+                                                "raise ValueError"
+                                            ],
+                           "passed":  true,
+                           "matched":  [
+                                           "raise ValueError"
+                                       ]
+                       }
+                   ],
+        "response_file":  "patch_generation_response.txt"
+    }
+]

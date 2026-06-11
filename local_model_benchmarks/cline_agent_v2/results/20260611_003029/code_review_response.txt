@@ -1,0 +1,92 @@
+Here is the review of the `JobQueue` module.
+
+### 1. Critical Bug: Race Condition in `claim_next` (Lost Update)
+
+**Concrete Bug:**
+The `claim_next` method suffers from a classic Time-of-Check to Time-of-Use (TOCTOU) race condition.
+1.  It acquires `self.lock`.
+2.  It loads jobs from disk (`jobs = self._load()`).
+3.  It reads `jobs[0]`.
+4.  It **releases** `self.lock` (exiting the `with` block).
+5.  It calls `self._save(jobs[1:])` **outside** the lock.
+
+**Impact:**
+If two threads call `claim_next` simultaneously:
+1.  Thread A acquires lock, loads `['job1', 'job2']`, releases lock.
+2.  Thread B acquires lock, loads `['job1', 'job2']` (same state), releases lock.
+3.  Thread A saves `['job2']`.
+4.  Thread B saves `['job2']` (overwriting Thread A's save).
+5.  **Result:** `job1` is lost forever. The queue state is corrupted, and a job is silently dropped.
+
+**Focused Fix:**
+Keep the save operation inside the lock.
+```python
+    def claim_next(self):
+        with self.lock:
+            jobs = self._load()
+            if not jobs:
+                return None
+            job_id = jobs[0]
+            # Save inside the lock to ensure atomicity
+            self._save(jobs[1:])
+        return job_id
+```
+
+### 2. Risk: Data Loss on Crash/Power Failure
+
+**Concrete Risk:**
+`_save` uses `open("w")`, which truncates the file immediately. If the process crashes or is killed between `_load` and `_save` (or during `_save`), the file may be empty or contain partial JSON.
+
+**Impact:**
+-   **In `enqueue`:** If a crash occurs after appending to the in-memory list but before `_save` completes, the new job is lost.
+-   **In `claim_next`:** If a crash occurs after the lock is released but before `_save` completes, the queue file may be truncated to an empty list `[]`, causing all remaining jobs to be lost.
+
+**Focused Fix:**
+Use atomic writes. Write to a temporary file and rename it.
+```python
+    def _save(self, jobs):
+        # Write to temp file first
+        temp_path = self.state_path.with_suffix('.tmp')
+        with temp_path.open("w", encoding="utf-8") as handle:
+            json.dump(jobs, handle)
+        # Atomic rename
+        temp_path.replace(self.state_path)
+```
+
+### 3. Bug: No Error Handling for Corrupted State File
+
+**Concrete Bug:**
+`_load` calls `json.load(handle)` without a `try/except` block. If the file exists but contains invalid JSON (e.g., due to a previous crash or manual edit), `json.JSONDecodeError` will be raised.
+
+**Impact:**
+-   Any subsequent call to `enqueue` or `claim_next` will crash with an unhandled exception.
+-   The application may become unusable until the state file is manually repaired.
+
+**Focused Fix:**
+Handle `json.JSONDecodeError` in `_load` by treating corrupted files as empty queues (or raising a more specific error if recovery is needed).
+```python
+    def _load(self):
+        if not self.state_path.exists():
+            return []
+        try:
+            with self.state_path.open("r", encoding="utf-8") as handle:
+                return json.load(handle)
+        except json.JSONDecodeError:
+            # Option 1: Return empty list (lose data)
+            return []
+            # Option 2: Raise a custom error for alerting
+            # raise ValueError(f"Corrupted state file: {self.state_path}")
+```
+
+### 4. Risk: No File Locking for Concurrent Processes
+
+**Concrete Risk:**
+The `threading.Lock` only protects against concurrent access within the **same Python process**. If multiple independent processes (e.g., multiple workers) access the same `state_path`, they will not coordinate.
+
+**Impact:**
+-   Same race condition as #1, but across processes.
+-   Jobs may be claimed by multiple workers simultaneously.
+-   Data corruption due to overlapping writes.
+
+**Focused Fix:**
+Use file locking (e.g., `fcntl` on Unix, `msvcrt` on

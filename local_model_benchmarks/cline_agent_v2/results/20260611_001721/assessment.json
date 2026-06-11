@@ -1,0 +1,75 @@
+{
+  "model": "Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf",
+  "endpoint": "DL380 loopback port 8098 via WinRM",
+  "context_tokens": 8192,
+  "isolation": {
+    "production_files_read_by_model": false,
+    "production_files_modified": false,
+    "active_inbox_outbox_used": false,
+    "model_filesystem_tools_enabled": false,
+    "result_scope": "local_model_benchmarks/cline_agent_v2/results/20260611_001721"
+  },
+  "cases": {
+    "architecture_plan": {
+      "verdict": "FAIL_STRICT_SUPERVISED_USABLE",
+      "strengths": [
+        "Preserved synchronous public API",
+        "Specified two-second timeout and continue-on-failure behavior",
+        "Included telemetry and failure tests"
+      ],
+      "failures": [
+        "Did not identify the exact hook after emergency stop and before validation",
+        "Returned production-style code despite plan-only instruction",
+        "Incorrectly said no rollback was needed",
+        "Changed the public signature by adding use_advisory"
+      ]
+    },
+    "code_review": {
+      "verdict": "FAIL_STRICT_SUPERVISED_USABLE",
+      "strengths": [
+        "Found save outside lock race",
+        "Found non-atomic persistence",
+        "Found JSON decoding risk"
+      ],
+      "failures": [
+        "Missed missing parent-directory handling",
+        "Added a weak false positive about mutable state_path",
+        "Suggested swallowing persistence failures, which can hide data loss"
+      ]
+    },
+    "patch_generation": {
+      "verdict": "FAIL",
+      "strengths": [
+        "Semantically closed the file handle",
+        "Added the requested zero-total ValueError"
+      ],
+      "failures": [
+        "Wrapped output in a Markdown fence despite ONLY unified diff instruction",
+        "Generated incorrect hunk line counts",
+        "git apply --check returned exit code 128: corrupt patch"
+      ]
+    }
+  },
+  "overall": {
+    "strict_cases_passed": 0,
+    "strict_cases_total": 3,
+    "verdict": "SUPERVISED_ASSISTANT_ONLY",
+    "approved_tasks": [
+      "Drafting initial plans for human review",
+      "First-pass small-file code review",
+      "Explaining code and suggesting candidate fixes"
+    ],
+    "not_approved_tasks": [
+      "Autonomous patch application",
+      "Unsupervised governance integration",
+      "Replacing Cline for instruction-sensitive executor work",
+      "Automatic acceptance without tests and human review"
+    ]
+  },
+  "qwen36_observation": {
+    "model": "Qwen3.6-35B-A3B-Q4_K_M.gguf",
+    "endpoint": "DL380 loopback port 8096",
+    "result": "INCOMPATIBLE_CURRENT_CONFIG",
+    "detail": "The first case consumed all 1200 output tokens in hidden reasoning and returned no usable final answer. Retest only after disabling thinking or increasing the output budget."
+  }
+}

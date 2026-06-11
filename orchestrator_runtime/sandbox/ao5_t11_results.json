@@ -1,0 +1,10 @@
+{
+  "baseline_verdict": "ACCEPTED",
+  "baseline_latency_ms": 17.09,
+  "flag_on_verdict": "ACCEPTED",
+  "flag_on_latency_ms": 22.13,
+  "latency_delta_ms": 5.04,
+  "verdict_unchanged": true,
+  "cwi_advisory_executed": true,
+  "errors": []
+}

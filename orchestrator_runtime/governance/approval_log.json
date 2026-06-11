@@ -364,6 +364,13 @@
       "final_status": "DONE",
       "final_feedback": "# AO5_T22_CWI_WORKFLOWRESULT_COMPAT — PASS\n**Run ID:** AO5_T22_CWI_WORKFLOWRESULT_COMPAT | **Iteration:** 1 | **Date:** 2026-06-11\n**Status:** PASS\n\n## Root Cause\nLine 410: execution_result[\"workflow_execution\"].get(\"success\") — WorkflowResult is a dataclass, not a dict.\n\n## Fix Applied\nAdded _workflow_result_to_dict() static helper. Normalizes WorkflowResult/dataclass/dict/None to dict before .get() access.\n\n## Results\n- success: true\n- Latency: 360.18ms\n- No AttributeError\n\n## Cognitive Evidence — FULL PIPELINE\n- Intent analysis: FILE_OPERATION\n- Router usage: executed\n- Semantic reasoning: sequential_execution\n- Workflow selected: basic\n- Workflow executed: WorkflowStatus.COMPLETED\n- Post-processing: learning insights extracted\n- Cognitive enhancement: applied_insights=true\n\n## Files Modified\n- src/core/cognitive_workflow_integration.py — helper + normalized access\n\n## Rollback\ngit restore -- src/core/cognitive_workflow_integration.py\n\n## Verdict\nPASS — CWI full pipeline operational.",
       "completed_at": "2026-06-11T05:20:49.184843+00:00"
+    },
+    {
+      "goal_id": "AO5_T24_MANUAL",
+      "final_verdict": "PASS",
+      "final_status": "DONE",
+      "final_feedback": "﻿T24 CWI adapter test payload\n",
+      "completed_at": "2026-06-11T06:42:08.499863+00:00"
     }
   ]
 }

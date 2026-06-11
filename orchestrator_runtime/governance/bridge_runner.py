@@ -97,8 +97,10 @@ STATUS_BLOCKED_KILL_SWITCH = "BLOCKED_KILL_SWITCH"
 
 # ── CWI Advisory Feature Flag ─────────────────────────────────────────
 # Default False: CWI remains disabled until explicit opt-in.
-# Set to True to enable advisory-only cognitive analysis pre-consumption.
-CWI_ADVISORY_ENABLED = False
+# Can be enabled via env var: $env:CWI_ADVISORY = "true"
+CWI_ADVISORY_ENABLED = (
+    os.environ.get("CWI_ADVISORY", "false").lower() == "true"
+)
 
 # ── Overseer Advisory Feature Flag ────────────────────────────────────
 # Default False: OverseerAgent remains disabled until explicit opt-in.
@@ -269,6 +271,9 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
     # ── CWI ADVISORY pre-consume hook (advisory-only, feature-flagged) ──
     # Only runs if CWI_ADVISORY_ENABLED is True.
     # Never raises, never blocks, never changes verdict or checksum logic.
+    _cwi_start = time.perf_counter() if CWI_ADVISORY_ENABLED else None
+    _cwi_advisory_status = "SKIPPED"
+    _cwi_advisory_output = ""
     if CWI_ADVISORY_ENABLED:
         try:
             from orchestrator_runtime.sandbox.cwi_advisory_wrapper import get_cwi_advisory_safe
@@ -287,21 +292,29 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
                 pass
             if not task_desc:
                 task_desc = run_id  # Fallback to run_id
-            _cwi_advisory = get_cwi_advisory_safe(
+            _cwi_result = get_cwi_advisory_safe(
                 task_description=task_desc,
                 context={"integration": "bridge_runner_pre_consume", "run_id": run_id},
                 user_id="ao5_system"
             )
-            if _cwi_advisory.get("status") == "OK":
-                _intent = _cwi_advisory.get("advisory", {}).get("intent_analysis", {}).get("intent_type", "unknown")
+            if _cwi_result.get("status") == "OK":
+                _cwi_advisory_status = "OK"
+                _adv = _cwi_result.get("advisory", {})
+                _intent = _adv.get("intent_analysis", {}).get("intent_type", "unknown") if isinstance(_adv, dict) else str(_adv)[:100]
+                _cwi_advisory_output = str(_adv)[:200]
                 logger = logging.getLogger(__name__)
                 logger.info(f"CWI advisory for {run_id}: intent={_intent}")
             else:
+                _cwi_advisory_status = "ERROR"
+                _cwi_advisory_output = str(_cwi_result.get("error", "unknown"))[:200]
                 logger = logging.getLogger(__name__)
-                logger.warning(f"CWI advisory for {run_id}: {_cwi_advisory.get('status')} — {_cwi_advisory.get('error')}")
+                logger.warning(f"CWI advisory for {run_id}: {_cwi_advisory_status} — {_cwi_advisory_output}")
         except Exception as _e:
+            _cwi_advisory_status = "ERROR"
+            _cwi_advisory_output = str(_e)[:200]
             logger = logging.getLogger(__name__)
             logger.error(f"CWI pre-analysis unexpected error for {run_id}: {_e}")
+    _cwi_latency_ms = round((time.perf_counter() - _cwi_start) * 1000, 2) if _cwi_start else 0
     # If CWI_ADVISORY_ENABLED is False, skip entirely — no behavior change
 
     # ── OVERSEER ADVISORY pre-consume hook (advisory-only, feature-flagged) ──
@@ -342,11 +355,18 @@ def consume_executor_output(run_id: str, expected_iteration: int) -> dict:
                 "ts": datetime.now(timezone.utc).isoformat(),
                 "run_id": run_id,
                 "iteration": expected_iteration,
-                "advisory_enabled": OVERSEER_ADVISORY_ENABLED,
-                "advisory_status": _overseer_advisory_status,
-                "advisory_output_first_200": _overseer_advisory_output,
+                # Overseer advisory fields
+                "overseer_enabled": OVERSEER_ADVISORY_ENABLED,
+                "overseer_status": _overseer_advisory_status,
+                "overseer_output_first_200": _overseer_advisory_output,
+                "overseer_latency_ms": _overseer_latency_ms,
+                # CWI advisory fields
+                "cwi_enabled": CWI_ADVISORY_ENABLED,
+                "cwi_status": _cwi_advisory_status,
+                "cwi_output_first_200": _cwi_advisory_output,
+                "cwi_latency_ms": _cwi_latency_ms,
+                # Totals
                 "latency_ms_total": _lat,
-                "latency_ms_advisory_only": _overseer_latency_ms,
                 "verdict": base["status"],
                 "errors": errors or []
             }

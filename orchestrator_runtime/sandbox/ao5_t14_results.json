@@ -1,0 +1,11 @@
+{
+  "baseline_verdict": "ACCEPTED",
+  "baseline_latency_ms": 13.25,
+  "flag_on_verdict": "ACCEPTED",
+  "flag_on_latency_ms": 106.24,
+  "latency_delta_ms": 92.99,
+  "verdict_unchanged": true,
+  "overseer_advisory_executed": true,
+  "overseer_advisory_output": null,
+  "errors": []
+}

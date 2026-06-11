@@ -1,0 +1,10 @@
+from pathlib import Path
+
+
+def read_first_line(path: Path) -> str:
+    handle = path.open("r", encoding="utf-8")
+    return handle.readline().strip()
+
+
+def ratio(completed: int, total: int) -> float:
+    return completed / total

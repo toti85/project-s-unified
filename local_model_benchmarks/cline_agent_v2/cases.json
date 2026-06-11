@@ -1,0 +1,45 @@
+[
+  {
+    "id": "architecture_plan",
+    "fixture": "fixtures/architecture_brief.md",
+    "instruction": "Act as a cautious coding executor. Follow the fixture request exactly. Keep the plan concrete and under 700 words.",
+    "max_tokens": 1200,
+    "required_groups": [
+      ["after emergency stop", "after the emergency stop", "before validation", "before ready.json"],
+      ["asyncio.run", "thread", "executor", "sync/async"],
+      ["timeout", "2 second", "two second"],
+      ["non-blocking", "continue", "advisory-only"],
+      ["telemetry", "latency", "status"],
+      ["feature flag", "disabled by default", "rollback"],
+      ["test", "failure path"]
+    ],
+    "forbidden": ["```python", "def consume_result", "production code"]
+  },
+  {
+    "id": "code_review",
+    "fixture": "fixtures/queue_module.py.txt",
+    "instruction": "Review this module without editing it. Report concrete bugs and risks, their impact, and focused fixes. Do not invent missing requirements.",
+    "max_tokens": 1000,
+    "required_groups": [
+      ["lock", "race", "outside the lock", "concurrent"],
+      ["atomic", "temporary file", "replace"],
+      ["jsondecodeerror", "invalid json", "corrupt"],
+      ["parent", "directory", "mkdir"]
+    ],
+    "forbidden": ["no bugs", "thread-safe as written"]
+  },
+  {
+    "id": "patch_generation",
+    "fixture": "fixtures/patch_module.py.txt",
+    "instruction": "Return ONLY a unified diff for patch_module.py. Fix the leaked file handle and make ratio raise ValueError when total is zero. Do not add dependencies, files, comments, or unrelated changes.",
+    "max_tokens": 700,
+    "required_groups": [
+      ["--- a/patch_module.py", "--- patch_module.py"],
+      ["+++ b/patch_module.py", "+++ patch_module.py"],
+      ["with path.open", "with open"],
+      ["if total == 0", "if not total"],
+      ["raise ValueError"]
+    ],
+    "forbidden": ["pip install", "pytest", "requirements.txt"]
+  }
+]

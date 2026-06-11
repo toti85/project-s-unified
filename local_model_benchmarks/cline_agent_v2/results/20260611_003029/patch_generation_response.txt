@@ -1,0 +1,20 @@
+```diff
+--- a/patch_module.py
++++ b/patch_module.py
+@@ -1,11 +1,13 @@
+ from pathlib import Path
+ 
+ 
+ def read_first_line(path: Path) -> str:
+-    handle = path.open("r", encoding="utf-8")
+-    return handle.readline().strip()
++    with path.open("r", encoding="utf-8") as handle:
++        return handle.readline().strip()
+ 
+ 
+ def ratio(completed: int, total: int) -> float:
+-    return completed / total
++    if total == 0:
++        raise ValueError("total cannot be zero")
++    return completed / total
+```
