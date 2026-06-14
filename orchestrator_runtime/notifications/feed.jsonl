@@ -178,3 +178,18 @@
 {"timestamp": "2026-06-11T06:37:56.818761+00:00", "event_type": "BRIDGE_REJECT", "goal_id": null, "message": "Checksum mismatch for AO5_T24_MANUAL", "severity": "INFO", "read": false}
 {"timestamp": "2026-06-11T06:42:08.465916+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T24_MANUAL iter 1", "severity": "INFO", "read": false}
 {"timestamp": "2026-06-11T06:42:08.580037+00:00", "event_type": "GOAL_DONE", "goal_id": "AO5_T24_MANUAL", "message": "PASS — ﻿T24 CWI adapter test payload\n", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T07:03:38.566905+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_07_1781161374 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T07:37:08.186437+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_07_1781163321 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T08:37:08.335625+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_08_1781167028 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T09:37:08.421339+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_09_1781170628 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T10:37:08.518555+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_10_1781174228 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T11:37:08.616686+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_11_1781177828 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T12:37:08.718813+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_12_1781181428 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T13:37:28.198165+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_13_1781185047 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T14:37:28.319267+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_14_1781188648 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T15:37:28.412849+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_15_1781192248 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T17:46:35.877002+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_17_1781199995 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T18:46:36.333792+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_18_1781203595 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-11T19:46:36.609288+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_19_1781207196 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-12T09:36:59.301235+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_09_1781257019 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-13T21:11:10.941191+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for AO5_T25_SYNTH_21_1781385070 iter 1", "severity": "INFO", "read": false}

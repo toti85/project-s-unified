@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-AO5_T15 Traffic Generator — Synthetic consume() loop (EventBus feed)
-=====================================================================
-Generates synthetic consume() events once per hour for 24h observation.
-Publishes EventBus events before/after each consume to feed OverseerAgent.
+AO5_T25 Traffic Generator — Synthetic consume() loop (CWI observation)
+======================================================================
+Generates synthetic consume() events once per hour for 24h CWI observation.
+Publishes EventBus events before/after each consume.
 
-FIXED: RISK_010 checksum sequence + EventBus event publishing.
+T25: CWI_ADVISORY=true, OVERSEER_ADVISORY=false (isolated CWI metrics).
 
 Usage:
-    $env:OVERSEER_ADVISORY='true'; python orchestrator_runtime/sandbox/ao5_t15_traffic_loop.py
+    python orchestrator_runtime/sandbox/ao5_t15_traffic_loop.py
     python orchestrator_runtime/sandbox/ao5_t15_traffic_loop.py --once  # single iteration
 
 Interrupt with Ctrl+C.
@@ -64,17 +64,17 @@ def _publish_event(event_type: str, data: dict):
 def _create_sandbox_handoff(run_id: str, tmpdir: Path):
     """
     Create minimal sandbox handoff for synthetic consume().
-    RISK_010: write last_output.md FINAL → compute SHA-256 → write output_ready.json LAST
+    RISK_010: write last_output.md FINAL -> compute SHA-256 -> write output_ready.json LAST
     """
     outbox = tmpdir / "cline_outbox"
     outbox.mkdir(exist_ok=True)
 
     # Step 1: Write last_output.md FINAL
     content = (
-        f"# AO5_T15 Synthetic Output\n"
+        f"# AO5_T25 Synthetic Output\n"
         f"Run ID: {run_id}\n"
         f"Generated: {datetime.now(timezone.utc).isoformat()}\n"
-        f"Synthetic payload for telemetry.\n"
+        f"Synthetic payload for CWI observation.\n"
     )
     output_path = outbox / "last_output.md"
     with open(output_path, "w", encoding="utf-8") as f:
@@ -100,7 +100,7 @@ def _create_sandbox_handoff(run_id: str, tmpdir: Path):
 
 def _run_synthetic_consume(hour: int):
     """Run single synthetic consume() with EventBus events."""
-    run_id = f"AO5_T15_SYNTH_{hour:02d}"
+    run_id = f"AO5_T25_SYNTH_{hour:02d}_{int(time.time())}"
     tmpdir = Path(tempfile.mkdtemp(prefix=f"synth_{run_id}_"))
 
     try:
@@ -161,13 +161,17 @@ def _run_synthetic_consume(hour: int):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="AO5_T15 Traffic Generator")
+    parser = argparse.ArgumentParser(description="AO5_T25 Traffic Generator")
     parser.add_argument("--once", action="store_true", help="Run 1 iteration then exit")
     args = parser.parse_args()
 
     max_iterations = 1 if args.once else RUN_HOURS
 
-    logger.info(f"Starting AO5_T15 traffic generator ({max_iterations} iterations)")
+    # T25: Set env vars at script start
+    os.environ["CWI_ADVISORY"] = "true"
+    os.environ["OVERSEER_ADVISORY"] = "false"
+    logger.info(f"Starting AO5_T25 traffic generator ({max_iterations} iterations)")
+    logger.info(f"CWI_ADVISORY: {os.environ.get('CWI_ADVISORY', 'NOT SET')}")
     logger.info(f"OVERSEER_ADVISORY: {os.environ.get('OVERSEER_ADVISORY', 'NOT SET')}")
     logger.info(f"Observation log: {OBS_PATH}")
     logger.info("Press Ctrl+C to stop")

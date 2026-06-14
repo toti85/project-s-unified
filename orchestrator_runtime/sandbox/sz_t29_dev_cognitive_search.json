@@ -1,0 +1,152 @@
+{
+  "task": "T29_FIND_CLEAN_COGNITIVE_CORE_ON_DEV",
+  "generated": "2026-06-14T00:33:00+03:00",
+  "search_scope": "C:\\ (entire drive, with exclusions)",
+  "summary": {
+    "total_cognitive_core_py_files_found": 100,
+    "unique_file_sizes_bytes": [6857, 17723, 17906, 18193, 18197, 18668, 18711, 20852, 22486, 23044, 23739, 26564, 26833, 27855],
+    "max_line_count": 704,
+    "target_line_count": 1032,
+    "confirmed_clean_candidates": 0,
+    "other_variants": 14,
+    "search_completed": true
+  },
+  "category_A_confirmed_clean": [],
+  "category_B_other_variants": [
+    {
+      "path": "C:\\ProjectS-Unified\\src\\core\\cognitive\\cognitive_core.py",
+      "line_count": 704,
+      "size_bytes": 27855,
+      "last_modified": "2025-07-22T23:27:51",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "Current Unified version. Stdlib-only imports."
+    },
+    {
+      "path": "C:\\ProjectS\\project-s-code\\src\\core\\cognitive\\cognitive_core.py",
+      "line_count": 704,
+      "size_bytes": 27855,
+      "last_modified": "2025-07-22T23:27:51",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "Identical to Unified. Legacy ProjectS install."
+    },
+    {
+      "path": "C:\\ProjectS-Snapshot-Staging\\src\\core\\cognitive\\cognitive_core.py",
+      "line_count": 704,
+      "size_bytes": 27855,
+      "last_modified": "2025-07-22T23:27:51",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "Snapshot staging copy. Identical to Unified."
+    },
+    {
+      "path": "C:\\v2_architecture\\core\\cognitive\\cognitive_core.py",
+      "line_count": 704,
+      "size_bytes": 27855,
+      "last_modified": "2025-07-04T13:43:32",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "v2_architecture root copy."
+    },
+    {
+      "path": "C:\\Users\\Admin\\Videos\\v2_architecture\\core\\cognitive\\cognitive_core.py",
+      "line_count": 704,
+      "size_bytes": 27855,
+      "last_modified": "2025-07-10T09:25:14",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "Videos/v2_architecture copy."
+    },
+    {
+      "path": "C:\\Users\\Admin\\project_s_super_core\\src\\core\\cognitive\\cognitive_core.py",
+      "line_count": 704,
+      "size_bytes": 27855,
+      "last_modified": "2025-07-02T21:10:14",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "super_core variant."
+    },
+    {
+      "path": "C:\\_cleanup_quarantine\\audit_forks_20260609\\1225\\project_s_super_core\\src\\core\\cognitive\\cognitive_core.py",
+      "line_count": 674,
+      "size_bytes": 26564,
+      "last_modified": "2026-01-01T21:31:44",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "Quarantine copy. Slightly different size."
+    },
+    {
+      "path": "C:\\_cleanup_quarantine\\audit_forks_20260609\\0614\\project_s_agent0603\\core\\cognitive_core.py",
+      "line_count": 626,
+      "size_bytes": 26833,
+      "last_modified": "2025-06-16T16:43:56",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "Largest non-704 variant. Still only 1 class."
+    },
+    {
+      "path": "C:\\_cleanup_quarantine\\audit_forks_20260609\\project-s-agent-main\\core\\cognitive_core.py",
+      "line_count": 555,
+      "size_bytes": 22486,
+      "last_modified": "2025-06-23T08:05:22",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "agent-main variant."
+    },
+    {
+      "path": "C:\\0617 Mukodo\\project_s_agent0603\\core\\cognitive_core.py",
+      "line_count": 555,
+      "size_bytes": 23044,
+      "last_modified": "2025-05-31T23:31:32",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "Mukodo working copy."
+    },
+    {
+      "path": "C:\\v2_architecture\\ProjectS_V2_Portable\\core\\cognitive\\cognitive_core.py",
+      "line_count": 483,
+      "size_bytes": 18711,
+      "last_modified": "2025-07-01T00:27:45",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "Portable v2 variant."
+    },
+    {
+      "path": "C:\\0617 Mukodo\\project_s_agent0603\\core_old\\cognitive_core.py",
+      "line_count": 467,
+      "size_bytes": 18193,
+      "last_modified": "2025-05-20T14:34:20",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "core_old legacy variant."
+    },
+    {
+      "path": "C:\\S1\\project-s-agent\\core\\cognitive_core.py",
+      "line_count": 198,
+      "size_bytes": 6857,
+      "last_modified": "2025-05-13T15:57:10",
+      "classes_found": ["CognitiveCore"],
+      "class_count": 1,
+      "notes": "Minimal stub version."
+    }
+  ],
+  "category_C_unrelated": {
+    "count": 87,
+    "description": "Quarantine duplicates, nested copies, core_old backups, real_test_folder mirrors, and date-stamped audit forks. All share the same 1-class structure (CognitiveCore only). No test files, vendored copies, or examples found outside Project-S ecosystem."
+  },
+  "conclusion": {
+    "clean_cognitive_core_found_on_dev": false,
+    "total_unique_files_scanned": 100,
+    "max_line_count_found": 704,
+    "target_line_count": 1032,
+    "max_classes_found": 1,
+    "target_classes": 4,
+    "classes_searched_for": ["EventBus", "Executor", "ErrorHandler", "CognitiveCore"],
+    "classes_found": ["CognitiveCore"],
+    "classes_missing": ["EventBus", "Executor", "ErrorHandler"],
+    "most_promising_candidate": null,
+    "complete_project_s_install_with_clean_core": false,
+    "recommendation": "The 1,032-line clean cognitive_core.py with 4 classes (EventBus, Executor, ErrorHandler, CognitiveCore) does NOT exist anywhere on this DEV machine. All 100+ cognitive_core.py files found contain only the CognitiveCore class (1 of 4) and max out at 704 lines. The clean version must be transferred from the legacy machine (T27's DESKTOP-AFDT43T) via USB/cloud as originally planned. Alternative: search the v2_architecture directory on the legacy machine at C:\\v2_architecture\\project-s-clean which T27 identified."
+  }
+}

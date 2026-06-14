@@ -6,6 +6,10 @@ from typing import Dict, List, Any, Optional, Set
 from datetime import datetime
 import uuid
 
+# Real infrastructure imports (T31: replaced mocks with real classes)
+from core.infrastructure.event_bus import EventBus
+from core.infrastructure.error_handler import ErrorHandler
+
 # Temporarily mock missing dependencies for clean V2 startup
 class MockEventBus:
     def subscribe(self, event, handler): pass
@@ -21,10 +25,11 @@ class MockErrorHandler:
 class MockMonitor:
     def monitor_performance(self, func): return func
 
-# Use mocks until we implement these properly in V2
-event_bus = MockEventBus()
+# Use real infrastructure for event_bus and error_handler (T31)
+# Keep mocks for executor and monitor (no real counterparts yet)
+event_bus = EventBus()
 executor = MockExecutor()
-error_handler = MockErrorHandler()
+error_handler = ErrorHandler()
 
 def monitor_performance(func):
     return func

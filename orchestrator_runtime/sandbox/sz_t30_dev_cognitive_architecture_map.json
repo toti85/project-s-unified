@@ -1,0 +1,113 @@
+{
+  "task": "AO5_T30_DEV_COGNITIVE_ARCHITECTURE_MAP",
+  "generated": "2026-06-14T01:18:00+03:00",
+  "mode": "READ-ONLY",
+
+  "A_unified_cognitive_infrastructure": {
+    "src_core_cognitive": {
+      "advanced_analyzer.py": {"size": 27687, "modified": "2025-07-01"},
+      "base_cognitive.py": {"size": 14577, "modified": "2025-07-01"},
+      "cognitive_core.py": {"size": 27855, "lines": 704, "modified": "2025-07-22"},
+      "enhanced_processor.py": {"size": 34580, "modified": "2025-07-01"},
+      "semantic_reasoning.py": {"size": 40182, "modified": "2025-07-01"},
+      "__init__.py": {"size": 966, "modified": "2026-06-11", "exports": ["CognitiveCore", "cognitive_registry", "CognitiveContext", "CognitiveResult", "IntentMatch", "TaskDecomposition", "EnhancedCognitiveProcessor", "AdvancedIntentAnalyzer", "SemanticReasoningEngine"]}
+    },
+    "src_core_infrastructure": {
+      "event_bus.py": {"size": 3646, "modified": "2025-07-01"},
+      "error_handler.py": {"size": 4586, "modified": "2025-07-01"},
+      "execution_events.py": {"size": 3455, "modified": "2025-12-25"}
+    },
+    "src_core_orchestration": {
+      "base_workflow.py": {"size": 8671, "modified": "2025-07-01", "classes": ["WorkflowStatus", "TaskComplexity", "WorkflowResult", "BaseWorkflowEngine", "WorkflowRegistry"]},
+      "langgraph_engine.py": {"size": 35900, "modified": "2025-07-01", "classes": ["TaskType", "LangGraphWorkflowEngine"]},
+      "workflow_engine.py": {"size": 39591, "modified": "2025-05-26", "classes": ["WorkflowState", "EnhancedWorkflowEngine", "WorkflowError"]}
+    },
+    "cognitive_workflow_integration.py": {"size": 21150, "lines": 516, "modified": "2026-06-11", "classes": ["CognitiveWorkflowIntegration"]}
+  },
+
+  "B_event_bus_location": {
+    "path": "src/core/infrastructure/event_bus.py",
+    "size": 3646,
+    "modified": "2025-07-01"
+  },
+
+  "C_error_handler_location": {
+    "path": "src/core/infrastructure/error_handler.py",
+    "size": 4586,
+    "modified": "2025-07-01"
+  },
+
+  "D_cognitive_core_current_state": {
+    "path": "src/core/cognitive/cognitive_core.py",
+    "lines": 704,
+    "size": 27855,
+    "classes": [
+      {"name": "MockEventBus", "line": 10},
+      {"name": "MockExecutor", "line": 13},
+      {"name": "MockErrorHandler", "line": 16},
+      {"name": "MockMonitor", "line": 21},
+      {"name": "CognitiveCore", "line": 38}
+    ],
+    "imports": ["logging", "asyncio", "json", "uuid", "typing", "datetime"],
+    "imports_are_stdlib_only": true
+  },
+
+  "E_cognitive_core_langgraph_in_unified": false,
+
+  "F_best_langgraph_candidate": {
+    "path": "C:\\_cleanup_quarantine\\audit_forks_20260609\\project-s-agent-main\\core\\cognitive_core_langgraph.py",
+    "reason": "Largest (1118 lines), most recent (2025-06-24), from stable codebase (project-s-agent-main)"
+  },
+
+  "G_langgraph_candidate_analysis": {
+    "lines": 1118,
+    "size": 48893,
+    "modified": "2025-06-24",
+    "classes": [
+      {"name": "PathSerializationMixin", "line": 29, "purpose": "JSON serialization for Path objects in Pydantic models"},
+      {"name": "Memory", "line": 54, "purpose": "Pydantic model: conversation, entities, context"},
+      {"name": "Task", "line": 59, "purpose": "Pydantic model: id, description, status, steps, result"},
+      {"name": "CognitiveGraphState", "line": 68, "purpose": "Pydantic model: full graph state with memory, tasks, messages, workspace"},
+      {"name": "CognitiveCoreGraph", "line": 82, "purpose": "Graph-based cognitive core using LangGraph StateGraph"},
+      {"name": "CognitiveCoreWithLangGraph", "line": 743, "purpose": "Main orchestrator: combines CognitiveCoreGraph with event_bus, executor, error_handler"},
+      {"name": "CognitiveCoreWorkflow", "line": 1104, "purpose": "High-level workflow wrapper"}
+    ],
+    "imports": {
+      "stdlib": ["logging", "asyncio", "json", "os", "typing", "datetime", "pathlib"],
+      "external": ["pydantic", "langgraph.graph", "langgraph.prebuilt", "langgraph.graph.message", "langgraph.checkpoint.memory"],
+      "project": ["core.event_bus", "core.central_executor", "core.error_handler", "core.ai_command_handler", "core.multi_model_integration", "utils.performance_monitor", "integrations.langgraph_integration", "integrations.langgraph_state_manager", "integrations.langgraph_state_enhanced"]
+    }
+  },
+
+  "H_classes_in_langgraph_but_not_unified": [
+    {"name": "PathSerializationMixin", "port_difficulty": "TRIVIAL", "lines_approx": 23},
+    {"name": "Memory (Pydantic model)", "port_difficulty": "SIMPLE", "lines_approx": 5},
+    {"name": "Task (Pydantic model)", "port_difficulty": "SIMPLE", "lines_approx": 8},
+    {"name": "CognitiveGraphState (Pydantic model)", "port_difficulty": "SIMPLE", "lines_approx": 13},
+    {"name": "CognitiveCoreGraph", "port_difficulty": "COMPLEX", "lines_approx": 661, "reason": "Requires langgraph, pydantic, ai_command_handler, multi_model_integration"},
+    {"name": "CognitiveCoreWithLangGraph", "port_difficulty": "COMPLEX", "lines_approx": 361, "reason": "Requires langgraph infrastructure, event_bus integration"},
+    {"name": "CognitiveCoreWorkflow", "port_difficulty": "MODERATE", "lines_approx": 25, "reason": "Wrapper class, depends on above"}
+  ],
+
+  "I_cwi_overlap_analysis": {
+    "cwi_path": "src/core/cognitive_workflow_integration.py",
+    "cwi_lines": 516,
+    "cwi_classes": ["CognitiveWorkflowIntegration"],
+    "cwi_imports_from_orchestration": ["WorkflowRegistry", "LangGraphWorkflowEngine", "WorkflowResult"],
+    "cwi_imports_from_cognitive": ["EnhancedCognitiveProcessor", "AdvancedIntentAnalyzer", "SemanticReasoningEngine"],
+    "overlap_examples": [
+      {"langgraph_capability": "Graph-based workflow execution", "cwi_equivalent": "LangGraphWorkflowEngine (src/core/orchestration/langgraph_engine.py)", "conclusion": "COVERED"},
+      {"langgraph_capability": "State management with persistence", "cwi_equivalent": "PersistentStateManager (core.state)", "conclusion": "COVERED"},
+      {"langgraph_capability": "Advanced intent analysis", "cwi_equivalent": "AdvancedIntentAnalyzer (core.cognitive.advanced_analyzer)", "conclusion": "COVERED"},
+      {"langgraph_capability": "Semantic reasoning", "cwi_equivalent": "SemanticReasoningEngine (core.cognitive.semantic_reasoning)", "conclusion": "COVERED"},
+      {"langgraph_capability": "Enhanced cognitive processing", "cwi_equivalent": "EnhancedCognitiveProcessor (core.cognitive.enhanced_processor)", "conclusion": "COVERED"}
+    ]
+  },
+
+  "J_recommendation": "ARCHIVE",
+
+  "K_reasoning": "The _langgraph variant (cognitive_core_langgraph.py) is a historical orchestrator from 2025-06 that used LangGraph + Pydantic for graph-based cognitive workflows. However, the T16-T22 series already rebuilt and superseded its core capabilities through CWI (CognitiveWorkflowIntegration) + LangGraphWorkflowEngine + EnhancedWorkflowEngine + AdvancedIntentAnalyzer + SemanticReasoningEngine. The Unified architecture is more modular (separate files for event_bus, error_handler, orchestration) and more recent (2026-06 vs 2025-06). The _langgraph variant's Pydantic models (Memory, Task, CognitiveGraphState) are interesting but not directly portable without langgraph dependencies. The CognitiveCore.py in Unified uses mock classes (MockEventBus, MockExecutor, MockErrorHandler) which is a design concern, but the real infrastructure classes exist in src/core/infrastructure/ and are used by CWI. Recommendation: Archive the _langgraph variant for historical reference. If CognitiveCore.py needs to be upgraded, the priority should be replacing mock classes with real infrastructure imports, not migrating the _langgraph variant.",
+
+  "L_migration_not_needed": true,
+  "suggested_improvement": "Replace MockEventBus/MockExecutor/MockErrorHandler in cognitive_core.py with imports from core.infrastructure (event_bus, error_handler). This is a TRIVIAL fix that would make the current CognitiveCore functional without needing the _langgraph variant."
+}

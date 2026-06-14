@@ -1,0 +1,25 @@
+{
+  "data": {
+    "execution_pattern": {
+      "intent_type": "general",
+      "complexity": 1,
+      "strategy_effectiveness": true,
+      "duration": 0.042602
+    },
+    "cognitive_accuracy": {
+      "intent_confidence": 0.5,
+      "reasoning_confidence": 0.7,
+      "strategy_alignment": true
+    }
+  },
+  "metadata": {
+    "id": "learning_pattern_1781188648",
+    "type": "context",
+    "status": "active",
+    "created_at": "2026-06-11T17:37:28.303217",
+    "updated_at": "2026-06-11T17:37:28.303217",
+    "version": 1,
+    "size_bytes": 269,
+    "tags": []
+  }
+}
