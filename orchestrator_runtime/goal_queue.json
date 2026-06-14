@@ -5,12 +5,23 @@
   "scope_draft_milestones_count": 6,
   "goals": [
     {
+      "id": "CM_T40_VERDICT_EVAL",
+      "title": "AO5_T40 — verdict_evaluator ghost candidate deep dive (READ-ONLY)",
+      "source": "continuous_mind_v01",
+      "risk": "LOW",
+      "auto_approve": true,
+      "priority": 1,
+      "rationale": "Read-only investigation of verdict_evaluator ghost candidate. No production edits."
+    },
+    {
       "id": "GOAL_001",
       "title": "AO1.1 — Implement Autonomous Goal Discovery (this goal)",
       "source": "scope_draft",
       "risk": "LOW",
       "auto_approve": true,
-      "priority": 1,
+      "priority": 10,
+      "status": "DONE",
+      "done_at": "2026-05-27T01:00:00Z",
       "rationale": "Already completed in this session via manual goal_queue.json generation."
     },
     {
@@ -19,8 +30,10 @@
       "source": "scope_draft",
       "risk": "MEDIUM",
       "auto_approve": false,
-      "priority": 2,
-      "rationale": "Requires creating orchestrator_runtime/governance/risk_classifier.py."
+      "priority": 11,
+      "status": "DONE",
+      "done_at": "2026-06-14T21:09:14Z",
+      "rationale": "Completed as AO5_T37 — bridge_runner.py + risk_classifier.py modified, E2E validated (T38)."
     },
     {
       "id": "GOAL_003",
@@ -28,8 +41,10 @@
       "source": "scope_draft",
       "risk": "MEDIUM",
       "auto_approve": false,
-      "priority": 3,
-      "rationale": "Modifies existing orchestrator loop logic to add auto-retry on FAIL verdict."
+      "priority": 12,
+      "status": "DONE",
+      "done_at": "2026-06-01T00:00:00Z",
+      "rationale": "Completed — self_correcting_loop.py exists in governance/."
     },
     {
       "id": "GOAL_004",
