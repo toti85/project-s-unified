@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
-  "last_updated": "2026-06-14T22:20:00Z",
-  "updated_by": "Sz AO5_T40 self_state update — CM v0.1 continuous_mind.py built, dry-run PASS, goal_queue CM_T40_VERDICT_EVAL queued",
+  "last_updated": "2026-06-14T22:28:00Z",
+  "updated_by": "Sz AO5_T40 verdict_evaluator deep dive COMPLETE — CM v0.1 first real cycle closed",
   "identity": {
     "what_i_am": "Project-S вЂ” egy kontrollГЎlt autonГіm AI governance rendszer, persistent file-based self-model-lal. SAI (SuperIntelligentAI) az egyetlen aktГ­v Doer runtime, MetaController aktГ­v a SAI-en belГјl use_meta_controller=True Гєton, Interactive Layer v1 a verified operator-facing entry surface.",
     "what_i_am_not": [
@@ -1531,6 +1531,21 @@
         "dry-run output: run_id=CM_GOAL_002_T40, prompt generated, no inbox write"
       ],
       "classification": "autonomy_infrastructure"
+    },
+    {
+      "id": 53,
+      "date": "2026-06-14",
+      "title": "AO5_T40 CM v0.1 first real cycle COMPLETE — verdict_evaluator ghost confirmed",
+      "status": "completed",
+      "summary": "CM v0.1 ran first real cycle (not dry-run): picked CM_T40_VERDICT_EVAL, generated AO5_T40 prompt, wrote inbox (FA1_HANDOFF_V1), output arrived in 5m51s, bridge_runner consumed ACCEPTED. Investigation result: VerdictEvaluator (src/orchestrator/verdict_evaluator.py) is a confirmed ghost — 0 importers, never instantiated. Live evaluation path is _heuristic_evaluate() inside FilesystemOrchestrator. Governance pipeline (bridge_runner + SCL) is a separate layer that does not use either. Bug fixed: CM run_id vs goal_id mismatch in gateway classification corrected.",
+      "evidence": [
+        "orchestrator_runtime/cline_outbox/last_output.md (AO5_T40 deep dive report)",
+        "status=ACCEPTED from bridge_runner.consume_executor_output",
+        "CM cycle log: orchestrator_runtime/active_loops/cm_v01_cycle_log.jsonl",
+        "src/orchestrator/verdict_evaluator.py — 0 importers confirmed",
+        "src/orchestrator/filesystem_orchestrator.py:499 — _heuristic_evaluate() is live path"
+      ],
+      "classification": "autonomy_first_real_cycle"
     }
   ],
   "bridges": {
@@ -1904,8 +1919,8 @@
       "mitigation_validated": "2026-06-01"
     }
   ],
-  "active_focus": "CM v0.1 LIVE — continuous_mind.py built and dry-run proven. Next: run --once for verdict_evaluator T40 deep dive.",
-  "next_concrete_step": "python orchestrator_runtime/continuous_mind.py --once  (CM_T40_VERDICT_EVAL is queued as priority 1 in goal_queue.json)",
+  "active_focus": "CM v0.1 first real cycle COMPLETE — verdict_evaluator ghost confirmed, gateway run_id/goal_id fix applied. Next: second CM cycle or new goal.",
+  "next_concrete_step": "python orchestrator_runtime/continuous_mind.py --once  (next priority goal from goal_queue.json)",
   "key_realizations": [
     {
       "id": "KR_001",

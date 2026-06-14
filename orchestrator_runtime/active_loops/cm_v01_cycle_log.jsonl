@@ -1,0 +1,3 @@
+{"event": "cm_dry_run", "cycle": 1, "goal_id": "GOAL_002", "run_id": "CM_GOAL_002_T40", "prompt_chars": 3455, "at": "2026-06-14T19:15:51.288725+00:00"}
+{"event": "cm_inbox_written", "cycle": 1, "goal_id": "CM_T40_VERDICT_EVAL", "run_id": "CM_CM_T40_VERDICT_EVAL_T40", "at": "2026-06-14T19:21:14.986219+00:00"}
+{"event": "cm_consume_result", "cycle": 1, "goal_id": "CM_T40_VERDICT_EVAL", "run_id": "CM_CM_T40_VERDICT_EVAL_T40", "status": "CONSUME_ERROR", "gateway_decision": "UNKNOWN", "at": "2026-06-14T19:27:05.211739+00:00"}

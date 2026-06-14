@@ -344,22 +344,44 @@ def _wait_for_output(run_id: str, timeout: int, poll_interval: int) -> bool:
 
 def _consume_via_gateway(run_id: str, goal_id: str) -> dict:
     """
-    Call bridge_runner.consume_executor_output().
-    Returns the result dict with at minimum:
+    Consume executor output via bridge_runner, then resolve gateway decision.
+
+    run_id  — FA1_HANDOFF_V1 file identifier (used for checksum/consume)
+    goal_id — queue entry identifier (used for risk classification)
+
+    Returns dict with at minimum:
       status: ACCEPTED | WAITING_FOR_EXECUTOR | REJECTED_* | BLOCKED_*
-      gateway_decision: ALLOW | PAUSE | DENY (set by T37 gateway)
+      gateway_decision: ALLOW | PAUSE | DENY
     """
     try:
         from orchestrator_runtime.governance.bridge_runner import consume_executor_output
-        result = consume_executor_output(run_id)
-        return result
+        result = consume_executor_output(run_id, expected_iteration=1)
     except Exception as exc:
         log.error("bridge_runner consume failed for %s: %s", run_id, exc)
         return {
             "status": "CONSUME_ERROR",
             "run_id": run_id,
+            "gateway_decision": "DENY",
             "error": str(exc),
         }
+
+    # If consume succeeded, classify the GOAL (not the run_id) for gateway decision.
+    # The run_id encodes the goal_id but may not match queue keys directly.
+    if result.get("status") == "ACCEPTED" and "gateway_decision" not in result:
+        try:
+            from orchestrator_runtime.governance.risk_classifier import classify_execution_request
+            classification = classify_execution_request(goal_id)
+            result["gateway_decision"] = classification.get("gateway_decision", "ALLOW")
+            result["gateway_reason"] = classification.get("reason", "")
+            log.info(
+                "Gateway classification for goal_id=%s: %s",
+                goal_id, result["gateway_decision"],
+            )
+        except Exception as exc:
+            log.warning("Gateway classification failed for %s: %s — defaulting ALLOW", goal_id, exc)
+            result["gateway_decision"] = "ALLOW"
+
+    return result
 
 # ── CM state ──────────────────────────────────────────────────────────
 

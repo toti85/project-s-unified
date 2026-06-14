@@ -11,7 +11,10 @@
       "risk": "LOW",
       "auto_approve": true,
       "priority": 1,
-      "rationale": "Read-only investigation of verdict_evaluator ghost candidate. No production edits."
+      "status": "DONE",
+      "done_at": "2026-06-14T22:27:05Z",
+      "rationale": "Read-only investigation of verdict_evaluator ghost candidate. No production edits.",
+      "result": "GHOST confirmed: VerdictEvaluator has 0 importers. Live path is _heuristic_evaluate() in filesystem_orchestrator.py. Archive recommended."
     },
     {
       "id": "GOAL_001",
