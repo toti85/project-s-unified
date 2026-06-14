@@ -1535,17 +1535,17 @@
     {
       "id": 53,
       "date": "2026-06-14",
-      "title": "AO5_T40 CM v0.1 first real cycle COMPLETE — verdict_evaluator ghost confirmed",
-      "status": "completed",
-      "summary": "CM v0.1 ran first real cycle (not dry-run): picked CM_T40_VERDICT_EVAL, generated AO5_T40 prompt, wrote inbox (FA1_HANDOFF_V1), output arrived in 5m51s, bridge_runner consumed ACCEPTED. Investigation result: VerdictEvaluator (src/orchestrator/verdict_evaluator.py) is a confirmed ghost — 0 importers, never instantiated. Live evaluation path is _heuristic_evaluate() inside FilesystemOrchestrator. Governance pipeline (bridge_runner + SCL) is a separate layer that does not use either. Bug fixed: CM run_id vs goal_id mismatch in gateway classification corrected.",
+      "title": "AO5_T40 CM v0.1 first cycle — verdict_evaluator ghost confirmed, manual rescue required",
+      "status": "completed_with_caveats",
+      "summary": "CM v0.1 ran first real (non-dry-run) cycle: picked CM_T40_VERDICT_EVAL, generated AO5_T40 prompt, wrote inbox (FA1_HANDOFF_V1). Executor (Copilot/me) performed the investigation and wrote outbox. CM consumed with CONSUME_ERROR (bug: missing expected_iteration). Manual rescue: --run-id consume-only mode → ACCEPTED. Two bugs fixed in continuous_mind.py: (1) expected_iteration=1 added, (2) run_id vs goal_id gateway mismatch fixed. goal_queue marked DONE manually (not by CM). Investigation result: VerdictEvaluator is confirmed ghost (0 importers); _heuristic_evaluate() in filesystem_orchestrator.py is the live path. HONEST STATUS: CM infrastructure proved end-to-end but cycle did not close autonomously — executor was Copilot, consume required manual rescue. Next --once cycle should close cleanly with the fixed code.",
       "evidence": [
-        "orchestrator_runtime/cline_outbox/last_output.md (AO5_T40 deep dive report)",
-        "status=ACCEPTED from bridge_runner.consume_executor_output",
-        "CM cycle log: orchestrator_runtime/active_loops/cm_v01_cycle_log.jsonl",
-        "src/orchestrator/verdict_evaluator.py — 0 importers confirmed",
-        "src/orchestrator/filesystem_orchestrator.py:499 — _heuristic_evaluate() is live path"
+        "orchestrator_runtime/active_loops/cm_v01_cycle_log.jsonl — last event: cm_consume_result status=CONSUME_ERROR",
+        "manual rescue: python continuous_mind.py --run-id CM_CM_T40_VERDICT_EVAL_T40 → ACCEPTED",
+        "continuous_mind.py bugs fixed: expected_iteration + goal_id gateway",
+        "src/orchestrator/verdict_evaluator.py — 0 importers confirmed (grep_search)",
+        "src/orchestrator/filesystem_orchestrator.py:499 — _heuristic_evaluate() live path"
       ],
-      "classification": "autonomy_first_real_cycle"
+      "classification": "autonomy_first_cycle_partial"
     }
   ],
   "bridges": {
@@ -1919,8 +1919,8 @@
       "mitigation_validated": "2026-06-01"
     }
   ],
-  "active_focus": "CM v0.1 first real cycle COMPLETE — verdict_evaluator ghost confirmed, gateway run_id/goal_id fix applied. Next: second CM cycle or new goal.",
-  "next_concrete_step": "python orchestrator_runtime/continuous_mind.py --once  (next priority goal from goal_queue.json)",
+  "active_focus": "CM v0.1 infrastructure proved (partial). Next --once cycle should close cleanly: bugs fixed, executor=Copilot, gateway classification corrected.",
+  "next_concrete_step": "python orchestrator_runtime/continuous_mind.py --once  (next pending goal; cycle should close without manual rescue now)",
   "key_realizations": [
     {
       "id": "KR_001",
