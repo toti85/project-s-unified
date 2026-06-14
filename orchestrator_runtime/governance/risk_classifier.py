@@ -102,6 +102,106 @@ def _is_sandbox_only(rationale):
     return True
 
 
+def _normalize_risk(value):
+    """Normalize risk string to LOW/MEDIUM/HIGH with HIGH as safe default."""
+    risk = str(value or "HIGH").upper().strip()
+    if risk not in {"LOW", "MEDIUM", "HIGH"}:
+        return "HIGH"
+    return risk
+
+
+def classify_goal_record(goal: dict, goal_id: str = "UNKNOWN") -> dict:
+    """
+    Classify an in-memory goal record into explicit gateway behavior.
+
+    Gateway policy:
+      LOW    -> ALLOW (auto-approve)
+      MEDIUM -> PAUSE (manual approval required)
+      HIGH   -> DENY (blocked)
+    """
+    if not goal:
+        return {
+            "goal_id": goal_id,
+            "title": "UNKNOWN",
+            "risk": "HIGH",
+            "sandbox_only": False,
+            "gateway_decision": "DENY",
+            "decision": "BLOCKED_POLICY",
+            "reason": "Goal record missing. Default deny for safety.",
+            "classified_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+    risk = _normalize_risk(goal.get("risk", "HIGH"))
+    rationale = goal.get("rationale", "")
+    sandbox_only = _is_sandbox_only(rationale)
+
+    if risk == "LOW":
+        gateway_decision = "ALLOW"
+        decision = "APPROVED"
+        reason = "LOW risk request auto-approved by gateway policy."
+    elif risk == "MEDIUM":
+        gateway_decision = "PAUSE"
+        decision = "PENDING_HUMAN"
+        reason = "MEDIUM risk request paused for explicit human approval."
+    else:
+        gateway_decision = "DENY"
+        decision = "BLOCKED_POLICY"
+        reason = "HIGH risk request is blocked by policy."
+
+    return {
+        "goal_id": goal.get("id", goal_id),
+        "title": goal.get("title", ""),
+        "risk": risk,
+        "sandbox_only": sandbox_only,
+        "gateway_decision": gateway_decision,
+        "decision": decision,
+        "reason": reason,
+        "classified_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def classify_execution_request(goal_id: str) -> dict:
+    """Classify an execution request by goal_id using goal_queue.json."""
+    queue = load_goal_queue()
+    goal = None
+    candidates = [goal_id]
+    if isinstance(goal_id, str) and goal_id.startswith("AO3_"):
+        candidates.append(goal_id[4:])
+
+    for g in queue.get("goals", []):
+        gid = g.get("id")
+        if gid in candidates:
+            goal = g
+            break
+
+    if goal is None:
+        result = {
+            "goal_id": goal_id,
+            "title": "UNKNOWN",
+            "risk": "HIGH",
+            "sandbox_only": False,
+            "gateway_decision": "DENY",
+            "decision": "BLOCKED_POLICY",
+            "reason": f"Goal {goal_id} not found in goal_queue.json. Default deny.",
+            "classified_at": datetime.now(timezone.utc).isoformat(),
+        }
+    else:
+        result = classify_goal_record(goal, goal_id=goal_id)
+
+    log_data = load_approval_log()
+    log_data["entries"].append(result)
+    save_approval_log(log_data)
+
+    if result["gateway_decision"] == "DENY":
+        _notify("ESCALATION", goal_id=goal_id, message=f"Gateway DENY — {result['reason']}")
+    elif result["gateway_decision"] == "PAUSE":
+        _notify("ESCALATION", goal_id=goal_id, message=f"Gateway PAUSE — {result['reason']}")
+    else:
+        _notify("GOAL_APPROVED", goal_id=goal_id, message=f"Gateway ALLOW — {result['reason']}")
+
+    return result
+
+
 def classify_goal(goal_id):
     """
     Classify a goal by ID.
@@ -137,54 +237,19 @@ def classify_goal(goal_id):
             "classified_at": datetime.now(timezone.utc).isoformat(),
         }
 
-    risk = goal.get("risk", "HIGH")
-    auto_approve_orig = goal.get("auto_approve", False)
-    rationale = goal.get("rationale", "")
-    sandbox_only = _is_sandbox_only(rationale)
+    gateway_result = classify_goal_record(goal, goal_id=goal_id)
 
-    # Updated threshold rules (AO1.2 relaxed):
-    # LOW + auto_approve=true → APPROVED
-    # MEDIUM + sandbox_only → APPROVED (relaxed threshold)
-    # MEDIUM + production touch → PENDING_HUMAN
-    # HIGH → always PENDING_HUMAN
-
-    if risk == "LOW" and auto_approve_orig is True:
-        decision = "APPROVED"
-        reason = (
-            f"Risk={risk}, auto_approve=true. Goal is sandbox-only/read-only with no production impact. "
-            f"Auto-approved per AO1.2 risk classification rules."
-        )
-    elif risk == "MEDIUM" and sandbox_only:
-        decision = "APPROVED"
-        reason = (
-            f"Risk={risk}, sandbox_only=true. Goal only touches sandbox/orchestrator_runtime/reports. "
-            f"Auto-approved per relaxed AO1.2 threshold (MEDIUM + sandbox-only = APPROVED)."
-        )
-    elif risk == "MEDIUM" and not sandbox_only:
-        decision = "PENDING_HUMAN"
-        reason = (
-            f"Risk={risk}, sandbox_only=false. Goal rationale indicates production/src/self_state touch. "
-            f"Requires human approval regardless of sandbox classification."
-        )
-    elif risk == "HIGH":
-        decision = "PENDING_HUMAN"
-        reason = (
-            f"Risk={risk}. High-risk goals (production files, config, self_state writes) always require "
-            f"human approval. No relaxation permitted."
-        )
-    else:
-        decision = "PENDING_HUMAN"
-        reason = f"Risk={risk}. Default to PENDING_HUMAN."
-
+    # Backward-compatible shape for existing callers.
     result = {
-        "goal_id": goal_id,
-        "title": goal.get("title", ""),
-        "risk": risk,
-        "auto_approve": decision == "APPROVED",
-        "sandbox_only": sandbox_only,
-        "decision": decision,
-        "reason": reason,
-        "classified_at": datetime.now(timezone.utc).isoformat(),
+        "goal_id": gateway_result["goal_id"],
+        "title": gateway_result["title"],
+        "risk": gateway_result["risk"],
+        "auto_approve": gateway_result["gateway_decision"] == "ALLOW",
+        "sandbox_only": gateway_result["sandbox_only"],
+        "decision": "APPROVED" if gateway_result["gateway_decision"] == "ALLOW" else "PENDING_HUMAN",
+        "reason": gateway_result["reason"],
+        "gateway_decision": gateway_result["gateway_decision"],
+        "classified_at": gateway_result["classified_at"],
     }
 
     # Log the classification

@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
-  "last_updated": "2026-06-14T04:57:46Z",
-  "updated_by": "Sz AO5_T32 self_state update — T7-T31 closeout + key_realizations section",
+  "last_updated": "2026-06-14T21:47:00Z",
+  "updated_by": "Sz AO5_T39 self_state update — T37/T38 gateway closeout + exact backup filename verification",
   "identity": {
     "what_i_am": "Project-S вЂ” egy kontrollГЎlt autonГіm AI governance rendszer, persistent file-based self-model-lal. SAI (SuperIntelligentAI) az egyetlen aktГ­v Doer runtime, MetaController aktГ­v a SAI-en belГјl use_meta_controller=True Гєton, Interactive Layer v1 a verified operator-facing entry surface.",
     "what_i_am_not": [
@@ -1465,6 +1465,59 @@
         "Verification: event_bus type = EventBus, error_handler type = ErrorHandler"
       ],
       "classification": "infrastructure_cleanup"
+    },
+    {
+      "id": 48,
+      "date": "2026-06-14",
+      "title": "AO5_T37 Risk-Classified Auto-Approval Gateway — implemented",
+      "status": "completed",
+      "summary": "bridge_runner.py and risk_classifier.py now enforce explicit ALLOW, PAUSE, and DENY gateway behavior before SCL verdicting. LOW auto-approves, MEDIUM pauses for human approval, HIGH blocks. The gateway became the controlling approval boundary without changing unrelated consume/checksum flow.",
+      "evidence": [
+        "orchestrator_runtime/governance/bridge_runner.py",
+        "orchestrator_runtime/governance/risk_classifier.py",
+        "reports/MS_AO5_T37_AO1_2_IMPLEMENT_RISK_CLASSIFIED_AUTO_APPROVAL_GATEWAY_20260614.md"
+      ],
+      "classification": "governance_gateway"
+    },
+    {
+      "id": 49,
+      "date": "2026-06-14",
+      "title": "AO5_T38 Gateway End-to-End Validation — real consume proved",
+      "status": "completed",
+      "summary": "Three real bridge_runner consume handshakes validated the T37 gateway end to end. LOW -> ALLOW -> DONE, MEDIUM -> PAUSE -> AWAIT_HUMAN, HIGH -> DENY -> BLOCKED. Zero divergences versus the T37 synthetic validation set.",
+      "evidence": [
+        "orchestrator_runtime/cline_outbox/ao5_t38_low/",
+        "orchestrator_runtime/cline_outbox/ao5_t38_medium/",
+        "orchestrator_runtime/cline_outbox/ao5_t38_high/",
+        "orchestrator_runtime/sandbox/ao5_t38_e2e_validation.json",
+        "reports/MS_AO5_T38_GATEWAY_E2E_VALIDATION_20260614.md"
+      ],
+      "classification": "validation_proof"
+    },
+    {
+      "id": 50,
+      "date": "2026-06-14",
+      "title": "AO5_T38 safe-default behavior clarified for unknown run_id",
+      "status": "completed",
+      "summary": "The first T38 attempt used AO5_T38_LOW / MEDIUM / HIGH, which are absent from goal_queue.json. The gateway correctly returned DENY as a safe default. This is a safety-net behavior, not a classification regression.",
+      "evidence": [
+        "orchestrator_runtime/sandbox/ao5_t38_e2e_validation.json",
+        "Unknown run_id -> DENY in first T38 attempt"
+      ],
+      "classification": "safety_default_verified"
+    },
+    {
+      "id": 51,
+      "date": "2026-06-14",
+      "title": "AO5_T39 self_state update — exact evidence recorded",
+      "status": "completed",
+      "summary": "Self_state synced with T37/T38 story, milestone progression, and exact backup filenames verified on disk before recording them in evidence. Milestone count advanced 47 -> 51 and key_realizations 7 -> 11.",
+      "evidence": [
+        "bridge_runner.py.bak_t37_20260614_210914",
+        "risk_classifier.py.bak_t37_20260614_210914",
+        "reports/MS_AO5_T39_SELF_STATE_UPDATE_20260614.md"
+      ],
+      "classification": "state_sync"
     }
   ],
   "bridges": {
@@ -1838,8 +1891,8 @@
       "mitigation_validated": "2026-06-01"
     }
   ],
-  "active_focus": "Sz post-archaeology decision point — Continuous Mind v0.1 OR Strategic Vision multi-AI synthesis",
-  "next_concrete_step": "Either: (a) CM v0.1 Phase 1 (continuous_loop heartbeat + git_observer feeding real diffs to CWI), or (b) wait for additional Strategic Vision v3 multi-AI responses, or (c) verdict_evaluator deep dive (3rd ghost candidate untouched).",
+  "active_focus": "Sz post-archaeology decision point — Continuous Mind v0.1 OR Strategic Vision multi-AI synthesis (T37/T38 gateway proven)",
+  "next_concrete_step": "T39 self_state update complete; next concrete step: verdict_evaluator deep dive, CM v0.1, or Strategic Vision v3 follow-up.",
   "key_realizations": [
     {
       "id": "KR_001",
@@ -1882,6 +1935,30 @@
       "date": "2026-06-14",
       "realization": "Sz architecturálisan kész. EventBus + ErrorHandler valós, CWI pipeline él, telemetry stabil, 3-node backup szinkronban. Következő lépés: Continuous Mind v0.1 vagy verdict_evaluator deep dive vagy strategic pause.",
       "context": "T31 closeout, post-archaeology state"
+    },
+    {
+      "id": "KR_008",
+      "date": "2026-06-14",
+      "realization": "T37 inserted the controlling risk gateway at bridge_runner before SCL: explicit ALLOW, PAUSE, DENY decisions now gate execution requests.",
+      "context": "AO5_T37 implementation"
+    },
+    {
+      "id": "KR_009",
+      "date": "2026-06-14",
+      "realization": "T38 real consume validation matched the T37 synthetic cases exactly: LOW=ALLOW/DONE, MEDIUM=PAUSE/AWAIT_HUMAN, HIGH=DENY/BLOCKED, with zero divergences.",
+      "context": "AO5_T38 real E2E validation"
+    },
+    {
+      "id": "KR_010",
+      "date": "2026-06-14",
+      "realization": "Unknown run_id is a safe-default path, not a success signal: if a goal id is missing from goal_queue.json, the gateway returns DENY.",
+      "context": "AO5_T38 first attempt used non-queued IDs"
+    },
+    {
+      "id": "KR_011",
+      "date": "2026-06-14",
+      "realization": "Exact backup filenames must be verified on disk before recording evidence. Confirmed names: bridge_runner.py.bak_t37_20260614_210914 and risk_classifier.py.bak_t37_20260614_210914.",
+      "context": "AO5_T39 evidence hygiene"
     }
   ]
 }

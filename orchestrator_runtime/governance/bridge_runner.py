@@ -151,50 +151,31 @@ def _atomic_write_output_ready(data: dict):
     tmp.replace(path)
 
 
-# ── HIGH risk gate ────────────────────────────────────────────────────
+# ── Risk-classified approval gateway ──────────────────────────────────
 
-def _check_high_risk_gate(run_id: str) -> dict | None:
+def _evaluate_execution_gateway(run_id: str) -> dict:
     """
-    Check if run_id corresponds to a HIGH risk goal that requires human approval.
-    Returns verdict dict if gate blocks, None if proceed to SCL.
+    Classify execution request into explicit ALLOW/PAUSE/DENY actions.
+
+    Returns dict with at least:
+      gateway_decision: ALLOW | PAUSE | DENY
+      decision: APPROVED | PENDING_HUMAN | BLOCKED_POLICY
+      reason: str
     """
-    # Check goal_queue.json
-    goal_queue_path = Path(__file__).parent.parent.parent / "goal_queue.json"
-    if goal_queue_path.exists():
-        try:
-            with open(goal_queue_path, "r", encoding="utf-8-sig") as f:
-                queue = json.load(f)
-            for goal in queue.get("goals", []):
-                if goal.get("id") == run_id:
-                    if goal.get("risk") == "HIGH" and not goal.get("auto_approve", False):
-                        return {
-                            "status": "PENDING_HUMAN",
-                            "reason": f"HIGH risk goal '{goal.get('title', run_id)}' requires human approval before verdict",
-                            "goal_id": run_id,
-                            "action": "AWAIT_HUMAN",
-                        }
-        except (json.JSONDecodeError, IOError):
-            pass
-
-    # Check governance/hardening/ directory
-    hardening_dir = Path(__file__).parent / "hardening"
-    if hardening_dir.exists():
-        for f in hardening_dir.glob("*.json"):
-            try:
-                with open(f, "r", encoding="utf-8") as fh:
-                    goal = json.load(fh)
-                if goal.get("id") == run_id:
-                    if goal.get("risk") == "HIGH" and not goal.get("auto_approve", False):
-                        return {
-                            "status": "PENDING_HUMAN",
-                            "reason": f"HIGH risk goal '{goal.get('title', run_id)}' requires human approval before verdict",
-                            "goal_id": run_id,
-                            "action": "AWAIT_HUMAN",
-                        }
-            except (json.JSONDecodeError, IOError):
-                pass
-
-    return None
+    try:
+        from orchestrator_runtime.governance.risk_classifier import classify_execution_request
+        return classify_execution_request(run_id)
+    except Exception as e:
+        # Safety-first fallback: pause if classifier is unavailable.
+        return {
+            "goal_id": run_id,
+            "title": run_id,
+            "risk": "HIGH",
+            "gateway_decision": "PAUSE",
+            "decision": "PENDING_HUMAN",
+            "reason": f"Risk classifier unavailable ({e}); pausing for manual approval.",
+            "classified_at": datetime.now(timezone.utc).isoformat(),
+        }
 
 
 # ── Retry count tracking ──────────────────────────────────────────────
@@ -474,16 +455,39 @@ def get_verdict_for_content(content: str, run_id: str) -> dict:
     """
     Pass consumed content to self_correcting_loop for verdict.
 
-    HIGH RISK GATE: Before SCL, checks if run_id is a HIGH risk goal.
-    If so, returns PENDING_HUMAN instead of proceeding to SCL.
+    Risk-Classified Gateway: Before SCL, classify execution request as
+    ALLOW, PAUSE, or DENY.
     """
-    # HIGH risk gate check
-    gate_result = _check_high_risk_gate(run_id)
-    if gate_result is not None:
-        _log_cycle({"event": "bridge_high_risk_gate", "run_id": run_id,
-                     "gate_result": gate_result})
-        _notify("HIGH_RISK_GATE", f"HIGH risk goal {run_id} blocked — requires human approval")
-        return gate_result
+    gateway = _evaluate_execution_gateway(run_id)
+    gateway_decision = gateway.get("gateway_decision", "PAUSE")
+
+    if gateway_decision == "DENY":
+        blocked = {
+            "status": "BLOCKED_POLICY",
+            "reason": gateway.get("reason", "Execution denied by risk policy."),
+            "goal_id": run_id,
+            "action": "BLOCKED",
+            "gateway_decision": "DENY",
+            "gateway": gateway,
+        }
+        _log_cycle({"event": "bridge_gateway_deny", "run_id": run_id, "gateway": gateway})
+        _notify("HIGH_RISK_GATE", f"Gateway DENY for {run_id}: {blocked['reason']}")
+        return blocked
+
+    if gateway_decision == "PAUSE":
+        paused = {
+            "status": "PENDING_HUMAN",
+            "reason": gateway.get("reason", "Execution paused pending manual approval."),
+            "goal_id": run_id,
+            "action": "AWAIT_HUMAN",
+            "gateway_decision": "PAUSE",
+            "gateway": gateway,
+        }
+        _log_cycle({"event": "bridge_gateway_pause", "run_id": run_id, "gateway": gateway})
+        _notify("HIGH_RISK_GATE", f"Gateway PAUSE for {run_id}: {paused['reason']}")
+        return paused
+
+    _log_cycle({"event": "bridge_gateway_allow", "run_id": run_id, "gateway": gateway})
 
     # Determine PASS/FAIL from content
     verdict_status = "FAIL" if (
