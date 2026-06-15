@@ -136,3 +136,6 @@
 {"event": "bridge_consumed", "run_id": "CM_CM_T40_VERDICT_EVAL_T40", "iteration": 1, "checksum": "1796961a95237c66", "logged_at": "2026-06-14T19:27:23.293793+00:00"}
 {"event": "bridge_consumed", "run_id": "GOAL_005", "iteration": 1, "checksum": "abc4e8210c86f8e4", "logged_at": "2026-06-15T05:46:32.946066+00:00"}
 {"event": "bridge_consumed", "run_id": "AO5_T46_FAKE_SAI_OUTPUT", "iteration": 1, "checksum": "f490213d765e1fe8", "logged_at": "2026-06-15T08:03:16.525213+00:00"}
+{"event": "bridge_consumed", "run_id": "AO5_T47_SAI_CONTROLLED_EXECUTION", "iteration": 1, "checksum": "3517e1d2afe5a3bd", "logged_at": "2026-06-15T08:18:01.215081+00:00"}
+{"event": "bridge_gateway_deny", "run_id": "AO5_T47_SAI_CONTROLLED_EXECUTION", "gateway": {"goal_id": "AO5_T47_SAI_CONTROLLED_EXECUTION", "title": "UNKNOWN", "risk": "HIGH", "sandbox_only": false, "gateway_decision": "DENY", "decision": "BLOCKED_POLICY", "reason": "Goal AO5_T47_SAI_CONTROLLED_EXECUTION not found in goal_queue.json. Default deny.", "classified_at": "2026-06-15T08:18:01.218081+00:00"}, "logged_at": "2026-06-15T08:18:01.233083+00:00"}
+{"event": "bridge_reject_consumed", "run_id": "AO5_T47_SAI_CONTROLLED_EXECUTION", "logged_at": "2026-06-15T08:18:08.849930+00:00"}
