@@ -5,6 +5,17 @@
   "scope_draft_milestones_count": 6,
   "goals": [
     {
+      "id": "CM_T47_9_E2E_RETEST",
+      "title": "AO5_T47.9 -- independent CM-SAI e2e retest",
+      "source": "t47_9_validation",
+      "risk": "LOW",
+      "auto_approve": true,
+      "priority": 1,
+      "rationale": "Independent reproduction of T47.8 CM-SAI e2e flow.",
+      "status": "DONE",
+      "done_at": "2026-06-15T12:19:26.893652+00:00"
+    },
+    {
       "id": "CM_T47_8_SAI_TEST",
       "title": "T47.8 SAI Direct Mode Smoke Test ? Generate a one-line status check",
       "source": "t47_8_test",

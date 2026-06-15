@@ -748,6 +748,26 @@
       "decision": "APPROVED",
       "reason": "LOW risk request auto-approved by gateway policy.",
       "classified_at": "2026-06-15T12:09:45.172615+00:00"
+    },
+    {
+      "goal_id": "CM_T47_9_E2E_RETEST",
+      "title": "AO5_T47.9 -- independent CM-SAI e2e retest",
+      "risk": "LOW",
+      "sandbox_only": false,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T12:17:50.628535+00:00"
+    },
+    {
+      "goal_id": "CM_T47_9_E2E_RETEST",
+      "title": "AO5_T47.9 -- independent CM-SAI e2e retest",
+      "risk": "LOW",
+      "sandbox_only": false,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T12:19:26.780471+00:00"
     }
   ]
 }

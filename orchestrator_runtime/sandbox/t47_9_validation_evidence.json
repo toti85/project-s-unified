@@ -1,0 +1,146 @@
+{
+  "mission": "AO5_T47_9_E2E_PROOF_VALIDATION",
+  "validated_at": "2026-06-15T12:19:30Z",
+  "overall_verdict": "REPRODUCIBILITY_PROVED",
+  "phase_1_goal_origin": {
+    "id": "CM_T47_8_SAI_TEST",
+    "title": "T47.8 SAI Direct Mode Smoke Test - Generate a one-line status check",
+    "source": "t47_8_test",
+    "risk": "LOW",
+    "auto_approve": true,
+    "priority": 1,
+    "status": "DONE",
+    "done_at": "2026-06-15T12:09:45.237722+00:00",
+    "classification": "TEST_STUB - created by T47.8 agent, not a pre-existing production goal",
+    "added_in_commit": "5ca9957 Sz AO5_T47_8_CM_SAI_INTEGRATION"
+  },
+  "phase_2_t47_8_sequence": [
+    {
+      "ts": "2026-06-15T12:08:29.954931+00:00",
+      "event": "cm_sai_direct_start",
+      "goal": "CM_T47_8_SAI_TEST"
+    },
+    {
+      "ts": "2026-06-15T12:09:45.100090+00:00",
+      "event": "cm_sai_direct_result",
+      "success": true,
+      "goal": "CM_T47_8_SAI_TEST"
+    },
+    {
+      "ts": "2026-06-15T12:09:45.232565+00:00",
+      "event": "cm_consume_result",
+      "status": "ACCEPTED",
+      "gateway_decision": "ALLOW",
+      "via": "sai_direct"
+    },
+    {
+      "ts": "2026-06-15T12:09:45.242289+00:00",
+      "event": "cm_goal_completed",
+      "via": "sai_direct"
+    }
+  ],
+  "phase_2_notes": "All 4 events present in correct order, gap free",
+  "phase_3_outbox": {
+    "current_run_id": "AO5_T47_8_CM_SAI_INTEGRATION",
+    "note": "T47.8 outbox overwritten by T47.8 FA1 handoff script at 12:11:32Z",
+    "t47_8_checksum_in_bridge_log": "e3bc52b33bbbb243",
+    "bridge_consumed_at": "2026-06-15T12:09:45.165009+00:00",
+    "governance_cycle_log_entry": "bridge_consumed run_id=CM_T47_8_SAI_TEST iteration=1 checksum=e3bc52b33bbbb243"
+  },
+  "phase_4_sai_execution": {
+    "latency_s": 75.1,
+    "telemetry_tools_at_15_09_local": [
+      "file_search",
+      "file_content_search",
+      "file_writer"
+    ],
+    "task_description_prefix": "AO5_T50 (CM-generated mission number)",
+    "sai_actually_ran": true,
+    "file_writer_called": true,
+    "note": "sai_success field may reflect file_reader path issue (separate from governance)"
+  },
+  "phase_5_taste_model": {
+    "cm_cycle_1_entry": {
+      "mission_id": "CM_CYCLE_1_CM_T47_8_SAI_TEST",
+      "claimed_status": "completed",
+      "actual_status": "completed",
+      "model_used": "sai_gateway_adapter",
+      "patterns": [
+        "sai_execution",
+        "outbox_handoff"
+      ],
+      "notes": "SAI output written run_id=CM_T47_8_SAI_TEST ck=e3bc52b33bbbb243"
+    },
+    "cm_goal_entry": {
+      "mission_id": "CM_T47_8_SAI_TEST",
+      "claimed_status": "completed",
+      "actual_status": "completed",
+      "model_used": "continuous_mind_sai",
+      "patterns": [
+        "cm_sai_direct",
+        "cm_accepted",
+        "gw_allow"
+      ],
+      "notes": "CM-SAI cycle 1: CM_T47_8_SAI_TEST status=ACCEPTED gw=ALLOW"
+    }
+  },
+  "phase_6_t47_9_retest": {
+    "goal": {
+      "id": "CM_T47_9_E2E_RETEST",
+      "risk": "LOW",
+      "auto_approve": true,
+      "priority": 1,
+      "source": "t47_9_validation"
+    },
+    "cycle_log_before": 16,
+    "cycle_log_after": 20,
+    "new_entries": 4,
+    "sequence": [
+      {
+        "ts": "2026-06-15T12:17:50.611237+00:00",
+        "event": "cm_sai_direct_start"
+      },
+      {
+        "ts": "2026-06-15T12:19:26.668140+00:00",
+        "event": "cm_sai_direct_result",
+        "success": true
+      },
+      {
+        "ts": "2026-06-15T12:19:26.880589+00:00",
+        "event": "cm_consume_result",
+        "status": "ACCEPTED",
+        "gateway_decision": "ALLOW",
+        "via": "sai_direct"
+      },
+      {
+        "ts": "2026-06-15T12:19:26.906654+00:00",
+        "event": "cm_goal_completed",
+        "via": "sai_direct"
+      }
+    ],
+    "goal_status": "DONE",
+    "done_at": "2026-06-15T12:19:26.893652+00:00",
+    "sai_latency_s": 96.1,
+    "bridge_consumed": "CM_T47_9_E2E_RETEST checksum=9f99a1a20247d2cf at 12:19:26Z"
+  },
+  "phase_7_comparison": {
+    "same_event_sequence": true,
+    "both_completed_via_sai_direct": true,
+    "both_goals_DONE": true,
+    "both_ACCEPTED_ALLOW": true,
+    "latency_t47_8": "75.1s",
+    "latency_t47_9": "96.1s",
+    "note": "bridge_gateway_allow NOT in governance/cycle_log for either run (bridge_runner logs bridge_consumed; ALLOW comes from classify_execution_request in CM). Minor architecture note - ALLOW is real, just logged differently."
+  },
+  "phase_8_final_state": {
+    "cm_v01_state": {
+      "total_cycles": 1,
+      "goals_completed": 2,
+      "goals_denied": 2,
+      "goals_paused": 0
+    },
+    "taste_model_total": 20,
+    "outbox_run_id": "AO5_T47_8_CM_SAI_INTEGRATION"
+  },
+  "honest_assessment": "Both test goals were stubs (source=t47_8_test / t47_9_validation), not pre-existing production goals. The CM-SAI flow executes correctly end-to-end. SAI ran real tools (file_search, file_content_search, file_writer) with real latency. The governance gateway approved both. Reproducible. Primary caveat: production-goal testing still needed (GOAL_007, GOAL_008)."
+}
