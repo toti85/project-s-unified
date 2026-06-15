@@ -568,6 +568,76 @@
       "decision": "BLOCKED_POLICY",
       "reason": "HIGH risk request is blocked by policy.",
       "classified_at": "2026-06-15T05:46:32.951098+00:00"
+    },
+    {
+      "goal_id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T07:06:21.867426+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T3_HIGH",
+      "title": "Modify production config file",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "HIGH risk request is blocked by policy.",
+      "classified_at": "2026-06-15T07:06:21.885398+00:00"
+    },
+    {
+      "goal_id": "SAI_FAKE_UNKNOWN_001",
+      "title": "UNKNOWN",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "Goal SAI_FAKE_UNKNOWN_001 not found in goal_queue.json. Default deny.",
+      "classified_at": "2026-06-15T07:06:21.901933+00:00"
+    },
+    {
+      "goal_id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T07:06:31.146823+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T3_HIGH",
+      "title": "Modify production config file",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "HIGH risk request is blocked by policy.",
+      "classified_at": "2026-06-15T07:06:31.278673+00:00"
+    },
+    {
+      "goal_id": "SAI_FAKE_UNKNOWN_001",
+      "title": "UNKNOWN",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "Goal SAI_FAKE_UNKNOWN_001 not found in goal_queue.json. Default deny.",
+      "classified_at": "2026-06-15T07:06:31.401002+00:00"
+    },
+    {
+      "goal_id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T07:06:31.529611+00:00"
     }
   ]
 }
