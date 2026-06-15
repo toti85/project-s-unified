@@ -1,0 +1,159 @@
+{
+  "audit_id": "AO5_T47_AUDIT_DIAGNOSIS",
+  "audited_mission": "AO5_T47_SAI_CONTROLLED_EXECUTION",
+  "audit_date": "2026-06-15",
+  "auditor": "Sz (GitHub Copilot)",
+  "mode": "READ-ONLY",
+
+  "phase1_outbox_history": {
+    "files_in_last_24h": [
+      {
+        "path": "orchestrator_runtime/cline_outbox/last_output.md",
+        "bytes": 2305,
+        "last_write": "2026-06-15T11:19:43 (local) = 08:19:43 UTC",
+        "note": "FINAL HANDOFF write — agent summary after bridge_runner consume"
+      },
+      {
+        "path": "orchestrator_runtime/cline_outbox/output_ready.json",
+        "bytes": 214,
+        "last_write": "2026-06-15T11:19:43 (local) = 08:19:43 UTC",
+        "note": "Corresponds to final handoff write, checksum=8c5ff833efb3aea2, consumed=false"
+      },
+      {
+        "path": "orchestrator_runtime/cline_outbox/output_ready_ao5_t42.json",
+        "bytes": 201,
+        "last_write": "2026-06-15T10:08:00 (local)",
+        "note": "T42 archived copy"
+      }
+    ],
+    "total_files": 14,
+    "observation": "The outbox IS active. Two writes happened today: first the T47 SAI execution write (checksum 3517e1d2afe5a3bd, ~08:17 UTC), then the final handoff write (checksum 8c5ff833efb3aea2, ~08:19 UTC). The final write OVERWROTE the consumed outbox with a summary document."
+  },
+
+  "phase2_execution_evidence": {
+    "script": "orchestrator_runtime/sandbox/t47_sai_controlled_execution.py",
+    "output_path_used": "orchestrator_runtime/cline_outbox/last_output.md",
+    "protocol": "write_sai_output_to_outbox() from sai_gateway_adapter.py — standard cline_outbox path",
+    "bridge_runner_called_from_script": false,
+    "bridge_runner_called_separately": true,
+    "run_id_used": "AO5_T47_SAI_CONTROLLED_EXECUTION",
+    "goal_id_for_gate": "GOAL_007",
+    "sai_execution": {
+      "success": true,
+      "latency_s": 49.98,
+      "output_len_chars": 1356,
+      "error": null
+    },
+    "outbox_write_at_execution_time": {
+      "checksum": "3517e1d2afe5a3bd",
+      "timestamp_utc": "2026-06-15T08:17:03"
+    }
+  },
+
+  "phase3_cm_cycle_log": {
+    "total_entries": 141,
+    "t47_entries": [
+      {
+        "line": 139,
+        "event": "bridge_consumed",
+        "run_id": "AO5_T47_SAI_CONTROLLED_EXECUTION",
+        "checksum": "3517e1d2afe5a3bd",
+        "logged_at": "2026-06-15T08:18:01.215081+00:00",
+        "note": "PRIMARY ACCEPT — checksum match, run_id match, iteration match"
+      },
+      {
+        "line": 140,
+        "event": "bridge_gateway_deny",
+        "run_id": "AO5_T47_SAI_CONTROLLED_EXECUTION",
+        "gateway_reason": "Goal AO5_T47_SAI_CONTROLLED_EXECUTION not found in goal_queue.json. Default deny.",
+        "logged_at": "2026-06-15T08:18:01.218081+00:00",
+        "note": "POST-CONSUME VERDICT STEP used run_id as goal_id. run_id is not a goal_queue entry. Verdict: BLOCKED_POLICY. This means goal never marked DONE via standard verdict path."
+      },
+      {
+        "line": 141,
+        "event": "bridge_reject_consumed",
+        "run_id": "AO5_T47_SAI_CONTROLLED_EXECUTION",
+        "logged_at": "2026-06-15T08:18:08.849930+00:00",
+        "note": "Anti-double-consume: second consume call correctly rejected"
+      }
+    ]
+  },
+
+  "phase4_taste_model_audit": {
+    "log_outcome_call_sites": [
+      {
+        "file": "orchestrator_runtime/taste_model/mission_outcome_logger.py",
+        "line": 94,
+        "context": "def log_outcome() — the function definition itself"
+      },
+      {
+        "file": "orchestrator_runtime/taste_model/mission_outcome_logger.py",
+        "line": 165,
+        "context": "r = log_outcome(...) — called only from within the same file (demo/self-test block)"
+      }
+    ],
+    "called_from_sz_prompt_generator": false,
+    "called_from_continuous_mind": false,
+    "called_from_sai_gateway_adapter": false,
+    "called_from_t47_script": false,
+    "root_cause_t43_t47_missing": "log_outcome() is NEVER called from any mission execution pipeline. sz_prompt_generator.py READS mission_outcomes.jsonl (load_taste_model_summary) but never WRITES. continuous_mind.py has zero taste model references. The 12 records (T31-T42) were all manually backfilled by Sz at T43 setup time. There is NO automatic logging hook anywhere. T43-T47 are missing because nothing invoked log_outcome() during or after those missions."
+  },
+
+  "phase5_sai_gateway_adapter": {
+    "outbox_path_used": "_CLINE_OUTBOX = _ROOT / 'orchestrator_runtime' / 'cline_outbox'",
+    "uses_standard_cline_outbox": true,
+    "calls_bridge_runner": false,
+    "instantiates_sai": false,
+    "risk010_compliant_by_design": true,
+    "write_order": "1. last_output.md write  2. SHA-256 checksum compute  3. output_ready.json write (atomic rename from .tmp)"
+  },
+
+  "phase6_risk010_compliance": {
+    "current_checksum_in_output_ready": "8c5ff833efb3aea2",
+    "computed_sha256_of_last_output_md_first16": "8c5ff833efb3aea2",
+    "checksum_match": true,
+    "last_output_written_before_output_ready": true,
+    "current_output_ready_consumed": false,
+    "note": "The CURRENT outbox state is RISK_010 compliant for the final handoff write. The SAI execution write at 08:17 UTC was also RISK_010 compliant (adapter enforces it). However, the final handoff write at 08:19 UTC overwrote the consumed outbox — this second write has not been consumed by bridge_runner."
+  },
+
+  "phase7_honest_verdict": {
+    "Q1_standard_outbox_protocol": {
+      "answer": "PARTIAL",
+      "evidence": "T47 execution script DID write to standard cline_outbox via sai_gateway_adapter.write_sai_output_to_outbox(). The path is correct. However, AFTER bridge_runner consumed the SAI output, a second 'final handoff' write was made that overwrote the consumed outbox. This second write (checksum 8c5ff833efb3aea2) has never been consumed by bridge_runner — it is currently pending at consumed=false."
+    },
+    "Q2_accepted_verdict_verifiable": {
+      "answer": "YES — with caveats",
+      "proof_file": "orchestrator_runtime/governance/cycle_log.jsonl, line 139",
+      "proof": "{\"event\": \"bridge_consumed\", \"run_id\": \"AO5_T47_SAI_CONTROLLED_EXECUTION\", \"iteration\": 1, \"checksum\": \"3517e1d2afe5a3bd\", \"logged_at\": \"2026-06-15T08:18:01.215081+00:00\"}",
+      "caveat": "The POST-CONSUME verdict step (bridge_runner --verdict) got DENY because run_id 'AO5_T47_SAI_CONTROLLED_EXECUTION' is not in goal_queue.json. The initial ACCEPT is real and logged. But the goal was never officially marked DONE in the approval_log via verdict path."
+    },
+    "Q3_taste_model_missing": {
+      "answer": "No automatic hook exists. log_outcome() is never called from any mission pipeline.",
+      "root_cause": "Design gap: the Taste Model was built as a foundation (T43) with manual CLI tooling. No CM v0.1 integration, no bridge_runner integration, no sai_gateway_adapter integration. All 12 existing records were manually backfilled. T43-T47 missions produced no outputs that triggered log_outcome() because there is no trigger."
+    },
+    "Q4_parallel_pipeline": {
+      "answer": "PARTIAL",
+      "detail": "sandbox/t47_sai_controlled_execution.py is a manually-invoked script, not hooked into CM v0.1 or the bridge_runner workflow. It correctly calls write_sai_output_to_outbox() (standard path), but the overall flow is: agent writes script → agent runs script → agent separately calls bridge_runner CLI — rather than: CM v0.1 picks goal → generates prompt → waits for outbox → bridge_runner auto-consumes. The governance components (gate, outbox adapter, bridge_runner) are all genuine. The orchestration layer (CM v0.1 driving it) is absent."
+    },
+    "Q5_overall_verdict": {
+      "verdict": "B — Partial proof",
+      "reasoning": [
+        "GENUINE: SuperIntelligentAI.execute_intelligent_task() was invoked and ran for 49.98 seconds with real file reads and real AI output (1356 chars)",
+        "GENUINE: sai_pre_execution_gate() was called with goal_id=GOAL_007 and returned ALLOW",
+        "GENUINE: write_sai_output_to_outbox() wrote to standard cline_outbox with RISK_010 compliance",
+        "GENUINE: bridge_runner consume returned status=ACCEPTED (cycle_log line 139 confirms)",
+        "PARTIAL: bridge_gateway_deny logged immediately after consume — verdict step failed because run_id != goal_queue entry (run_id was 'AO5_T47_SAI_CONTROLLED_EXECUTION', not 'GOAL_007')",
+        "PARTIAL: A second 'final handoff' write overwrote the consumed outbox at 08:19 UTC — this has never been consumed by bridge_runner",
+        "MISSING: No Taste Model log entry created — this was not claimed but is an ongoing gap",
+        "MISSING: CM v0.1 did not orchestrate this — it was a manually-run sandbox script"
+      ]
+    }
+  },
+
+  "anomaly_resolution": {
+    "anomaly_1_outbox_empty": "FALSE — outbox is NOT empty. last_output.md (2305 bytes) and output_ready.json exist and were written today at 11:19 local time. The 'empty' perception may come from checking between the bridge_runner consume (which marks consumed=true) and the subsequent final handoff write (which reset to consumed=false). The final handoff write is currently unconsumed.",
+    "anomaly_2_taste_model_missing": "CONFIRMED. T43-T47 are missing because log_outcome() has no automatic call site in any pipeline. Design gap — not a bug in the logger itself.",
+    "anomaly_3_parallel_pipeline": "PARTIAL CONFIRMED. sandbox/t47_* files are support artifacts but the actual output (SAI execution content) did flow through the standard cline_outbox. The issue is that the final handoff overwrite happened AFTER consume, creating an unconsumed file with different content than what bridge_runner accepted."
+  }
+}
