@@ -35,6 +35,11 @@ _GOAL_QUEUE = _ROOT / "orchestrator_runtime" / "goal_queue.json"
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+try:
+    from orchestrator_runtime.taste_model.mission_outcome_logger import log_outcome as _log_outcome
+except Exception:
+    _log_outcome = None  # type: ignore[assignment]
+
 
 # ── Internal helpers ───────────────────────────────────────────────────
 
@@ -276,6 +281,22 @@ def write_sai_output_to_outbox(
         tmp = output_ready_path.with_suffix(".tmp")
         tmp.write_text(json.dumps(ready, indent=4, ensure_ascii=False), encoding="utf-8")
         tmp.replace(output_ready_path)  # atomic rename
+
+        if _log_outcome:
+            try:
+                _log_outcome(
+                    mission_id=mission_id,
+                    date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                    claimed_status="completed",
+                    actual_status="completed",
+                    model_used="sai_gateway_adapter",
+                    runtime_validated=True,
+                    value_immediate=3,
+                    patterns=["sai_execution", "outbox_handoff"],
+                    notes=f"SAI output written run_id={run_id} ck={checksum}",
+                )
+            except Exception:
+                pass  # logging must never break the outbox write
 
         return {
             "success": True,

@@ -57,6 +57,11 @@ STATE_PATH = ACTIVE_LOOPS_DIR / "cm_v01_state.json"
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src"))
 
+try:
+    from orchestrator_runtime.taste_model.mission_outcome_logger import log_outcome as _log_outcome
+except Exception:
+    _log_outcome = None  # type: ignore[assignment]
+
 # ── Logging ───────────────────────────────────────────────────────────
 
 logging.basicConfig(
@@ -565,6 +570,21 @@ def run_heartbeat(
                 "run_id": run_id,
                 "at": _now_iso(),
             })
+            if _log_outcome:
+                try:
+                    _log_outcome(
+                        mission_id=goal_id.upper(),
+                        date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                        claimed_status="failed",
+                        actual_status="failed",
+                        model_used="continuous_mind_v01",
+                        runtime_validated=False,
+                        value_immediate=3,
+                        patterns=["cm_cycle", "cm_output_timeout"],
+                        notes=f"CM cycle {cycle}: output timeout for {goal_id}",
+                    )
+                except Exception as exc:
+                    log.warning("log_outcome failed (cm_timeout): %s", exc)
             if once:
                 break
             time.sleep(heartbeat)
@@ -586,6 +606,27 @@ def run_heartbeat(
             "gateway_decision": gateway,
             "at": _now_iso(),
         })
+        if _log_outcome:
+            try:
+                _cm_log_status = (
+                    "completed" if (status == "ACCEPTED" and gateway == "ALLOW") else
+                    "blocked" if gateway == "DENY" else
+                    "partial" if gateway == "PAUSE" else
+                    "failed"
+                )
+                _log_outcome(
+                    mission_id=goal_id.upper(),
+                    date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                    claimed_status=_cm_log_status,
+                    actual_status=_cm_log_status,
+                    model_used="continuous_mind_v01",
+                    runtime_validated=(status == "ACCEPTED" and gateway == "ALLOW"),
+                    value_immediate=3,
+                    patterns=["cm_cycle", f"cm_{status.lower()}", f"gw_{gateway.lower()}"],
+                    notes=f"CM cycle {cycle}: {goal_id} status={status} gw={gateway}",
+                )
+            except Exception as exc:
+                log.warning("log_outcome failed (cm_consume): %s", exc)
 
         # ── Route by gateway decision ──────────────────────────────
         if status == "ACCEPTED" and gateway == "ALLOW":

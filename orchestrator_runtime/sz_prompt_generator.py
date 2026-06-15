@@ -20,6 +20,13 @@ HIGH_PRIORITY_MARKERS = {"HIGH", "URGENT", "CRITICAL", "P0", "P1"}
 DONE_MARKERS = {"DONE", "COMPLETED", "CLOSED", "RESOLVED"}
 TASTE_MODEL_LOG = ROOT / "orchestrator_runtime" / "taste_model" / "mission_outcomes.jsonl"
 
+try:
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from orchestrator_runtime.taste_model.mission_outcome_logger import log_outcome as _log_outcome
+except Exception:
+    _log_outcome = None  # type: ignore[assignment]
+
 
 def slugify(text: str) -> str:
     slug = re.sub(r"[^A-Za-z0-9]+", "_", text).strip("_")
@@ -456,6 +463,21 @@ def save_prompt(prompt_text: str, mission_number: int) -> Path:
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     path = MISSION_DIR / f"MS_AO5_T{mission_number}_DRAFT_{timestamp}.md"
     path.write_text(prompt_text, encoding="utf-8")
+    if _log_outcome:
+        try:
+            _log_outcome(
+                mission_id=f"AO5_T{mission_number}_DRAFT",
+                date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                claimed_status="draft_only",
+                actual_status="draft_only",
+                model_used="sz_prompt_generator",
+                runtime_validated=False,
+                value_immediate=3,
+                patterns=["sz_auto_draft", "draft_generated"],
+                notes=f"Auto-generated draft {len(prompt_text)} chars",
+            )
+        except Exception:
+            pass  # logging must never break draft generation
     return path
 
 
