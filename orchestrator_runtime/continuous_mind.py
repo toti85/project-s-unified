@@ -342,7 +342,7 @@ def _wait_for_output(run_id: str, timeout: int, poll_interval: int) -> bool:
 
 # ── Gateway consume ───────────────────────────────────────────────────
 
-def _consume_via_gateway(run_id: str, goal_id: str) -> dict:
+def _consume_via_gateway(run_id: str, goal_id: str, expected_iteration: int = 1) -> dict:
     """
     Consume executor output via bridge_runner, then resolve gateway decision.
 
@@ -355,7 +355,7 @@ def _consume_via_gateway(run_id: str, goal_id: str) -> dict:
     """
     try:
         from orchestrator_runtime.governance.bridge_runner import consume_executor_output
-        result = consume_executor_output(run_id, expected_iteration=1)
+        result = consume_executor_output(run_id, expected_iteration=expected_iteration)
     except Exception as exc:
         log.error("bridge_runner consume failed for %s: %s", run_id, exc)
         return {
@@ -488,7 +488,7 @@ def run_heartbeat(
             # Fallback: read cm_state for rough estimate
             mission_num = cm_state.get("total_cycles", cycle) + 39  # post-T39 baseline
 
-        run_id = f"CM_{goal_id}_T{mission_num}"
+        run_id = goal_id  # use bare goal_id so gateway can look it up in goal_queue
         cm_state["last_run_id"] = run_id
 
         # ── Generate prompt ────────────────────────────────────────
@@ -571,7 +571,7 @@ def run_heartbeat(
             continue
 
         # ── Gateway consume ────────────────────────────────────────
-        result = _consume_via_gateway(run_id, goal_id)
+        result = _consume_via_gateway(run_id, goal_id, expected_iteration=cm_state.get("total_cycles", cycle))
         status = result.get("status", "UNKNOWN")
         gateway = result.get("gateway_decision", "UNKNOWN")
 

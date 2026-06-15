@@ -4,7 +4,7 @@
   "total_cycles": 1,
   "goals_completed": 0,
   "goals_paused": 0,
-  "goals_denied": 0,
-  "last_cycle_at": "2026-06-14T19:21:14.677902+00:00",
-  "last_run_id": "CM_CM_T40_VERDICT_EVAL_T40"
+  "goals_denied": 2,
+  "last_cycle_at": "2026-06-15T05:45:52.803861+00:00",
+  "last_run_id": "GOAL_005"
 }

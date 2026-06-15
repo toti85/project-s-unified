@@ -2,3 +2,7 @@
 {"event": "cm_inbox_written", "cycle": 1, "goal_id": "CM_T40_VERDICT_EVAL", "run_id": "CM_CM_T40_VERDICT_EVAL_T40", "at": "2026-06-14T19:21:14.986219+00:00"}
 {"event": "cm_consume_result", "cycle": 1, "goal_id": "CM_T40_VERDICT_EVAL", "run_id": "CM_CM_T40_VERDICT_EVAL_T40", "status": "CONSUME_ERROR", "gateway_decision": "UNKNOWN", "at": "2026-06-14T19:27:05.211739+00:00"}
 {"event": "cm_goal_completed_manual_rescue", "cycle": 1, "goal_id": "CM_T40_VERDICT_EVAL", "run_id": "CM_CM_T40_VERDICT_EVAL_T40", "note": "CM closed with CONSUME_ERROR (missing expected_iteration bug). Manual rescue via --run-id mode gave ACCEPTED. goal_queue marked DONE manually. Bugs fixed in continuous_mind.py post-cycle.", "at": "2026-06-14T19:27:23.000000+00:00"}
+{"event": "cm_inbox_written", "cycle": 1, "goal_id": "GOAL_004", "run_id": "GOAL_004", "at": "2026-06-15T05:44:08.182009+00:00"}
+{"event": "cm_consume_result", "cycle": 1, "goal_id": "GOAL_004", "run_id": "GOAL_004", "status": "CONSUME_ERROR", "gateway_decision": "DENY", "at": "2026-06-15T05:44:53.211277+00:00"}
+{"event": "cm_inbox_written", "cycle": 1, "goal_id": "GOAL_005", "run_id": "GOAL_005", "at": "2026-06-15T05:45:52.922427+00:00"}
+{"event": "cm_consume_result", "cycle": 1, "goal_id": "GOAL_005", "run_id": "GOAL_005", "status": "ACCEPTED", "gateway_decision": "DENY", "at": "2026-06-15T05:46:32.966056+00:00"}

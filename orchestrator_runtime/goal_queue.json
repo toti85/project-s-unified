@@ -56,7 +56,9 @@
       "risk": "HIGH",
       "auto_approve": false,
       "priority": 4,
-      "rationale": "Highest complexity milestone. Introduces concurrency to the orchestrator."
+      "rationale": "Highest complexity milestone. Introduces concurrency to the orchestrator.",
+      "status": "DONE",
+      "done_at": "2026-06-15T05:44:53.213276+00:00"
     },
     {
       "id": "GOAL_005",
@@ -65,7 +67,9 @@
       "risk": "HIGH",
       "auto_approve": false,
       "priority": 5,
-      "rationale": "Directly writes to self_state.json — a production governance file."
+      "rationale": "Directly writes to self_state.json — a production governance file.",
+      "status": "DONE",
+      "done_at": "2026-06-15T05:46:32.968056+00:00"
     },
     {
       "id": "GOAL_006",
@@ -122,7 +126,9 @@
       "auto_approve": true,
       "sandbox_only": true,
       "priority": 11,
-      "touches": ["orchestrator_runtime/sandbox/t7_shared.txt"]
+      "touches": [
+        "orchestrator_runtime/sandbox/t7_shared.txt"
+      ]
     },
     {
       "id": "AO4_T7_GOAL_B",
@@ -132,7 +138,9 @@
       "auto_approve": true,
       "sandbox_only": true,
       "priority": 12,
-      "touches": ["orchestrator_runtime/sandbox/t7_shared.txt"]
+      "touches": [
+        "orchestrator_runtime/sandbox/t7_shared.txt"
+      ]
     },
     {
       "id": "AO4_T7_GOAL_C",
@@ -142,7 +150,9 @@
       "auto_approve": true,
       "sandbox_only": true,
       "priority": 13,
-      "touches": ["orchestrator_runtime/sandbox/t7_unique.txt"]
+      "touches": [
+        "orchestrator_runtime/sandbox/t7_unique.txt"
+      ]
     }
   ],
   "risk_breakdown": {

@@ -371,6 +371,203 @@
       "final_status": "DONE",
       "final_feedback": "﻿T24 CWI adapter test payload\n",
       "completed_at": "2026-06-11T06:42:08.499863+00:00"
+    },
+    {
+      "goal_id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-14T16:49:37.964081+00:00"
+    },
+    {
+      "goal_id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-14T16:49:37.973233+00:00"
+    },
+    {
+      "goal_id": "AO3_GOAL_007",
+      "final_verdict": "PASS",
+      "final_status": "DONE",
+      "final_feedback": "# AO3_GOAL_007\nRun ID: AO3_GOAL_007\nTask: Generate MS-AO1 Progress Report (read-only)\nAll sections written. No code modified.\nStatus: COMPLETED\n",
+      "completed_at": "2026-06-14T18:12:24.624863+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T2_GOV",
+      "title": "Generate sandbox test summary report",
+      "risk": "MEDIUM",
+      "sandbox_only": true,
+      "gateway_decision": "PAUSE",
+      "decision": "PENDING_HUMAN",
+      "reason": "MEDIUM risk request paused for explicit human approval.",
+      "classified_at": "2026-06-14T16:49:38.070837+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T2_GOV",
+      "title": "Generate sandbox test summary report",
+      "risk": "MEDIUM",
+      "sandbox_only": true,
+      "gateway_decision": "PAUSE",
+      "decision": "PENDING_HUMAN",
+      "reason": "MEDIUM risk request paused for explicit human approval.",
+      "classified_at": "2026-06-14T16:49:38.098232+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T3_HIGH",
+      "title": "Modify production config file",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "HIGH risk request is blocked by policy.",
+      "classified_at": "2026-06-14T16:49:38.131712+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T3_HIGH",
+      "title": "Modify production config file",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "HIGH risk request is blocked by policy.",
+      "classified_at": "2026-06-14T16:49:38.173818+00:00"
+    },
+    {
+      "goal_id": "AO5_T38_LOW",
+      "title": "UNKNOWN",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "Goal AO5_T38_LOW not found in goal_queue.json. Default deny.",
+      "classified_at": "2026-06-14T18:10:42.400437+00:00"
+    },
+    {
+      "goal_id": "AO5_T38_MEDIUM",
+      "title": "UNKNOWN",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "Goal AO5_T38_MEDIUM not found in goal_queue.json. Default deny.",
+      "classified_at": "2026-06-14T18:10:42.473695+00:00"
+    },
+    {
+      "goal_id": "AO5_T38_HIGH",
+      "title": "UNKNOWN",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "Goal AO5_T38_HIGH not found in goal_queue.json. Default deny.",
+      "classified_at": "2026-06-14T18:10:42.536735+00:00"
+    },
+    {
+      "goal_id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-14T18:11:34.618299+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T2_GOV",
+      "title": "Generate sandbox test summary report",
+      "risk": "MEDIUM",
+      "sandbox_only": true,
+      "gateway_decision": "PAUSE",
+      "decision": "PENDING_HUMAN",
+      "reason": "MEDIUM risk request paused for explicit human approval.",
+      "classified_at": "2026-06-14T18:11:34.808846+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T3_HIGH",
+      "title": "Modify production config file",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "HIGH risk request is blocked by policy.",
+      "classified_at": "2026-06-14T18:11:34.870157+00:00"
+    },
+    {
+      "goal_id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-14T18:12:24.404541+00:00"
+    },
+    {
+      "goal_id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-14T18:12:24.539646+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T2_GOV",
+      "title": "Generate sandbox test summary report",
+      "risk": "MEDIUM",
+      "sandbox_only": true,
+      "gateway_decision": "PAUSE",
+      "decision": "PENDING_HUMAN",
+      "reason": "MEDIUM risk request paused for explicit human approval.",
+      "classified_at": "2026-06-14T18:12:24.748549+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T2_GOV",
+      "title": "Generate sandbox test summary report",
+      "risk": "MEDIUM",
+      "sandbox_only": true,
+      "gateway_decision": "PAUSE",
+      "decision": "PENDING_HUMAN",
+      "reason": "MEDIUM risk request paused for explicit human approval.",
+      "classified_at": "2026-06-14T18:12:24.868039+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T3_HIGH",
+      "title": "Modify production config file",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "HIGH risk request is blocked by policy.",
+      "classified_at": "2026-06-14T18:12:24.949752+00:00"
+    },
+    {
+      "goal_id": "AO3_HARD_T3_HIGH",
+      "title": "Modify production config file",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "HIGH risk request is blocked by policy.",
+      "classified_at": "2026-06-14T18:12:25.070196+00:00"
+    },
+    {
+      "goal_id": "GOAL_005",
+      "title": "AO1.5 — Implement Self-State Auto-Update",
+      "risk": "HIGH",
+      "sandbox_only": false,
+      "gateway_decision": "DENY",
+      "decision": "BLOCKED_POLICY",
+      "reason": "HIGH risk request is blocked by policy.",
+      "classified_at": "2026-06-15T05:46:32.951098+00:00"
     }
   ]
 }
