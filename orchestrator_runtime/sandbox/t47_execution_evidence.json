@@ -1,7 +1,7 @@
 {
   "mission_id": "AO5_T47_SAI_CONTROLLED_EXECUTION",
   "goal_id": "GOAL_007",
-  "started_at": "2026-06-15T11:38:23.607437+00:00",
+  "started_at": "2026-06-15T11:49:04.569469+00:00",
   "gate": {
     "allowed": true,
     "gateway_action": "ALLOW",
@@ -34,23 +34,23 @@
           "gateway_decision": "ALLOW",
           "decision": "APPROVED",
           "reason": "LOW risk request auto-approved by gateway policy.",
-          "classified_at": "2026-06-15T11:38:23.632595+00:00"
+          "classified_at": "2026-06-15T11:49:04.591716+00:00"
         }
       }
     },
-    "evaluated_at": "2026-06-15T11:38:23.607437+00:00"
+    "evaluated_at": "2026-06-15T11:49:04.569469+00:00"
   },
-  "sai_latency_s": 75.06,
+  "sai_latency_s": 71.45,
   "sai_result": {
     "success": false,
     "output_len": 101,
     "error": null
   },
-  "completed_at": "2026-06-15T11:39:38.772560+00:00",
+  "completed_at": "2026-06-15T11:50:16.126869+00:00",
   "outbox_write": {
     "success": true,
     "run_id": "GOAL_007",
-    "checksum": "62e50c7802f79ca5",
+    "checksum": "f7cdd6a21c01f210",
     "last_output_path": "C:\\ProjectS-Unified\\orchestrator_runtime\\cline_outbox\\last_output.md",
     "output_ready_path": "C:\\ProjectS-Unified\\orchestrator_runtime\\cline_outbox\\output_ready.json",
     "error": null

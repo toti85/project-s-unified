@@ -718,6 +718,36 @@
       "decision": "APPROVED",
       "reason": "LOW risk request auto-approved by gateway policy.",
       "classified_at": "2026-06-15T11:40:25.486473+00:00"
+    },
+    {
+      "goal_id": "GOAL_007",
+      "title": "Generate MS-AO1 Progress Report — Document current state after AO1.1",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T11:49:04.591716+00:00"
+    },
+    {
+      "goal_id": "CM_T47_8_SAI_TEST",
+      "title": "T47.8 SAI Direct Mode Smoke Test ? Generate a one-line status check",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T12:08:29.968447+00:00"
+    },
+    {
+      "goal_id": "CM_T47_8_SAI_TEST",
+      "title": "T47.8 SAI Direct Mode Smoke Test ? Generate a one-line status check",
+      "risk": "LOW",
+      "sandbox_only": true,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T12:09:45.172615+00:00"
     }
   ]
 }

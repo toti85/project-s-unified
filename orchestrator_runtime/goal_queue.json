@@ -5,6 +5,17 @@
   "scope_draft_milestones_count": 6,
   "goals": [
     {
+      "id": "CM_T47_8_SAI_TEST",
+      "title": "T47.8 SAI Direct Mode Smoke Test ? Generate a one-line status check",
+      "source": "t47_8_test",
+      "risk": "LOW",
+      "auto_approve": true,
+      "priority": 1,
+      "rationale": "T47.8 live test: CM direct SAI execution. Read-only, no state changes.",
+      "status": "DONE",
+      "done_at": "2026-06-15T12:09:45.237722+00:00"
+    },
+    {
       "id": "CM_T40_VERDICT_EVAL",
       "title": "AO5_T40 — verdict_evaluator ghost candidate deep dive (READ-ONLY)",
       "source": "continuous_mind_v01",

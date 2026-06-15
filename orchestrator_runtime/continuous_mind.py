@@ -28,9 +28,11 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import asyncio
 import hashlib
 import json
 import logging
+import os
 import sys
 import time
 from datetime import datetime, timezone
@@ -388,6 +390,69 @@ def _consume_via_gateway(run_id: str, goal_id: str, expected_iteration: int = 1)
 
     return result
 
+# ── SAI direct execution (T47.8) ───────────────────────────────────────────
+
+def _execute_via_sai(goal_id: str, prompt: str, cycle: int) -> dict:
+    """
+    Run a goal directly through SAI (no human inbox handoff).
+    Calls sai_pre_execution_gate, executes SAI, writes to outbox.
+    Returns dict with: success, run_id, checksum, error.
+    Set CM_SAI_DIRECT_MODE=1 to enable this path in the CM cycle.
+    """
+    try:
+        from orchestrator_runtime.governance.sai_gateway_adapter import (
+            sai_pre_execution_gate,
+            write_sai_output_to_outbox,
+            build_sai_handoff_content,
+        )
+    except ImportError as exc:
+        return {"success": False, "reason": f"sai_gateway_adapter import failed: {exc}"}
+
+    try:
+        mission_id = f"CM_CYCLE_{cycle}_{goal_id}"
+
+        # Pre-execution gate
+        gate = sai_pre_execution_gate(mission_id, goal_id=goal_id)
+        if not gate["allowed"]:
+            return {
+                "success": False,
+                "reason": f"Gate denied: {gate.get('reason', 'unknown')}",
+                "gate": gate,
+            }
+
+        # Import and run SAI
+        from src.core.super_intelligent_ai import SuperIntelligentAI
+        ai = SuperIntelligentAI(use_meta_controller=False)
+
+        sai_result = asyncio.run(
+            asyncio.wait_for(
+                ai.execute_intelligent_task(prompt),
+                timeout=120,
+            )
+        )
+
+        # Build handoff content and write to outbox with goal_id as run_id
+        content = build_sai_handoff_content(mission_id, sai_result)
+        write_result = write_sai_output_to_outbox(
+            mission_id,
+            content,
+            iteration=cycle,
+            goal_id=goal_id,
+        )
+
+        return {
+            "success": write_result.get("success", False),
+            "run_id": write_result.get("run_id", goal_id),
+            "checksum": write_result.get("checksum"),
+            "sai_success": sai_result.get("success"),
+            "error": write_result.get("error"),
+        }
+
+    except asyncio.TimeoutError:
+        return {"success": False, "reason": "SAI timeout after 120s"}
+    except Exception as exc:
+        return {"success": False, "reason": f"SAI execution error: {exc}"}
+
 # ── CM state ──────────────────────────────────────────────────────────
 
 def _load_cm_state() -> dict:
@@ -531,6 +596,117 @@ def run_heartbeat(
             })
             _save_cm_state(cm_state)
             break  # dry-run always exits after first prompt
+
+        # ── SAI direct mode (CM_SAI_DIRECT_MODE=1) ────────────────
+        # Set CM_SAI_DIRECT_MODE=1 to enable direct SAI execution
+        # for auto_approve LOW/MEDIUM goals (skips inbox handoff).
+        use_sai_direct = (
+            goal.get("auto_approve", False)
+            and goal.get("risk", "HIGH") in ("LOW", "MEDIUM")
+            and os.environ.get("CM_SAI_DIRECT_MODE", "").lower() in ("1", "true", "yes")
+        )
+
+        if use_sai_direct:
+            log.info("SAI direct mode for goal %s (auto_approve+%s)", goal_id, goal.get("risk"))
+            _append_jsonl(CM_LOG_PATH, {
+                "event": "cm_sai_direct_start",
+                "cycle": cycle,
+                "goal_id": goal_id,
+                "at": _now_iso(),
+            })
+
+            sai_exec = _execute_via_sai(goal_id, prompt, cycle)
+
+            _append_jsonl(CM_LOG_PATH, {
+                "event": "cm_sai_direct_result",
+                "cycle": cycle,
+                "goal_id": goal_id,
+                "success": sai_exec.get("success"),
+                "sai_success": sai_exec.get("sai_success"),
+                "run_id": sai_exec.get("run_id"),
+                "reason": sai_exec.get("reason", ""),
+                "at": _now_iso(),
+            })
+
+            if sai_exec["success"]:
+                run_id = sai_exec["run_id"]
+                result = _consume_via_gateway(run_id, goal_id, expected_iteration=cycle)
+                status = result.get("status", "UNKNOWN")
+                gateway = result.get("gateway_decision", "UNKNOWN")
+
+                log.info("SAI consume result: status=%s gateway=%s", status, gateway)
+                _append_jsonl(CM_LOG_PATH, {
+                    "event": "cm_consume_result",
+                    "cycle": cycle,
+                    "goal_id": goal_id,
+                    "run_id": run_id,
+                    "status": status,
+                    "gateway_decision": gateway,
+                    "via": "sai_direct",
+                    "at": _now_iso(),
+                })
+                if _log_outcome:
+                    try:
+                        _sai_log_status = (
+                            "completed" if (status == "ACCEPTED" and gateway == "ALLOW") else
+                            "blocked" if gateway == "DENY" else
+                            "partial" if gateway == "PAUSE" else
+                            "failed"
+                        )
+                        _log_outcome(
+                            mission_id=goal_id.upper(),
+                            date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                            claimed_status=_sai_log_status,
+                            actual_status=_sai_log_status,
+                            model_used="continuous_mind_sai",
+                            runtime_validated=(status == "ACCEPTED" and gateway == "ALLOW"),
+                            value_immediate=3,
+                            patterns=["cm_sai_direct", f"cm_{status.lower()}", f"gw_{gateway.lower()}"],
+                            notes=f"CM-SAI cycle {cycle}: {goal_id} status={status} gw={gateway}",
+                        )
+                    except Exception as exc:
+                        log.warning("log_outcome failed (sai consume): %s", exc)
+
+                if status == "ACCEPTED" and gateway == "ALLOW":
+                    log.info("SAI ALLOW — goal %s completed.", goal_id)
+                    _mark_goal_done(goal_id)
+                    cm_state["goals_completed"] = cm_state.get("goals_completed", 0) + 1
+                    _append_jsonl(CM_LOG_PATH, {
+                        "event": "cm_goal_completed",
+                        "cycle": cycle,
+                        "goal_id": goal_id,
+                        "run_id": run_id,
+                        "via": "sai_direct",
+                        "at": _now_iso(),
+                    })
+                elif gateway == "PAUSE" or status in ("PENDING_HUMAN", "AWAIT_HUMAN"):
+                    log.warning("SAI PAUSE — goal %s queued for human review.", goal_id)
+                    cm_state["goals_paused"] = cm_state.get("goals_paused", 0) + 1
+                    _append_jsonl(PAUSE_QUEUE_PATH, {
+                        "goal_id": goal_id, "run_id": run_id, "cycle": cycle,
+                        "consume_result": result, "queued_at": _now_iso(),
+                    })
+                elif gateway == "DENY" or status == "BLOCKED_POLICY":
+                    log.warning("SAI DENY — goal %s blocked by policy.", goal_id)
+                    cm_state["goals_denied"] = cm_state.get("goals_denied", 0) + 1
+                    _append_jsonl(DENY_LOG_PATH, {
+                        "goal_id": goal_id, "run_id": run_id, "cycle": cycle,
+                        "consume_result": result, "denied_at": _now_iso(),
+                    })
+                    _mark_goal_done(goal_id)
+                else:
+                    log.info("SAI consume unhandled status=%s — continuing.", status)
+            else:
+                log.warning("SAI direct execution failed: %s", sai_exec.get("reason"))
+                # SAI failed — skip to next cycle (inbox fallback not used in T47.8)
+
+            _save_cm_state(cm_state)
+            if once:
+                log.info("--once flag set — exiting after SAI direct cycle.")
+                break
+            log.info("Sleeping %ds before next cycle.", heartbeat)
+            time.sleep(heartbeat)
+            continue  # skip inbox-write + polling below
 
         # ── Write inbox ────────────────────────────────────────────
         try:

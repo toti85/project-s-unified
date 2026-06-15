@@ -6,3 +6,11 @@
 {"event": "cm_consume_result", "cycle": 1, "goal_id": "GOAL_004", "run_id": "GOAL_004", "status": "CONSUME_ERROR", "gateway_decision": "DENY", "at": "2026-06-15T05:44:53.211277+00:00"}
 {"event": "cm_inbox_written", "cycle": 1, "goal_id": "GOAL_005", "run_id": "GOAL_005", "at": "2026-06-15T05:45:52.922427+00:00"}
 {"event": "cm_consume_result", "cycle": 1, "goal_id": "GOAL_005", "run_id": "GOAL_005", "status": "ACCEPTED", "gateway_decision": "DENY", "at": "2026-06-15T05:46:32.966056+00:00"}
+{"event": "cm_inbox_written", "cycle": 1, "goal_id": "GOAL_006", "run_id": "GOAL_006", "at": "2026-06-15T11:50:36.185350+00:00"}
+{"event": "cm_inbox_written", "cycle": 1, "goal_id": "GOAL_006", "run_id": "GOAL_006", "at": "2026-06-15T11:52:08.199595+00:00"}
+{"event": "cm_output_timeout", "cycle": 1, "goal_id": "GOAL_006", "run_id": "GOAL_006", "at": "2026-06-15T11:52:18.206690+00:00"}
+{"event": "cm_dry_run", "cycle": 1, "goal_id": "GOAL_006", "run_id": "GOAL_006", "prompt_chars": 3269, "at": "2026-06-15T12:07:33.295254+00:00"}
+{"event": "cm_sai_direct_start", "cycle": 1, "goal_id": "CM_T47_8_SAI_TEST", "at": "2026-06-15T12:08:29.954931+00:00"}
+{"event": "cm_sai_direct_result", "cycle": 1, "goal_id": "CM_T47_8_SAI_TEST", "success": true, "sai_success": false, "run_id": "CM_T47_8_SAI_TEST", "reason": "", "at": "2026-06-15T12:09:45.100090+00:00"}
+{"event": "cm_consume_result", "cycle": 1, "goal_id": "CM_T47_8_SAI_TEST", "run_id": "CM_T47_8_SAI_TEST", "status": "ACCEPTED", "gateway_decision": "ALLOW", "via": "sai_direct", "at": "2026-06-15T12:09:45.232565+00:00"}
+{"event": "cm_goal_completed", "cycle": 1, "goal_id": "CM_T47_8_SAI_TEST", "run_id": "CM_T47_8_SAI_TEST", "via": "sai_direct", "at": "2026-06-15T12:09:45.242289+00:00"}
