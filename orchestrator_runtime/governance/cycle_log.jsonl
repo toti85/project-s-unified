@@ -135,3 +135,4 @@
 {"event": "bridge_gateway_deny", "run_id": "AO3_AO3_HARD_T3_HIGH", "gateway": {"goal_id": "AO3_HARD_T3_HIGH", "title": "Modify production config file", "risk": "HIGH", "sandbox_only": false, "gateway_decision": "DENY", "decision": "BLOCKED_POLICY", "reason": "HIGH risk request is blocked by policy.", "classified_at": "2026-06-14T18:12:25.070196+00:00"}, "logged_at": "2026-06-14T18:12:25.138341+00:00"}
 {"event": "bridge_consumed", "run_id": "CM_CM_T40_VERDICT_EVAL_T40", "iteration": 1, "checksum": "1796961a95237c66", "logged_at": "2026-06-14T19:27:23.293793+00:00"}
 {"event": "bridge_consumed", "run_id": "GOAL_005", "iteration": 1, "checksum": "abc4e8210c86f8e4", "logged_at": "2026-06-15T05:46:32.946066+00:00"}
+{"event": "bridge_consumed", "run_id": "AO5_T46_FAKE_SAI_OUTPUT", "iteration": 1, "checksum": "f490213d765e1fe8", "logged_at": "2026-06-15T08:03:16.525213+00:00"}
