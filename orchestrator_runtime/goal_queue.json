@@ -5,6 +5,17 @@
   "scope_draft_milestones_count": 6,
   "goals": [
     {
+      "id": "CM_T47_11_VERDICT_LOG_TEST",
+      "title": "AO5_T47.11 -- verify bridge_gateway_allow logging",
+      "source": "t47_11_validation",
+      "risk": "LOW",
+      "auto_approve": true,
+      "priority": 1,
+      "rationale": "Verify bridge_runner verdict path executes in CM-SAI flow.",
+      "status": "DONE",
+      "done_at": "2026-06-15T12:32:36.248538+00:00"
+    },
+    {
       "id": "CM_T47_9_E2E_RETEST",
       "title": "AO5_T47.9 -- independent CM-SAI e2e retest",
       "source": "t47_9_validation",

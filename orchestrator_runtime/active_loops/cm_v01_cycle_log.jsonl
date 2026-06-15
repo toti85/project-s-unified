@@ -22,3 +22,7 @@
 {"event": "cm_sai_direct_result", "cycle": 1, "goal_id": "GOAL_008", "success": true, "sai_success": false, "run_id": "GOAL_008", "reason": "", "at": "2026-06-15T12:26:11.627507+00:00"}
 {"event": "cm_consume_result", "cycle": 1, "goal_id": "GOAL_008", "run_id": "GOAL_008", "status": "ACCEPTED", "gateway_decision": "ALLOW", "via": "sai_direct", "at": "2026-06-15T12:26:11.660092+00:00"}
 {"event": "cm_goal_completed", "cycle": 1, "goal_id": "GOAL_008", "run_id": "GOAL_008", "via": "sai_direct", "at": "2026-06-15T12:26:11.665096+00:00"}
+{"event": "cm_sai_direct_start", "cycle": 1, "goal_id": "CM_T47_11_VERDICT_LOG_TEST", "at": "2026-06-15T12:31:40.459075+00:00"}
+{"event": "cm_sai_direct_result", "cycle": 1, "goal_id": "CM_T47_11_VERDICT_LOG_TEST", "success": true, "sai_success": false, "run_id": "CM_T47_11_VERDICT_LOG_TEST", "reason": "", "at": "2026-06-15T12:32:36.187535+00:00"}
+{"event": "cm_consume_result", "cycle": 1, "goal_id": "CM_T47_11_VERDICT_LOG_TEST", "run_id": "CM_T47_11_VERDICT_LOG_TEST", "status": "ACCEPTED", "gateway_decision": "ALLOW", "via": "sai_direct", "at": "2026-06-15T12:32:36.245536+00:00"}
+{"event": "cm_goal_completed", "cycle": 1, "goal_id": "CM_T47_11_VERDICT_LOG_TEST", "run_id": "CM_T47_11_VERDICT_LOG_TEST", "via": "sai_direct", "at": "2026-06-15T12:32:36.250543+00:00"}

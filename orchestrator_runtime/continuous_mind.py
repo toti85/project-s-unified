@@ -372,21 +372,38 @@ def _consume_via_gateway(run_id: str, goal_id: str, expected_iteration: int = 1)
             "error": str(exc),
         }
 
-    # If consume succeeded, classify the GOAL (not the run_id) for gateway decision.
-    # The run_id encodes the goal_id but may not match queue keys directly.
+    # If consume succeeded, route through bridge_runner.get_verdict_for_content()
+    # (T47.11: fixes architectural gap — logs bridge_gateway_allow/deny to
+    # governance/cycle_log.jsonl for CM-SAI direct runs, completing audit trail).
     if result.get("status") == "ACCEPTED" and "gateway_decision" not in result:
         try:
-            from orchestrator_runtime.governance.risk_classifier import classify_execution_request
-            classification = classify_execution_request(goal_id)
-            result["gateway_decision"] = classification.get("gateway_decision", "ALLOW")
-            result["gateway_reason"] = classification.get("reason", "")
+            from orchestrator_runtime.governance.bridge_runner import get_verdict_for_content
+            last_output_path = OUTBOX_DIR / "last_output.md"
+            content = (
+                last_output_path.read_text(encoding="utf-8")
+                if last_output_path.exists()
+                else ""
+            )
+            # Pass goal_id as run_id so _evaluate_execution_gateway classifies correctly
+            verdict = get_verdict_for_content(content=content, run_id=goal_id)
+            result["gateway_decision"] = verdict.get("gateway_decision", "ALLOW")
+            result["gateway_reason"] = verdict.get("reason", "")
+            result["bridge_verdict"] = verdict
             log.info(
-                "Gateway classification for goal_id=%s: %s",
+                "bridge_runner verdict for goal_id=%s: %s",
                 goal_id, result["gateway_decision"],
             )
         except Exception as exc:
-            log.warning("Gateway classification failed for %s: %s — defaulting ALLOW", goal_id, exc)
-            result["gateway_decision"] = "ALLOW"
+            # Never break consume flow — fall back to local classify
+            log.warning("bridge_runner verdict call failed for %s: %s — fallback classify", goal_id, exc)
+            try:
+                from orchestrator_runtime.governance.risk_classifier import classify_execution_request
+                classification = classify_execution_request(goal_id)
+                result["gateway_decision"] = classification.get("gateway_decision", "ALLOW")
+                result["gateway_reason"] = classification.get("reason", "")
+            except Exception as exc2:
+                log.warning("Gateway classification also failed for %s: %s — defaulting ALLOW", goal_id, exc2)
+                result["gateway_decision"] = "ALLOW"
 
     return result
 
