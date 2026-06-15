@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
-  "last_updated": "2026-06-14T22:28:00Z",
-  "updated_by": "Sz AO5_T40 verdict_evaluator deep dive COMPLETE — CM v0.1 first real cycle closed",
+  "last_updated": "2026-06-15T12:42:01Z",
+  "updated_by": "Sz AO5_T47.12 self_state update ? T42-T47.11 closeout (Taste Model + CM-SAI integration + full E2E proof)",
   "identity": {
     "what_i_am": "Project-S вЂ” egy kontrollГЎlt autonГіm AI governance rendszer, persistent file-based self-model-lal. SAI (SuperIntelligentAI) az egyetlen aktГ­v Doer runtime, MetaController aktГ­v a SAI-en belГјl use_meta_controller=True Гєton, Interactive Layer v1 a verified operator-facing entry surface.",
     "what_i_am_not": [
@@ -1546,6 +1546,119 @@
         "src/orchestrator/filesystem_orchestrator.py:499 — _heuristic_evaluate() live path"
       ],
       "classification": "autonomy_first_cycle_partial"
+    },
+    {
+      "id": 54,
+      "date": "2026-06-15",
+      "title": "AO5_T42 CM v0.1 real bug fix and retest",
+      "status": "completed",
+      "summary": "T41 commit message claimed 'continuous_mind.py: 2 bugs fixed' but git diff was EMPTY ? declaration without implementation. T42 actually fixed both bugs: (1) run_id construction simplified to goal_id (line 491), (2) expected_iteration parameter added to _consume_via_gateway. Real retest: GOAL_005 ? ACCEPTED, NO CONSUME_ERROR. First explicit T41-style false-claim correction in Sz history.",
+      "evidence": [
+        "Commit 9b4fc46",
+        "4 actual lines changed in continuous_mind.py",
+        "Real --once execution: GOAL_005 ACCEPTED",
+        "Pattern: trust_verified_not_given established"
+      ],
+      "classification": "honest_correction_milestone"
+    },
+    {
+      "id": 55,
+      "date": "2026-06-15",
+      "title": "AO5_T43 Taste Model Foundation",
+      "status": "completed",
+      "summary": "Sz starts learning from its own decisions. Built orchestrator_runtime/taste_model/: schema.md, mission_outcome_logger.py (182 lines), query.py (237 lines), mission_outcomes.jsonl. Backfilled T31-T42 with Toti-rated values (avg 3.67, range 1-5). Passive mode ? data collection only, no read-back yet.",
+      "evidence": [
+        "Commit e0b07fb",
+        "12 backfill records",
+        "Cline-Qwen avg=4.2, Copilot avg=3.4, sz-auto-gen avg=3.0",
+        "T41 false_declaration captured as value=1"
+      ],
+      "classification": "taste_model_foundation"
+    },
+    {
+      "id": 56,
+      "date": "2026-06-15",
+      "title": "AO5_T44 Taste Model Active Read-Back",
+      "status": "completed",
+      "summary": "sz_prompt_generator.py integrated with Taste Model: reads recent outcomes + pattern statistics + value averages to inform next mission generation. Advisory only (passive read-back) ? generator can suggest based on history but doesn't force decisions.",
+      "evidence": [
+        "Commit 7ce39a9",
+        "sz_prompt_generator.py +83 lines",
+        "Read access to mission_outcomes.jsonl"
+      ],
+      "classification": "taste_model_integration"
+    },
+    {
+      "id": 57,
+      "date": "2026-06-15",
+      "title": "AO5_T45-T46 SAI Governance Gateway Adapter",
+      "status": "completed",
+      "summary": "T45 READ-ONLY governance discovery plan, T45.5 dry-run proved gateway routing logic, T46 production implementation. Built orchestrator_runtime/governance/sai_gateway_adapter.py (347 lines): sai_pre_execution_gate (kill_switch + budget + goal_queue + risk_classifier), write_sai_output_to_outbox (RISK_010 strict), build_sai_handoff_content (FA1_HANDOFF_V1 markdown). Fail-closed design: unknown goal ? DENY.",
+      "evidence": [
+        "Commits 18d43f4, cbe991e, 19e4ddb",
+        "sai_gateway_adapter.py 347 lines",
+        "sai_gateway_dry_run.py 262 lines",
+        "test_sai_gateway_adapter.py 214 lines"
+      ],
+      "classification": "sai_governance_layer"
+    },
+    {
+      "id": 58,
+      "date": "2026-06-15",
+      "title": "AO5_T47 First SAI execution via manual script + audit",
+      "status": "partial_pass_then_audited",
+      "summary": "T47 ran SAI via t47_sai_controlled_execution.py manual script for GOAL_007. SAI executed real tools (file_search, file_content_search, file_writer). Outbox write completed RISK_010 compliant. Bridge consume ACCEPTED. BUT: post-execution audit (T47 self-audit) revealed 3 gaps: (1) log_outcome had ZERO callers ? Taste Model cobbler's children, (2) bridge gateway DENY because mission_id != goal_id, (3) NOT CM-orchestrated. Verdict: B (partial proof).",
+      "evidence": [
+        "Commits a5f0edc, 0935017",
+        "t47_sai_controlled_execution.py 172 lines",
+        "Audit by Toti + Claude: B (partial proof)",
+        "3 architectural gaps identified for T47.6-T47.11 chain"
+      ],
+      "classification": "first_sai_execution_with_honest_audit"
+    },
+    {
+      "id": 59,
+      "date": "2026-06-15",
+      "title": "AO5_T47.6 run_id fix ? mission_id != goal_id problem solved",
+      "status": "completed",
+      "summary": "Added goal_id parameter to write_sai_output_to_outbox. When provided, run_id = goal_id (matches goal_queue), else run_id = mission_id (backward compat). t47 script updated to pass GOAL_ID. Real retest: output_ready.json run_id='GOAL_007', bridge gateway ALLOW (was DENY). Bug fix proved with git diff + retest.",
+      "evidence": [
+        "Commit c4f2129",
+        "sai_gateway_adapter.py +19/-4",
+        "t47_sai_controlled_execution.py +4/-2",
+        "Real retest: GOAL_007 ? ALLOW"
+      ],
+      "classification": "surgical_run_id_fix"
+    },
+    {
+      "id": 60,
+      "date": "2026-06-15",
+      "title": "AO5_T47.7 log_outcome integration ? Cobbler's children fixed",
+      "status": "completed",
+      "summary": "log_outcome() had ZERO external callers since T43. Added automatic hooks at 3 pipeline points: continuous_mind.py (4 events), sai_gateway_adapter.py (on outbox write), sz_prompt_generator.py (on draft save). All wrapped in try/except ? logging never breaks main flow. Live evidence: 3 new auto-logging models active. Taste Model 12 ? 16 records.",
+      "evidence": [
+        "Commit f1c5387",
+        "3 files modified",
+        "Auto-logging proven: sz_prompt_generator + sai_gateway_adapter + continuous_mind_v01",
+        "Taste Model now self-populates"
+      ],
+      "classification": "taste_model_self_logging"
+    },
+    {
+      "id": 61,
+      "date": "2026-06-15",
+      "title": "AO5_T47.8-T47.11 CM-SAI direct integration + bridge_runner verdict logging ? FULL E2E PROVED",
+      "status": "completed",
+      "summary": "T47.8 added CM-SAI direct execution mode (CM_SAI_DIRECT_MODE env var). T47.9 proved reproducibility with second test run. T47.10 ran on REAL production goal GOAL_008 (source=known_gaps): SAI latency 52.4s, real tools, ACCEPTED, gateway ALLOW, goal DONE. T47.11 closed architectural gap: bridge_runner.get_verdict_for_content now called from CM-direct path, writing bridge_gateway_allow events to governance/cycle_log.jsonl for complete audit trail. First real CM-orchestrated SAI execution on production goal with full governance logging.",
+      "evidence": [
+        "Commits 5ca9957, 462b7d7, 38560d6, f84e479",
+        "continuous_mind.py +176 + +25 lines",
+        "GOAL_008 DONE at 12:26:11Z (production goal, source=known_gaps)",
+        "CM_T47_11_VERDICT_LOG_TEST: bridge_gateway_allow logged",
+        "3 successful CM-SAI cycles (T47.8, T47.9, T47.10) + T47.11 verdict logging",
+        "Reproducibility proved, audit trail complete"
+      ],
+      "classification": "cm_sai_full_e2e_proved"
     }
   ],
   "bridges": {
@@ -1919,8 +2032,8 @@
       "mitigation_validated": "2026-06-01"
     }
   ],
-  "active_focus": "CM v0.1 infrastructure proved (partial). Next --once cycle should close cleanly: bugs fixed, executor=Copilot, gateway classification corrected.",
-  "next_concrete_step": "python orchestrator_runtime/continuous_mind.py --once  (next pending goal; cycle should close without manual rescue now)",
+  "active_focus": "Sz autonomy chain complete: CM-SAI direct e2e proved on production goal with full bridge_runner audit trail. Next: T48 SAI Quality Validation (multi-goal sample, comparative analysis Cline vs Copilot vs SAI).",
+  "next_concrete_step": "T48 SAI Quality Validation: select 10-20 historical/pending goals, run each through SAI direct mode, score via Taste Model, compare quality with Cline-Qwen and Copilot baselines. Latency, success rate, governance outcome, value score, false claim rate. Goal: determine if Sz autonomous loop can be trusted for continuous operation.",
   "key_realizations": [
     {
       "id": "KR_001",
@@ -1987,6 +2100,36 @@
       "date": "2026-06-14",
       "realization": "Exact backup filenames must be verified on disk before recording evidence. Confirmed names: bridge_runner.py.bak_t37_20260614_210914 and risk_classifier.py.bak_t37_20260614_210914.",
       "context": "AO5_T39 evidence hygiene"
+    },
+    {
+      "id": "KR_012",
+      "date": "2026-06-15",
+      "realization": "Trust is verified, not given. T41 commit message claimed '2 bugs fixed' but git diff was empty. Toti detected via direct git diff. T42 actually fixed and proved with retest. Pattern: every src/-modification claim now verified by git diff before acceptance.",
+      "context": "T41 ? T42 honest correction cycle"
+    },
+    {
+      "id": "KR_013",
+      "date": "2026-06-15",
+      "realization": "A Taste Model 'Cobbler's children problem': T43 built mission_outcome_logger but had ZERO external callers for 4 missions. T47.7 fixed by adding automatic hooks at 3 pipeline points. Sz now self-logs every execution. Lesson: building data infrastructure != populating it ? both must be designed together.",
+      "context": "T43 build ? T47 audit ? T47.7 fix"
+    },
+    {
+      "id": "KR_014",
+      "date": "2026-06-15",
+      "realization": "SAI gateway adapter (T46) achieves fail-closed governance: unknown goal_id ? DENY, kill_switch active ? DENY, budget exhausted ? DENY. No exceptions propagate to caller. Production-grade safety pattern: every gate has a default-deny branch.",
+      "context": "T46 sai_gateway_adapter.py implementation"
+    },
+    {
+      "id": "KR_015",
+      "date": "2026-06-15",
+      "realization": "CM-SAI direct integration (T47.8-T47.10) proved real production goal execution: GOAL_008 (source=known_gaps) ran through full chain CM ? gate ? SAI ? outbox ? bridge consume ? verdict ALLOW ? DONE. Latency 52.4s, real tools, real file writes. Sz autonomous execution cycle first production proof.",
+      "context": "T47.10 GOAL_008 e2e execution"
+    },
+    {
+      "id": "KR_016",
+      "date": "2026-06-15",
+      "realization": "Bridge_runner.get_verdict_for_content is the authoritative verdict logger. T47.10 revealed CM was using classify_execution_request locally ? gateway decisions were correct but NOT logged to governance/cycle_log.jsonl. T47.11 routed through bridge_runner verdict path. Lesson: governance audit trail requires central logger, not distributed decisions.",
+      "context": "T47.10 audit gap ? T47.11 fix"
     }
   ]
 }
