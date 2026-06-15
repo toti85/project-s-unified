@@ -134,9 +134,11 @@ async def run_sai_mission() -> dict:
         print(f"[T47] Error: {sai_result.get('error')}")
 
     # ── Phase 4: Write to outbox ──────────────────────────────────────
-    print(f"\n[T47] Phase 4: writing to outbox...")
+    print(f"\n[T47] Phase 4: writing to outbox (run_id={GOAL_ID})...")
     content = build_sai_handoff_content(MISSION_ID, sai_result)
-    write_result = write_sai_output_to_outbox(MISSION_ID, content, iteration=1)
+    write_result = write_sai_output_to_outbox(
+        MISSION_ID, content, iteration=1, goal_id=GOAL_ID
+    )
     evidence["outbox_write"] = write_result
     print(f"[T47] Outbox write: success={write_result['success']} checksum={write_result.get('checksum')}")
 

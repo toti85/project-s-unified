@@ -218,6 +218,7 @@ def write_sai_output_to_outbox(
     content: str,
     iteration: int = 1,
     metadata: dict[str, Any] | None = None,
+    goal_id: str | None = None,
 ) -> dict[str, Any]:
     """
     Write SAI execution result to FA1_HANDOFF_V1 format so bridge_runner can consume it.
@@ -229,10 +230,13 @@ def write_sai_output_to_outbox(
 
     Parameters
     ----------
-    mission_id : str   Used as run_id in output_ready.json.
-    content    : str   The SAI execution output (markdown).
-    iteration  : int   Expected iteration number (default 1).
-    metadata   : dict  Optional extra fields merged into output_ready.json.
+    mission_id : str        Used as run_id fallback if goal_id is not provided.
+    content    : str        The SAI execution output (markdown).
+    iteration  : int        Expected iteration number (default 1).
+    metadata   : dict       Optional extra fields merged into output_ready.json.
+    goal_id    : str | None When provided, used as run_id instead of mission_id so
+                            bridge_runner can match it against goal_queue.json and
+                            proceed to the verdict step without a DENY.
 
     Returns
     -------
@@ -257,8 +261,9 @@ def write_sai_output_to_outbox(
         checksum = _sha256_file_16(last_output_path)
 
         # ── Step 3: Write output_ready.json LAST ──────────────────────
+        run_id = goal_id if goal_id else mission_id
         ready: dict[str, Any] = {
-            "run_id": mission_id,
+            "run_id": run_id,
             "iteration": iteration,
             "timestamp": _ts(),
             "status": "ready",
@@ -274,7 +279,7 @@ def write_sai_output_to_outbox(
 
         return {
             "success": True,
-            "run_id": mission_id,
+            "run_id": run_id,
             "checksum": checksum,
             "last_output_path": str(last_output_path),
             "output_ready_path": str(output_ready_path),
@@ -284,7 +289,7 @@ def write_sai_output_to_outbox(
     except Exception as exc:
         return {
             "success": False,
-            "run_id": mission_id,
+            "run_id": goal_id if goal_id else mission_id,
             "checksum": None,
             "last_output_path": None,
             "output_ready_path": None,
