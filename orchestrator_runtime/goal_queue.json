@@ -117,8 +117,10 @@
       "source": "known_gaps",
       "risk": "LOW",
       "auto_approve": true,
-      "priority": 8,
-      "rationale": "Read-only audit of self_state.json known_gaps."
+      "priority": 1,
+      "rationale": "Read-only audit of self_state.json known_gaps.",
+      "status": "DONE",
+      "done_at": "2026-06-15T12:26:11.662094+00:00"
     },
     {
       "id": "AO3_HARD_T2_GOV",

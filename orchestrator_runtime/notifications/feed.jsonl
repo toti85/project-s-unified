@@ -264,3 +264,6 @@
 {"timestamp": "2026-06-15T12:17:50.669812+00:00", "event_type": "GOAL_APPROVED", "goal_id": "CM_T47_9_E2E_RETEST", "message": "Gateway ALLOW — LOW risk request auto-approved by gateway policy.", "severity": "INFO", "read": false}
 {"timestamp": "2026-06-15T12:19:26.773326+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for CM_T47_9_E2E_RETEST iter 1", "severity": "INFO", "read": false}
 {"timestamp": "2026-06-15T12:19:26.875586+00:00", "event_type": "GOAL_APPROVED", "goal_id": "CM_T47_9_E2E_RETEST", "message": "Gateway ALLOW — LOW risk request auto-approved by gateway policy.", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-15T12:25:19.263531+00:00", "event_type": "GOAL_APPROVED", "goal_id": "GOAL_008", "message": "Gateway ALLOW — LOW risk request auto-approved by gateway policy.", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-15T12:26:11.642517+00:00", "event_type": "BRIDGE_CONSUMED", "goal_id": null, "message": "Consumed output for GOAL_008 iter 1", "severity": "INFO", "read": false}
+{"timestamp": "2026-06-15T12:26:11.659091+00:00", "event_type": "GOAL_APPROVED", "goal_id": "GOAL_008", "message": "Gateway ALLOW — LOW risk request auto-approved by gateway policy.", "severity": "INFO", "read": false}

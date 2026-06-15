@@ -768,6 +768,26 @@
       "decision": "APPROVED",
       "reason": "LOW risk request auto-approved by gateway policy.",
       "classified_at": "2026-06-15T12:19:26.780471+00:00"
+    },
+    {
+      "goal_id": "GOAL_008",
+      "title": "Audit: Verify no ACTIVE gaps were missed in self_state.json",
+      "risk": "LOW",
+      "sandbox_only": false,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T12:25:19.246496+00:00"
+    },
+    {
+      "goal_id": "GOAL_008",
+      "title": "Audit: Verify no ACTIVE gaps were missed in self_state.json",
+      "risk": "LOW",
+      "sandbox_only": false,
+      "gateway_decision": "ALLOW",
+      "decision": "APPROVED",
+      "reason": "LOW risk request auto-approved by gateway policy.",
+      "classified_at": "2026-06-15T12:26:11.644522+00:00"
     }
   ]
 }

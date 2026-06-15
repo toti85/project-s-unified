@@ -1,0 +1,128 @@
+{
+  "mission": "AO5_T47_10_PRODUCTION_GOAL_E2E_PROOF",
+  "validated_at": "2026-06-15T12:26:15Z",
+  "selected_goal": {
+    "id": "GOAL_008",
+    "title": "Audit: Verify no ACTIVE gaps were missed in self_state.json",
+    "source": "known_gaps",
+    "risk": "LOW",
+    "auto_approve": true,
+    "priority_before": 8,
+    "priority_test": 1,
+    "reason_chosen": "GOAL_008 was genuinely pending (no status field), source=known_gaps (real production), never previously run. GOAL_007 was also pending but had been exercised in T47/T47.6 series."
+  },
+  "pre_test_state": {
+    "cm_log_lines": 20,
+    "governance_log_lines": 146,
+    "taste_model_records": 20,
+    "cm_state_goals_completed": 2
+  },
+  "phase3_run": {
+    "sai_direct_start": "2026-06-15T12:25:19.240495+00:00",
+    "sai_direct_result": "2026-06-15T12:26:11.627507+00:00",
+    "latency_s": 52.4,
+    "tools_used": [
+      "file_reader",
+      "file_content_search",
+      "file_writer"
+    ],
+    "cm_stdout_tail": "Gateway classification for goal_id=GOAL_008: ALLOW | SAI consume result: status=ACCEPTED gateway=ALLOW | SAI ALLOW - goal GOAL_008 completed. | CM v0.1 finished. cycles=1 completed=3 paused=0 denied=2"
+  },
+  "phase4_cycle_log": {
+    "new_entries": 4,
+    "events": [
+      {
+        "ts": "2026-06-15T12:25:19.240495+00:00",
+        "event": "cm_sai_direct_start"
+      },
+      {
+        "ts": "2026-06-15T12:26:11.627507+00:00",
+        "event": "cm_sai_direct_result",
+        "success": true
+      },
+      {
+        "ts": "2026-06-15T12:26:11.660092+00:00",
+        "event": "cm_consume_result",
+        "status": "ACCEPTED",
+        "gateway_decision": "ALLOW",
+        "via": "sai_direct"
+      },
+      {
+        "ts": "2026-06-15T12:26:11.665096+00:00",
+        "event": "cm_goal_completed",
+        "via": "sai_direct"
+      }
+    ]
+  },
+  "phase5_bridge_gateway_analysis": {
+    "governance_new_entries": 1,
+    "only_entry": "bridge_consumed GOAL_008 iteration=1 checksum=2a6258728856f588 at 12:26:11Z",
+    "bridge_gateway_allow_found": false,
+    "bridge_gateway_deny_found": false,
+    "historical_entries_only": true,
+    "finding": "bridge_gateway_allow IS MISSING from governance/cycle_log.jsonl for GOAL_008 (confirmed on production goal, matching T47.9 finding on test stubs)"
+  },
+  "phase6_allow_trace": {
+    "actual_flow": [
+      "1. CM._execute_via_sai: sai_pre_execution_gate(mission_id=CM_CYCLE_1_GOAL_008, goal_id=GOAL_008) -> ALLOW (SAI_adapter pre-gate, logs to approval_log.json)",
+      "2. SAI executes (52.4s), writes to outbox",
+      "3. write_sai_output_to_outbox writes last_output.md + output_ready.json (run_id=GOAL_008)",
+      "4. CM._consume_via_gateway(run_id=GOAL_008, goal_id=GOAL_008): calls bridge_runner.consume_executor_output -> ACCEPTED (file checksum match) -- logs bridge_consumed to governance/cycle_log",
+      "5. CM._consume_via_gateway: calls classify_execution_request(goal_id=GOAL_008) -> ALLOW (risk_classifier internal) -- logs nothing to governance/cycle_log",
+      "6. CM sets gateway_decision=ALLOW in result dict, logs cm_consume_result event to cm_cycle_log"
+    ],
+    "bridge_gateway_allow_written_by": "bridge_runner.get_verdict_for_content() called from consume_and_verdict() or bridge_runner CLI --verdict mode",
+    "bridge_gateway_allow_NOT_written_by": "CM._consume_via_gateway path (calls consume_executor_output + classify_execution_request directly)",
+    "gap": "CM-SAI direct path bypasses get_verdict_for_content(), so bridge_gateway_allow is never written to governance/cycle_log. ALLOW is real but logged in cm_cycle_log only (cm_consume_result gw=ALLOW), not in governance/cycle_log as bridge_gateway_allow."
+  },
+  "phase4_goal_status": {
+    "GOAL_008": {
+      "status": "DONE",
+      "done_at": "2026-06-15T12:26:11.662094+00:00"
+    }
+  },
+  "taste_model_new": [
+    {
+      "mission_id": "CM_CYCLE_1_GOAL_008",
+      "model": "sai_gateway_adapter",
+      "status": "completed",
+      "ck": "2a6258728856f588"
+    },
+    {
+      "mission_id": "GOAL_008",
+      "model": "continuous_mind_sai",
+      "status": "completed",
+      "patterns": [
+        "cm_sai_direct",
+        "cm_accepted",
+        "gw_allow"
+      ]
+    }
+  ],
+  "cm_state_final": {
+    "total_cycles": 1,
+    "goals_completed": 3,
+    "goals_paused": 0,
+    "goals_denied": 2
+  },
+  "questions": {
+    "Q1_e2e_works": {
+      "answer": "YES",
+      "evidence": "GOAL_008 ACCEPTED/ALLOW via=sai_direct, status=DONE"
+    },
+    "Q2_reproducible": {
+      "answer": "YES",
+      "evidence": "T47.8 (stub), T47.9 (stub), T47.10 (production) all identical 4-event sequence"
+    },
+    "Q3_production_goal": {
+      "answer": "YES",
+      "evidence": "GOAL_008 source=known_gaps, genuinely pending, no prior execution history"
+    },
+    "Q4_bridge_runner_verdict": {
+      "answer": "PARTIAL",
+      "detail": "bridge_runner.consume_executor_output() DOES execute (logs bridge_consumed). But get_verdict_for_content() does NOT execute - the verdict/ALLOW logging path is bypassed. CM uses classify_execution_request internally."
+    }
+  },
+  "final_verdict": "B - PROVED_WITH_ARCHITECTURAL_NOTE",
+  "recommendation": "R2 - T47.11: Add bridge_gateway_allow logging to CM._consume_via_gateway path (call get_verdict_for_content or log equivalent event to governance/cycle_log). Then R1: T48 SAI Quality Validation."
+}
