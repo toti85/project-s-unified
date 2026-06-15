@@ -18,6 +18,7 @@ MISSION_DIR = ROOT / "orchestrator_runtime" / "sz_proposed_missions"
 MISSION_ID_PATTERN = re.compile(r"AO5_T(\d+)", re.IGNORECASE)
 HIGH_PRIORITY_MARKERS = {"HIGH", "URGENT", "CRITICAL", "P0", "P1"}
 DONE_MARKERS = {"DONE", "COMPLETED", "CLOSED", "RESOLVED"}
+TASTE_MODEL_LOG = ROOT / "orchestrator_runtime" / "taste_model" / "mission_outcomes.jsonl"
 
 
 def slugify(text: str) -> str:
@@ -283,6 +284,84 @@ def choose_mission(state: dict[str, Any], goals: list[dict[str, Any]], reports: 
     }
 
 
+def load_taste_model_summary() -> str:
+    """
+    Read mission_outcomes.jsonl and return a compact advisory string.
+    Advisory-only: NEVER raises — returns a fallback string on any error.
+    Max 12 lines. Does not block prompt generation.
+    """
+    try:
+        if not TASTE_MODEL_LOG.exists():
+            return "Taste Model unavailable; continuing."
+
+        records: list[dict[str, Any]] = []
+        with TASTE_MODEL_LOG.open(encoding="utf-8") as fh:
+            for raw in fh:
+                raw = raw.strip()
+                if raw:
+                    try:
+                        records.append(json.loads(raw))
+                    except json.JSONDecodeError:
+                        continue
+
+        if not records:
+            return "Taste Model unavailable; continuing."
+
+        total = len(records)
+        values = [r["value_immediate"] for r in records if isinstance(r.get("value_immediate"), int)]
+        avg = sum(values) / len(values) if values else 0.0
+
+        by_model: dict[str, list[int]] = {}
+        for r in records:
+            m = r.get("model_used", "?")
+            v = r.get("value_immediate")
+            if isinstance(v, int):
+                by_model.setdefault(m, []).append(v)
+        if by_model:
+            top_model = max(by_model, key=lambda m: sum(by_model[m]) / len(by_model[m]))
+            top_avg = sum(by_model[top_model]) / len(by_model[top_model])
+        else:
+            top_model, top_avg = "?", 0.0
+
+        recent = records[-3:]
+        recent_lines = [
+            f"  {r['mission_id']} v={r.get('value_immediate','?')} "
+            f"{r.get('actual_status','?')} [{r.get('model_used','?')}]"
+            for r in recent
+        ]
+
+        last = records[-1]
+        last_status = last.get("actual_status", "")
+        warning = ""
+        if last_status in ("false_declaration", "partial_pass"):
+            warning = (
+                f"WARNING: last mission ({last['mission_id']}) "
+                f"status={last_status} — verify before trusting continuation."
+            )
+
+        hv_patterns: dict[str, int] = {}
+        for r in records:
+            if r.get("value_immediate", 0) >= 5:
+                for p in r.get("patterns", []):
+                    hv_patterns[p] = hv_patterns.get(p, 0) + 1
+        top_hv = sorted(hv_patterns, key=lambda p: -hv_patterns[p])[:4]
+
+        lines = [
+            f"total={total}  avg_value={avg:.2f}  top_model={top_model} (avg={top_avg:.2f})",
+            "recent missions:",
+            *recent_lines,
+        ]
+        if warning:
+            lines.append(warning)
+        if top_hv:
+            lines.append(f"high-value patterns (v>=5): {', '.join(top_hv)}")
+
+        return "\n".join(lines)
+
+    except Exception as exc:  # advisory must never block
+        return f"Taste Model unavailable; continuing. (error: {exc})"
+
+
 def build_context(state: dict[str, Any], reports: list[dict[str, Any]], last_output_head: str) -> list[str]:
     milestone_lines = []
     for item in state["milestones"]:
@@ -329,6 +408,7 @@ def render_prompt(
     mission_id = f"AO5_T{mission_number}"
     mission = finalize_mission(mission, mission_number)
     context_sentences = build_context(state, reports, last_output_head)
+    taste_advisory = load_taste_model_summary()
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     lines = [
         mission_id,
@@ -347,6 +427,9 @@ def render_prompt(
         format_block("OUTPUT FILES EXPECTED:", mission["outputs"]).rstrip(),
         "",
         format_block("RETURN VALUES:", mission["return_values"]).rstrip(),
+        "",
+        "## Taste Model Advisory",
+        taste_advisory,
         "",
         "CRITICAL CONSTRAINTS:",
         "- No src/ modifications without Toti approval",
