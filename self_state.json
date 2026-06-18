@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1",
-  "last_updated": "2026-06-15T12:42:01Z",
-  "updated_by": "Sz AO5_T47.12 self_state update ? T42-T47.11 closeout (Taste Model + CM-SAI integration + full E2E proof)",
+  "last_updated": "2026-06-18T09:18:00Z",
+  "updated_by": "AO7_T4 self_state update — AO7_T1-T3.5 honest partial recovery documentation",
   "identity": {
     "what_i_am": "Project-S вЂ” egy kontrollГЎlt autonГіm AI governance rendszer, persistent file-based self-model-lal. SAI (SuperIntelligentAI) az egyetlen aktГ­v Doer runtime, MetaController aktГ­v a SAI-en belГјl use_meta_controller=True Гєton, Interactive Layer v1 a verified operator-facing entry surface.",
     "what_i_am_not": [
@@ -423,6 +423,53 @@
         "status": "RESOLVED",
         "resolved_at": "2026-05-20",
         "resolution": "Hybrid prompt-class-aware routing layer implemented in interactive_layer/prompt_router.py. Route classes: DIRECT_LIGHTWEIGHT_RESPONSE, TRUTHFUL_UNCERTAINTY_RESPONSE, INTERNAL_PROJECT_DOC_REASONING, EXTERNAL_RESEARCH_SYNTHESIS, FULL_AGENTIC_META_CONTROLLER, CLARIFICATION_NEEDED. Hungarian normalization included. Route metadata persisted into mission records. Phase 1 (direct/internal/truthfulness): 22/22 tests PASS, 7/8 live matrix. Phase 2 (EXTERNAL_RESEARCH_SYNTHESIS via DDGS): 31/31 tests PASS, 8/8 live PASS. TEST_5: route=EXTERNAL_RESEARCH_SYNTHESIS, state=COMPLETE, elapsed=4.4s, 8 real web results."
+      },
+      {
+        "gap_id": "GAP_019B_FILE_SEARCH_SYNTHESIS_GAP",
+        "title": "SAI SmartToolOrchestrator synthesis gate is structurally closed for file_search-sourced evidence",
+        "discovered": "2026-06-17",
+        "discovered_by": "AO6.8.6_SAI_SYNTHESIS_TRIGGER_RETEST",
+        "source_mission": "AO6.8.6_SAI_SYNTHESIS_TRIGGER_RETEST",
+        "status": "open_measured_not_fixed",
+        "priority": "medium",
+        "parent_gap": "GAP_019",
+        "summary": "SAI SmartToolOrchestrator synthesis path is structurally blocked for file_search-sourced evidence. Explicit synthesis prompt did not change behavior. The synthesis gate (_is_synthesis_task) requires web-marker context ([web_search result] / [web_scraper result] / [browser_automation result] / [web_page_fetch result]) in tool_context. file_search output never contains these markers. Therefore the synthesis branch inside the file_writer handler is UNREACHABLE for any file_search-based task, regardless of prompt keywords.",
+        "evidence": [
+          "BD-001 baseline (AO6.8.5): output_len=240, raw file_search listing, success=False, evaluator=replan",
+          "BD-001 synthesis-cue (AO6.8.6): output_len=240, IDENTICAL output, behavior_changed=NO",
+          "synthesis_cue matched keywords: ['report', 'summary', 'write'] — more than baseline ['write']",
+          "root_cause: has_web_data=False always for file_search; _is_synthesis_task returns False",
+          "prompt cue cannot bypass this — it is a code-level tool-type gate",
+          "evidence_file: orchestrator_runtime/sandbox/ao6_8_6_synthesis_retest_evidence.json",
+          "log_entry: orchestrator_runtime/executor_benchmarks/AO6_8_RESULTS_LOG.jsonl task_id=BD001_AO686_SYNTHESIS_CUE"
+        ],
+        "root_cause": "_is_synthesis_task() in smart_orchestrator.py requires BOTH (1) synthesis keyword in task text AND (2) web result marker in tool_context. file_search never emits web result markers. Synthesis branch in file_writer handler is structurally unreachable for file_search tasks.",
+        "compute_arbiter_implication": "Do not route file-based diagnosis tasks to SAI unless GAP_019B is fixed or a dedicated file_search synthesis stage is added to the tool pipeline.",
+        "recommended_executor": "cline_or_direct_reasoning",
+        "proposed_fix": "Extend _is_synthesis_task() to also check for file_search/file_reader result markers, OR add a separate synthesis step that activates on diagnosis/analysis task types regardless of tool source type.",
+        "affects": [
+          "BD-001 style bug diagnosis tasks",
+          "Any task where SAI selects file_search and result must be synthesized into a narrative report"
+        ]
+      },
+      {
+        "gap_id": "TIME_BOMB_002",
+        "discovered": "2026-06-18",
+        "discovered_by": "DeepSeek V4 Flash AO7_T3.5",
+        "title": "smart_orchestrator wraps DDGS exception as success",
+        "status": "DOCUMENTED_NOT_FIXED",
+        "context": "When DDGS raises exception, smart_orchestrator wraps it as orchestration success at higher level than _ExecutorAdapter. AO7_T3 FIX 3 revision catches some cases but not all. Real fix needed at smart_orchestrator level.",
+        "discovered_evidence": "AO7_T3.5: DDGS test returned 0 results without exception, but orchestrator-level result reported success",
+        "deferred_fix": "Inspect smart_orchestrator.orchestrate_task error handling. Identify where DDGS exception is caught and silently wrapped. Replace with explicit error propagation."
+      },
+      {
+        "gap_id": "WORKAROUND_001",
+        "discovered": "2026-06-18",
+        "title": "AO7_T3 FIX 1: use_orchestration kw-based override (temporary)",
+        "status": "WORKAROUND_ACTIVE",
+        "context": "use_orchestration heuristic upstream is unreliable. FIX 1 forces True when task contains keywords (research, memo, report, file, etc.). This works but is brittle to phrasing changes.",
+        "deferred_fix": "Replace with: use_orchestration=True if Phase 1 strategic_plan returned recommended_tools list (regardless of task wording)",
+        "rationale_for_workaround": "Quick restoration of pipeline. Proper upstream fix in separate mission after DDGS + Layer B resolved."
       }
     ],
     "name_address": "Sz",
@@ -443,11 +490,12 @@
     },
     "gaps_summary": {
       "total": 31,
-      "resolved": 30,
-      "active": 0,
-      "accepted": 1
+      "resolved": 27,
+      "active": 2,
+      "accepted": 1,
+      "open_measured_not_fixed": 1
     },
-    "next_concrete_step": "TOP 3 ghost candidate bekötése VAGY Compute Arbiter router",
+    "next_concrete_step": "AO7_T5 — DDGS investigation and resolution (env issue, not code). After: AO7_T6 — Layer B fix in smart_orchestrator.py.",
     "minor_todos": [
       {
         "id": "TODO_001",
@@ -522,9 +570,9 @@
       "file_writer": "VERIFIED",
       "ilo_server_control": "VERIFIED вЂ” read-only access to DL380 Gen9 (serial CZ3733LABY) via iLO 4 Redfish API. Power management methods available but NOT exercised. NAT redirect workaround confirmed essential and working."
     },
-    "active_focus": "Sz - Ghost Branch v0.2 vagy Compute Arbiter",
-    "last_updated": "2026-06-09T09:51:44.330229+00:00",
-    "updated_by": "Sz name + AO5_T6 closeout"
+    "active_focus": "SAI pipeline partial recovery (AO7_T1-T3.5). Dispatch chain restored. DDGS env issue + Layer B orchestrator wrapping deferred. TIME_BOMB_001 (GAP_029) + TIME_BOMB_002 documented.",
+    "last_updated": "2026-06-18T09:18:00.000000+00:00",
+    "updated_by": "AO7_T4 self_state update"
   },
   "memory_index": {
     "meta_evidence": {
@@ -1659,6 +1707,19 @@
         "Reproducibility proved, audit trail complete"
       ],
       "classification": "cm_sai_full_e2e_proved"
+    },
+    {
+      "id": 62,
+      "date": "2026-06-18",
+      "title": "AO7_T1-T3.5 SAI Pipeline Multi-Layer Regression Recovery — PARTIAL",
+      "status": "partial_pass",
+      "summary": "Multi-layer regression diagnosed by DeepSeek V4 Flash (5 root cause layers identified, DEV deep analysis). 3 fixes applied server-side (FIX 1: use_orchestration kw-based override, FIX 2: ExecutionValidator 0 val → unanimous_pass, FIX 3 revised: honest tool_result inspection). Dispatch chain restored. Still blocked: DDGS environment issue + smart_orchestrator error-wrapping regression (Layer B). 2 time bombs documented for future fixes.",
+      "evidence": [
+        "Commits: TBD (this one)",
+        "DEV deep analysis identified 5 layers (DeepSeek V4 Flash)",
+        "Server FIX applied, dispatch restored, but end-to-end blocked"
+      ],
+      "classification": "honest_partial_recovery"
     }
   ],
   "bridges": {
@@ -2032,8 +2093,8 @@
       "mitigation_validated": "2026-06-01"
     }
   ],
-  "active_focus": "Sz autonomy chain complete: CM-SAI direct e2e proved on production goal with full bridge_runner audit trail. Next: T48 SAI Quality Validation (multi-goal sample, comparative analysis Cline vs Copilot vs SAI).",
-  "next_concrete_step": "T48 SAI Quality Validation: select 10-20 historical/pending goals, run each through SAI direct mode, score via Taste Model, compare quality with Cline-Qwen and Copilot baselines. Latency, success rate, governance outcome, value score, false claim rate. Goal: determine if Sz autonomous loop can be trusted for continuous operation.",
+  "active_focus": "SAI pipeline partial recovery (AO7_T1-T3.5). Dispatch chain restored. DDGS env issue + Layer B orchestrator wrapping deferred. TIME_BOMB_001 (GAP_029) + TIME_BOMB_002 documented.",
+  "next_concrete_step": "AO7_T5 — DDGS investigation and resolution (env issue, not code). After: AO7_T6 — Layer B fix in smart_orchestrator.py.",
   "key_realizations": [
     {
       "id": "KR_001",
@@ -2130,6 +2191,12 @@
       "date": "2026-06-15",
       "realization": "Bridge_runner.get_verdict_for_content is the authoritative verdict logger. T47.10 revealed CM was using classify_execution_request locally ? gateway decisions were correct but NOT logged to governance/cycle_log.jsonl. T47.11 routed through bridge_runner verdict path. Lesson: governance audit trail requires central logger, not distributed decisions.",
       "context": "T47.10 audit gap ? T47.11 fix"
+    },
+    {
+      "id": "KR_017",
+      "date": "2026-06-18",
+      "realization": "Multi-layer regression detected by DeepSeek V4 Flash with explicit 'go deeper' instruction. Cline-Qwen single-pass diagnosis was incomplete (3 of 5 layers missed). DeepSeek V4 Flash also caught FIX 3's fake success regression (Scenario GAMMA) where Cline-Qwen previously reported PARTIAL SUCCESS. Model-task fit matters: deep diagnosis and honest fake-success detection are DeepSeek V4 Flash strengths.",
+      "context": "AO7_T1_DEV deep + AO7_T3.5 evaluations"
     }
   ]
 }

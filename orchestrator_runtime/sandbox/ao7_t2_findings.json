@@ -1,0 +1,36 @@
+{
+  "mission": "AO7_T2_SAI_DISPATCH_DIAGNOSIS",
+  "timestamp": "2026-06-18T07:07:00+03:00",
+  "root_cause": "HYPOTHESIS_C",
+  "root_cause_description": "super_intelligent_ai.py lines 536-538: use_orchestration=False returns direct execution wrapper instead of calling SmartToolOrchestrator",
+  "gap_015_status": "RESOLVED_2026-05-04",
+  "gap_015_fix_intact": true,
+  "gap_015_test_exists": false,
+  "execute_single_tool_called": false,
+  "analyze_task_called": false,
+  "orchestrator_log_lines": 0,
+  "evaluator_replan_count": 5,
+  "evaluator_reasoning": "GAP_029: valid_replan - Replan has concrete corrective delta",
+  "final_output_length": 39,
+  "final_output_text": "[FAIL] MetaController failed: max_iters",
+  "hypothesis_ranking": {
+    "A_orchestrator_dispatch": "REFUTED",
+    "B_metacontroller_context": "REFUTED",
+    "C_sai_wrapper_before_orchestrator": "CONFIRMED",
+    "D_tool_registry_missing": "REFUTED"
+  },
+  "broken_code_location": "src/core/super_intelligent_ai.py:536-538",
+  "proposed_fix": "Force use_orchestration=True when recommended_tools is non-empty (Option 1)",
+  "proposed_fix_location": "src/core/super_intelligent_ai.py:508-538",
+  "git_history": {
+    "super_intelligent_ai": "15f126a Initial commit: Project-S Unified snapshot (2026-06-01)",
+    "smart_orchestrator": "15f126a Initial commit: Project-S Unified snapshot (2026-06-01)",
+    "single_commit_repo": true
+  },
+  "evidence_files": [
+    "orchestrator_runtime/sandbox/ao7_t1_stdout.log",
+    "orchestrator_runtime/sandbox/ao7_t1_evidence.json",
+    "reports/AO7_T1_SAI_LIVE_RUN_REPORT_20260618.md",
+    "reports/AO7_T2_DISPATCH_DIAGNOSIS_20260618.md"
+  ]
+}

@@ -82,8 +82,31 @@ class _ExecutorAdapter:
             
             # Ensure result is a dict with status
             if isinstance(result, dict):
-                if "status" not in result:
-                    result["status"] = "success" if result.get("success", False) else "failure"
+                # AO7_T3 FIX 3 REVISED (honest accounting — restores GAP_020 truthfulness)
+                # standard_execute_completion ≠ unconditional success.
+                # Check tool results from execution_result for actual outcome.
+                tool_results = []
+                orc_result = result.get("orchestration_result") or {}
+                for rec in (orc_result.get("final_output") or {}).get("detailed_results") or []:
+                    if rec.get("status") == "success" and rec.get("result"):
+                        tool_results.append(rec)
+                
+                if tool_results:
+                    # Real tools executed and produced output
+                    result["status"] = "success"
+                elif "status" not in result:
+                    # No tool results — either no-op or error. Report honestly.
+                    has_error = bool(result.get("error"))
+                    has_output = bool(result.get("output", "").strip())
+                    if has_error:
+                        result["status"] = "failed"
+                        result["reason"] = result.get("error", "execution error")
+                    elif has_output:
+                        result["status"] = "success"
+                    else:
+                        result["status"] = "failed"
+                        result["reason"] = "No tools executed and no output produced"
+                
                 return result
             else:
                 return {
@@ -507,7 +530,29 @@ class SuperIntelligentAI:
                     
                     # PHASE 3: Conditional Tool Orchestration (based on strategic decision)
                     orchestration_result = None
-                    if strategic_plan.get("use_orchestration", True):
+                    use_orchestration = strategic_plan.get("use_orchestration", True)
+                    recommended_tools = strategic_plan.get("recommended_tools", [])
+                    
+                    # AO7_T3 FIX (v2): Force orchestration when task requires tool execution.
+                    # The strategic planner may return use_orchestration=False + empty recommended_tools
+                    # for tasks that clearly require tools (web search, file write, etc.).
+                    # This was the root cause of AO7_T1 zero-tool-execution failure (diagnosed 2026-06-18).
+                    _tool_keywords = [
+                        "web_search", "web_scraper", "file_writer", "file_reader",
+                        "search", "scrape", "write", "read", "download",
+                        "look up", "research", "memo", "report", "file"
+                    ]
+                    _task_lower = task_description.lower()
+                    _task_requires_tools = any(kw in _task_lower for kw in _tool_keywords)
+                    
+                    if not use_orchestration and _task_requires_tools:
+                        logger.warning(
+                            "use_orchestration was False but task requires tool execution — "
+                            "forcing use_orchestration=True (AO7_T3 fix v2)"
+                        )
+                        use_orchestration = True
+                    
+                    if use_orchestration:
                         if _forced_orchestration:
                             logger.info("🔧 Phase 2b: Smart Tool Orchestration (GAP_026 forced for self-state prompt)")
                         else:
