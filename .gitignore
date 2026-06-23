@@ -181,3 +181,9 @@ self_state.json.backup*
 
 # Temp / dryrun outputs
 reports/dryrun_*
+
+# API keys / local secrets
+docs/*api_key*.py
+openrouter.txt
+API_KEY.txt
+*.key

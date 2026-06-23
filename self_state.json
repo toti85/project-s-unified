@@ -1720,6 +1720,24 @@
         "Server FIX applied, dispatch restored, but end-to-end blocked"
       ],
       "classification": "honest_partial_recovery"
+    },
+    {
+      "id": 63,
+      "date": "2026-06-23",
+      "title": "MILESTONE_63 — First Narrow-Scope Autonomous Executor Stack",
+      "status": "completed",
+      "summary": "First narrow-scope autonomous executor stack proved: CM → Watchdog → Continue CLI / DeepSeek V4 Flash → Bridge → Taste Model. Scope: LOW-risk file/report tasks with auto_approve only. Evidence: AO8F (single-goal pass), AO8G (3/3 batch pass), AO8H (watchdog live test), AO8I (10/10 burn-in with fail-closed recovery), AO8J5 (clean 10/10, stopped by kill switch). Not validated: web research, multi-tool sequencing, 24/7 unsupervised, self-generated goals.",
+      "evidence": [
+        "reports/MS_AO8F_CONTINUE_CM_INTEGRATION_SINGLE_GOAL_20260618.md",
+        "reports/MS_AO8G_CONTINUE_SUPERVISED_BATCH_3_GOALS_20260618.md",
+        "reports/MS_AO8H_CONTINUE_WATCHDOG_20260618.md",
+        "reports/MS_AO8I_10_CYCLE_SUPERVISED_BURN_IN_20260618.md",
+        "reports/MS_AO8J_4_RUN_ID_CONTENT_MISMATCH_FIX_20260623.md",
+        "reports/AO8Q_QUALITY_BASELINE_20260623.md",
+        "orchestrator_runtime/active_loops/cm_v01_cycle_log.jsonl (AO8J5 clean 10/10)",
+        "orchestrator_runtime/goal_queue.json (AO8J5 all DONE)"
+      ],
+      "classification": "autonomous_executor_stack"
     }
   ],
   "bridges": {
@@ -2197,6 +2215,18 @@
       "date": "2026-06-18",
       "realization": "Multi-layer regression detected by DeepSeek V4 Flash with explicit 'go deeper' instruction. Cline-Qwen single-pass diagnosis was incomplete (3 of 5 layers missed). DeepSeek V4 Flash also caught FIX 3's fake success regression (Scenario GAMMA) where Cline-Qwen previously reported PARTIAL SUCCESS. Model-task fit matters: deep diagnosis and honest fake-success detection are DeepSeek V4 Flash strengths.",
       "context": "AO7_T1_DEV deep + AO7_T3.5 evaluations"
+    },
+    {
+      "id": "KR_018",
+      "date": "2026-06-23",
+      "realization": "Execution success is not output quality. Taste Model default value_immediate=3 created DONE-inflation risk: every ACCEPTED/ALLOW mission scored 3 regardless of actual output quality. AO8Q introduced retrospective quality scoring across 10 random missions: avg 3.6/5.0 (range 3-4). No mission scored 5. File-counting tasks scored highest; analysis tasks need better prompting. Lesson: DONE != GOOD — quality must be measured independently.",
+      "context": "AO8Q — first output quality baseline review"
+    },
+    {
+      "id": "KR_019",
+      "date": "2026-06-23",
+      "realization": "AO8J first 2-hour loop exposed 5 bugs in the autonomous executor stack, all fixed: (1) outbox=None crash — run_and_write had no guard for Continue CLI failure producing no output → patched with empty output guard. (2) Empty output guard — minimal non-empty content written instead of None. (3) Stale outbox auto-archive — watchdog now archives stale outboxes after configurable timeout. (4) Run ID / content mismatch — metadata={'goal_id': goal_id} was missing from run_and_write() call causing all goals to show 'Goal ID: unknown'. (5) PAUSE retry-loop — paused goals kept repeating; now marked paused and skipped. AO8J5 clean run: 10/10 PASS.",
+      "context": "AO8J_1 through AO8J_4 bug fix cycle"
     }
   ]
 }

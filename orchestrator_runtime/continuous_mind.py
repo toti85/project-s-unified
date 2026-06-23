@@ -81,6 +81,7 @@ DEFAULT_OUTPUT_WAIT_SECONDS = 600
 DEFAULT_POLL_INTERVAL_SECONDS = 5
 
 DONE_STATUSES = {"DONE", "COMPLETED", "CLOSED", "RESOLVED"}
+SKIP_STATUSES = DONE_STATUSES | {"PAUSED", "FAILED", "NEEDS_HUMAN"}  # AO8J_4: skip paused/failed goals
 SKIP_RATIONALE = "already completed"
 
 # ── Governance imports (lazy, fail-gracefully) ─────────────────────────
@@ -145,7 +146,8 @@ def _pick_next_goal() -> dict | None:
             continue
         status = str(goal.get("status", "PENDING")).strip().upper()
         rationale = str(goal.get("rationale", "")).strip().lower()
-        if status in DONE_STATUSES:
+        # AO8J_4: skip DONE/PAUSED/FAILED/NEEDS_HUMAN goals
+        if status in SKIP_STATUSES:
             continue
         if SKIP_RATIONALE in rationale:
             continue
@@ -166,8 +168,8 @@ def _pick_next_goal() -> dict | None:
     return pending[0]
 
 
-def _mark_goal_done(goal_id: str) -> bool:
-    """Mark a goal as DONE in goal_queue.json. Returns True on success."""
+def _set_goal_status(goal_id: str, status: str, note: str = "") -> bool:
+    """Set any status on a goal. Returns True on success."""
     if not GOAL_QUEUE_PATH.exists():
         return False
     try:
@@ -175,8 +177,10 @@ def _mark_goal_done(goal_id: str) -> bool:
         goals = data if isinstance(data, list) else data.get("goals") or []
         for goal in goals:
             if isinstance(goal, dict) and goal.get("id") == goal_id:
-                goal["status"] = "DONE"
-                goal["done_at"] = _now_iso()
+                goal["status"] = status
+                goal["status_changed_at"] = _now_iso()
+                if note:
+                    goal["status_note"] = note
                 break
         tmp = GOAL_QUEUE_PATH.with_suffix(".tmp")
         with open(tmp, "w", encoding="utf-8") as fh:
@@ -184,8 +188,68 @@ def _mark_goal_done(goal_id: str) -> bool:
         tmp.replace(GOAL_QUEUE_PATH)
         return True
     except Exception as exc:
-        log.error("Cannot mark goal %s DONE: %s", goal_id, exc)
+        log.error("Cannot set goal %s -> %s: %s", goal_id, status, exc)
         return False
+
+def _mark_goal_done(goal_id: str) -> bool:
+    """Mark a goal as DONE in goal_queue.json."""
+    return _set_goal_status(goal_id, "DONE")
+
+def _mark_goal_failed(goal_id: str, reason: str = "") -> bool:
+    """Mark a goal as FAILED so _pick_next_goal skips it. AO8J_4."""
+    return _set_goal_status(goal_id, "FAILED", note=reason)
+
+def _mark_goal_paused(goal_id: str) -> bool:
+    """Mark a goal as PAUSED (human review) so _pick_next_goal skips it. AO8J_4."""
+    return _set_goal_status(goal_id, "PAUSED", note="Awaiting human review per PAUSE gateway decision")
+
+# ── AO8J_4: Output identity check ────────────────────────────────────
+
+def _check_output_identity(expected_run_id: str, expected_goal_id: str) -> str | None:
+    """
+    Read last_output.md and verify the embedded Run ID / Goal ID header
+    matches expectations. Returns None if OK, or a description string if mismatch.
+    """
+    last_output_path = OUTBOX_DIR / "last_output.md"
+    if not last_output_path.exists():
+        return f"last_output.md not found (expected run_id={expected_run_id})"
+
+    try:
+        head = last_output_path.read_text(encoding="utf-8").split("\n")[:5]
+    except OSError as exc:
+        return f"cannot read last_output.md: {exc}"
+
+    found_run_id = None
+    found_goal_id = None
+    for line in head:
+        if line.startswith("Run ID:"):
+            found_run_id = line.replace("Run ID:", "").strip()
+        elif line.startswith("Goal ID:"):
+            found_goal_id = line.replace("Goal ID:", "").strip()
+
+    if found_run_id is None and found_goal_id is None:
+        return "output has no Run ID / Goal ID header (pre-AO8J_4 format)"
+
+    issues = []
+    if found_run_id and found_run_id != expected_run_id:
+        issues.append(f"Run ID mismatch: expected={expected_run_id} got={found_run_id}")
+    if found_goal_id and found_goal_id != expected_goal_id:
+        issues.append(f"Goal ID mismatch: expected={expected_goal_id} got={found_goal_id}")
+
+    return "; ".join(issues) if issues else None
+
+
+def _archive_outbox_for_mismatch(run_id: str) -> None:
+    """Move outbox files to archive with MISMATCH label. AO8J_4."""
+    archive_dir = OUTBOX_DIR / "archive"
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S")
+    for fname in ["last_output.md", "output_ready.json"]:
+        src = OUTBOX_DIR / fname
+        if src.exists():
+            dst = archive_dir / f"{ts}_MISMATCH_{run_id}_{fname}"
+            src.rename(dst)
+            log.info("Archived mismatched outbox %s -> %s", src.name, dst.name)
 
 # ── Prompt generation ─────────────────────────────────────────────────
 
@@ -614,6 +678,16 @@ def run_heartbeat(
             _save_cm_state(cm_state)
             break  # dry-run always exits after first prompt
 
+        # ── Continue CLI executor mode (CM_CONTINUE_MODE=1) ────────
+        # Set CM_CONTINUE_MODE=1 to route auto_approve LOW/MEDIUM goals
+        # through the Continue CLI executor (cn) instead of SAI or inbox.
+        # Existing SAI mode and inbox fallback remain unchanged when flag is absent.
+        use_continue = (
+            goal.get("auto_approve", False)
+            and goal.get("risk", "HIGH") in ("LOW", "MEDIUM")
+            and os.environ.get("CM_CONTINUE_MODE", "").lower() in ("1", "true", "yes")
+        )
+
         # ── SAI direct mode (CM_SAI_DIRECT_MODE=1) ────────────────
         # Set CM_SAI_DIRECT_MODE=1 to enable direct SAI execution
         # for auto_approve LOW/MEDIUM goals (skips inbox handoff).
@@ -621,7 +695,223 @@ def run_heartbeat(
             goal.get("auto_approve", False)
             and goal.get("risk", "HIGH") in ("LOW", "MEDIUM")
             and os.environ.get("CM_SAI_DIRECT_MODE", "").lower() in ("1", "true", "yes")
+            and not use_continue  # Continue takes priority if both are set
         )
+
+        if use_continue:
+            log.info("Continue CLI mode for goal %s (auto_approve+%s)", goal_id, goal.get("risk"))
+
+            # ── Watchdog check before proceeding ────────────────────
+            try:
+                from orchestrator_runtime.governance.continue_watchdog import decide
+                wd = decide(outbox_dir=OUTBOX_DIR)
+            except Exception as exc:
+                log.warning("continue_watchdog not available (%s) — allowing", exc)
+                wd = {"allow_continue": True, "reason": "WATCHDOG_UNAVAILABLE", "evidence": []}
+
+            if not wd["allow_continue"]:
+                log.warning("Watchdog blocked goal %s: %s — %s", goal_id, wd["reason"], wd.get("evidence"))
+                _append_jsonl(CM_LOG_PATH, {
+                    "event": "cm_watchdog_block",
+                    "cycle": cycle,
+                    "goal_id": goal_id,
+                    "reason": wd["reason"],
+                    "evidence": wd.get("evidence", []),
+                    "at": _now_iso(),
+                })
+                _save_cm_state(cm_state)
+                if once:
+                    break
+                time.sleep(heartbeat)
+                continue
+
+            _append_jsonl(CM_LOG_PATH, {
+                "event": "cm_continue_start",
+                "cycle": cycle,
+                "goal_id": goal_id,
+                "at": _now_iso(),
+            })
+
+            try:
+                from orchestrator_runtime.governance.continue_executor_adapter import run_and_write
+                continue_result = run_and_write(
+                    prompt=prompt,
+                    run_id=run_id,
+                    iteration=cycle,
+                    metadata={"goal_id": goal_id},
+                )
+            except Exception as exc:
+                log.error("Continue run_and_write failed: %s", exc)
+                _append_jsonl(CM_LOG_PATH, {
+                    "event": "cm_continue_error",
+                    "cycle": cycle,
+                    "goal_id": goal_id,
+                    "error": str(exc),
+                    "at": _now_iso(),
+                })
+                if once:
+                    break
+                time.sleep(heartbeat)
+                continue
+
+            run = continue_result.get("run") or {}
+            outbox = continue_result.get("outbox") or {}
+            overall = continue_result.get("overall", "UNKNOWN")
+            run_ok = overall == "OK" and run.get("status") == "OK"
+            _append_jsonl(CM_LOG_PATH, {
+                "event": "cm_continue_result",
+                "cycle": cycle,
+                "goal_id": goal_id,
+                "run_id": run_id,
+                "run_status": run.get("status"),
+                "outbox_status": outbox.get("status"),
+                "checksum": outbox.get("checksum"),
+                "overall": overall,
+                "reason": continue_result.get("reason"),
+                "at": _now_iso(),
+            })
+
+            # ── AO8J_2: empty output — log failure, do NOT mark DONE, do NOT consume ──
+            if overall == "EMPTY_OUTPUT":
+                log.warning("Continue EMPTY_OUTPUT for goal %s: %s", goal_id, continue_result.get("reason", "unknown"))
+                _append_jsonl(CM_LOG_PATH, {
+                    "event": "cm_continue_empty_output",
+                    "cycle": cycle,
+                    "goal_id": goal_id,
+                    "run_id": run_id,
+                    "reason": continue_result.get("reason"),
+                    "at": _now_iso(),
+                })
+                _save_cm_state(cm_state)
+                if once:
+                    break
+                time.sleep(heartbeat)
+                continue
+
+            # ── AO8J_4: Pre-consume run_id mismatch guard ──────────────
+            if run_ok:
+                # Read last_output.md and verify it contains expected run_id/goal_id
+                _mismatch = _check_output_identity(run_id, goal_id)
+                if _mismatch:
+                    log.warning("Run ID mismatch for goal %s: %s", goal_id, _mismatch)
+                    _append_jsonl(CM_LOG_PATH, {
+                        "event": "cm_mismatch_error",
+                        "cycle": cycle,
+                        "goal_id": goal_id,
+                        "run_id": run_id,
+                        "mismatch": _mismatch,
+                        "at": _now_iso(),
+                    })
+                    # Archive the mismatched outbox
+                    _archive_outbox_for_mismatch(run_id)
+                    # Mark goal as FAILED so it won't be retried forever
+                    _mark_goal_failed(goal_id, f"MISMATCH: {_mismatch}")
+                    cm_state["goals_failed"] = cm_state.get("goals_failed", 0) + 1
+                    _save_cm_state(cm_state)
+                    if once:
+                        break
+                    time.sleep(heartbeat)
+                    continue
+
+                # Bridge consume the Continue output
+                result = _consume_via_gateway(run_id, goal_id, expected_iteration=cycle)
+                status = result.get("status", "UNKNOWN")
+                gateway = result.get("gateway_decision", "UNKNOWN")
+
+                log.info("Continue consume result: status=%s gateway=%s", status, gateway)
+                _append_jsonl(CM_LOG_PATH, {
+                    "event": "cm_consume_result",
+                    "cycle": cycle,
+                    "goal_id": goal_id,
+                    "run_id": run_id,
+                    "status": status,
+                    "gateway_decision": gateway,
+                    "via": "continue",
+                    "at": _now_iso(),
+                })
+
+                # Taste Model logging
+                if _log_outcome:
+                    try:
+                        _continue_log_status = (
+                            "completed" if (status == "ACCEPTED" and gateway == "ALLOW") else
+                            "blocked" if gateway == "DENY" else
+                            "partial" if gateway == "PAUSE" else
+                            "failed"
+                        )
+                        _log_outcome(
+                            mission_id=goal_id.upper(),
+                            date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                            claimed_status=_continue_log_status,
+                            actual_status=_continue_log_status,
+                            model_used="continue_cli_qwen3.6",
+                            runtime_validated=(status == "ACCEPTED" and gateway == "ALLOW"),
+                            value_immediate=3,
+                            patterns=["cm_continue", f"cm_{status.lower()}", f"gw_{gateway.lower()}"],
+                            notes=f"CM-Continue cycle {cycle}: {goal_id} status={status} gw={gateway}",
+                        )
+                    except Exception as exc:
+                        log.warning("log_outcome failed (continue): %s", exc)
+
+                if status == "ACCEPTED" and gateway == "ALLOW":
+                    log.info("Continue ALLOW — goal %s completed.", goal_id)
+                    _mark_goal_done(goal_id)
+                    cm_state["goals_completed"] = cm_state.get("goals_completed", 0) + 1
+                    _append_jsonl(CM_LOG_PATH, {
+                        "event": "cm_goal_completed",
+                        "cycle": cycle,
+                        "goal_id": goal_id,
+                        "run_id": run_id,
+                        "via": "continue",
+                        "at": _now_iso(),
+                    })
+                elif gateway == "PAUSE" or status in ("PENDING_HUMAN", "AWAIT_HUMAN"):
+                    log.warning("Continue PAUSE — goal %s queued for human review.", goal_id)
+                    cm_state["goals_paused"] = cm_state.get("goals_paused", 0) + 1
+                    _append_jsonl(PAUSE_QUEUE_PATH, {
+                        "goal_id": goal_id, "run_id": run_id, "cycle": cycle,
+                        "consume_result": result, "queued_at": _now_iso(),
+                    })
+                    _append_jsonl(CM_LOG_PATH, {
+                        "event": "cm_goal_blocked",
+                        "cycle": cycle,
+                        "goal_id": goal_id,
+                        "run_id": run_id,
+                        "reason": gateway,
+                        "via": "continue",
+                        "at": _now_iso(),
+                    })
+                    # AO8J_4: Mark PAUSED so _pick_next_goal skips it on next cycle
+                    _mark_goal_paused(goal_id)
+                elif gateway == "DENY" or status == "BLOCKED_POLICY":
+                    log.warning("Continue DENY — goal %s blocked by policy.", goal_id)
+                    cm_state["goals_denied"] = cm_state.get("goals_denied", 0) + 1
+                    _append_jsonl(DENY_LOG_PATH, {
+                        "goal_id": goal_id, "run_id": run_id, "cycle": cycle,
+                        "consume_result": result, "denied_at": _now_iso(),
+                    })
+                    _append_jsonl(CM_LOG_PATH, {
+                        "event": "cm_goal_blocked",
+                        "cycle": cycle,
+                        "goal_id": goal_id,
+                        "run_id": run_id,
+                        "reason": "DENY",
+                        "via": "continue",
+                        "at": _now_iso(),
+                    })
+                    _mark_goal_done(goal_id)
+                else:
+                    log.info("Continue consume unhandled status=%s — continuing.", status)
+            else:
+                log.warning("Continue execution failed: %s", run.get("error", "(no error field)"))
+
+            _save_cm_state(cm_state)
+            if once:
+                log.info("--once flag set — exiting after Continue cycle.")
+                break
+            log.info("Sleeping %ds before next cycle.", heartbeat)
+            time.sleep(heartbeat)
+            continue  # skip inbox-write + polling below
 
         if use_sai_direct:
             log.info("SAI direct mode for goal %s (auto_approve+%s)", goal_id, goal.get("risk"))
@@ -631,6 +921,100 @@ def run_heartbeat(
                 "goal_id": goal_id,
                 "at": _now_iso(),
             })
+
+            # ── Compute Arbiter V0: executor recommendation ────────
+            try:
+                from orchestrator_runtime.compute_arbiter import recommend_executor as _recommend_executor
+                _arbiter_rec = _recommend_executor(
+                    task_text=prompt,
+                    risk_level=goal.get("risk", "UNKNOWN"),
+                )
+            except Exception as _arb_exc:
+                log.warning("Compute Arbiter import/call failed (%s) — proceeding with SAI default.", _arb_exc)
+                _arbiter_rec = {
+                    "primary_executor": "sai",
+                    "routing_enabled": False,
+                    "confidence": 0.5,
+                    "blocked": False,
+                    "blocked_reason": None,
+                    "warning": None,
+                    "recommendation": "Arbiter unavailable — SAI default used.",
+                }
+
+            log.info(
+                "Compute Arbiter: executor=%s confidence=%.2f blocked=%s",
+                _arbiter_rec.get("primary_executor"),
+                _arbiter_rec.get("confidence", 0.0),
+                _arbiter_rec.get("blocked"),
+            )
+            _append_jsonl(CM_LOG_PATH, {
+                "event": "cm_arbiter_recommendation",
+                "cycle": cycle,
+                "goal_id": goal_id,
+                "primary_executor": _arbiter_rec.get("primary_executor"),
+                "confidence": _arbiter_rec.get("confidence"),
+                "blocked": _arbiter_rec.get("blocked"),
+                "blocked_reason": _arbiter_rec.get("blocked_reason"),
+                "warning": _arbiter_rec.get("warning"),
+                "recommendation": _arbiter_rec.get("recommendation"),
+                "at": _now_iso(),
+            })
+
+            # Guard 1: Arbiter recommends non-SAI executor (not possible in V0, but defensive)
+            if _arbiter_rec.get("primary_executor") != "sai":
+                _reason = f"Arbiter recommended non-SAI executor: {_arbiter_rec.get('primary_executor')}. V0 only supports SAI."
+                log.error("Compute Arbiter: %s — halting cycle.", _reason)
+                _append_jsonl(CM_LOG_PATH, {
+                    "event": "cm_arbiter_halted",
+                    "cycle": cycle,
+                    "goal_id": goal_id,
+                    "reason": _reason,
+                    "at": _now_iso(),
+                })
+                _save_cm_state(cm_state)
+                if once:
+                    break
+                time.sleep(heartbeat)
+                continue
+
+            # Guard 2: Blocked (HIGH risk or explicit block)
+            if _arbiter_rec.get("blocked"):
+                _reason = _arbiter_rec.get("blocked_reason", "Arbiter blocked execution.")
+                log.warning("Compute Arbiter: goal %s blocked — %s", goal_id, _reason)
+                _append_jsonl(CM_LOG_PATH, {
+                    "event": "cm_arbiter_blocked",
+                    "cycle": cycle,
+                    "goal_id": goal_id,
+                    "reason": _reason,
+                    "at": _now_iso(),
+                })
+                _save_cm_state(cm_state)
+                if once:
+                    break
+                time.sleep(heartbeat)
+                continue
+
+            # Guard 3: Very low confidence
+            if _arbiter_rec.get("confidence", 1.0) < 0.3:
+                _reason = f"Arbiter confidence too low ({_arbiter_rec.get('confidence'):.2f} < 0.30). Human review recommended."
+                log.warning("Compute Arbiter: %s — halting cycle for goal %s.", _reason, goal_id)
+                _append_jsonl(CM_LOG_PATH, {
+                    "event": "cm_arbiter_low_confidence",
+                    "cycle": cycle,
+                    "goal_id": goal_id,
+                    "confidence": _arbiter_rec.get("confidence"),
+                    "reason": _reason,
+                    "at": _now_iso(),
+                })
+                _save_cm_state(cm_state)
+                if once:
+                    break
+                time.sleep(heartbeat)
+                continue
+
+            if _arbiter_rec.get("warning"):
+                log.warning("Compute Arbiter warning for %s: %s", goal_id, _arbiter_rec["warning"])
+            # ── End Compute Arbiter V0 ─────────────────────────────
 
             sai_exec = _execute_via_sai(goal_id, prompt, cycle)
 
@@ -844,6 +1228,8 @@ def run_heartbeat(
                 "consume_result": result,
                 "queued_at": _now_iso(),
             })
+            # AO8J_4: Mark PAUSED so _pick_next_goal skips it
+            _mark_goal_paused(goal_id)
 
         elif gateway == "DENY" or status == "BLOCKED_POLICY":
             log.warning("DENY — goal %s blocked by policy.", goal_id)
