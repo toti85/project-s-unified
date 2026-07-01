@@ -184,6 +184,17 @@ reports/dryrun_*
 
 # API keys / local secrets
 docs/*api_key*.py
+docs/*_key.py
 openrouter.txt
 API_KEY.txt
 *.key
+
+# Ad-hoc test scripts (regenerable)
+_ao*_*.py
+_sai_*.py
+
+# Strategic output cache (regenerable)
+strategic_output_*.txt
+
+# Local AI models (too large, external — note: git ignores only within repo)
+C:/AI/**
