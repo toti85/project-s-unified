@@ -1,0 +1,106 @@
+Create a new file `single_prompt_output.json` in the current directory.
+The file must contain ONLY valid JSON — no preamble, no markdown, no explanation.
+
+Classify these 77 findings (indices 1 to 77) with severity:
+HIGH=security/data-loss/auth, MEDIUM=functionality/correctness/performance, LOW=docs/style/cleanup
+
+FINDINGS (include ALL, invent NONE):
+#1 [TODO] debug_kill_list.py:40 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#2 [TODO] debug_kill_list.py:73 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#3 [TODO] debug_rabbit_hole.py:37 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#4 [TODO] debug_rabbit_hole.py:63 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#5 [TODO] debug_rabbit_hole.py:89 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#6 [TODO] debug_rename_detailed.py:31 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#7 [TODO] test_kill_detection_mock.py:29 "description=\"[TODO] Rename to EcdsLibStub (file:7)\","  context: "task_id="test_rename","
+#8 [TODO] test_kill_detection_mock.py:34 "metadata={\"priority\": \"TODO\"}"  context: "text="Rename to EcdsLibStub","
+#9 [TODO] test_protection_direct.py:18 "snippet=\"# TODO: Test with dust amounts (1 wei, etc.)\","  context: "text="Test with dust amounts (1 wei, etc.)","
+#10 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:4 "Operator scans the repository for TODO/FIXME/XXX markers."  context: "Feeds raw scan data to Ornith 9B."
+#11 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:50 "TODO_PATTERN = re.compile(r\"\b(TODO|FIXME|XXX)\b\")"  context: "}"
+#12 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:117 "Scan all Python files under root for TODO/FIXME/XXX."  context: """""
+#13 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:256 "print(\"\n[PHASE 1] Scanning repository for TODO/FIXME/XXX in Python files...\")"  context: "# ── PHASE 1: Operator scan ────────────────────────────────────────"
+#14 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:269 "print(f\"  By type: TODO={type_counts.get('TODO',0)} FIXME={type_counts.get('FIXME',0)} XXX={type_counts.get('XXX',0)}\")"  context: "print(f"  Total findings: {scan_count}")"
+#15 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:292 "# PROJECT-S TODO/FIXME/XXX AUDIT"
+#16 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:295 "State: date of scan ({scan_ts[:10]}), Python files scanned ({files_scanned}), files with findings ({files_with}), total findings ({scan_count}), breakdown by type (TODO: {type_counts.get('TODO',0)}, FIXME: {type_counts.get('FIXME',0)}, XXX: {type_counts.get('XXX',0)})."  context: "## 1. Summary"
+#17 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:298 "{\"If there are no findings, write: No TODO/FIXME/XXX markers were found.\" if scan_count == 0 else f\"For each of the {scan_count} findings above, list: file path, line number, type, the text, surrounding context, and severity classification.\"}"  context: "## 2. Findings"
+#18 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:349 "\"type\": \"<TODO|FIXME|XXX>\","  context: ""line": <line number as integer>,"
+#19 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:434 "Findings by type: TODO={type_counts.get('TODO',0)}, FIXME={type_counts.get('FIXME',0)}, XXX={type_counts.get('XXX',0)}"  context: "Total findings from scan: {scan_count}"
+#20 [TODO] organism/core/loop.py:73 "text=todo['text'],  # Original TODO/FIXME text"  context: "metadata={'priority': todo['priority']},"
+#21 [TODO] organism/core/observer.py:6 "- Extract TODO/FIXME annotations"  context: "- Scan repository changes (git diff)"
+#22 [TODO] organism/core/observer.py:30 "\"\"\"TODO annotation found in source.\"\"\""  context: "class TodoItem(TypedDict):"
+#23 [TODO] organism/core/observer.py:34 "priority: str  # 'TODO', 'FIXME'"  context: "text: str"
+#24 [TODO] organism/core/observer.py:55 "text: str = \"\"  # Original TODO/FIXME text"  context: "line: int = 0"
+#25 [TODO] organism/core/observer.py:177 "Scan source files for TODO/FIXME annotations in actual code comments only."  context: """""
+#26 [TODO] organism/core/observer.py:213 "# Python format: ^(\s*)#\s*(TODO|FIXME)"  context: "# Only match actual code comments (anchored to line start, after whitespace)"
+#27 [TODO] organism/core/observer.py:214 "# JavaScript format: ^(\s*)//(TODO|FIXME)"  context: "# Python format: ^(\s*)#\s*(TODO|FIXME)"
+#28 [TODO] organism/core/observer.py:219 "# Check if line is a Python comment with TODO/FIXME"  context: "py_match = None"
+#29 [TODO] organism/core/observer.py:224 "py_match = re.match(r'#\s*(TODO|FIXME)[:\s]+(.*?)(?:\s*$)', stripped)"  context: "if stripped.startswith('#'):"
+#30 [TODO] organism/core/observer.py:226 "# Check if line is a JavaScript/Solidity comment with TODO/FIXME"  context: "if stripped.startswith('//'):"
+#31 [TODO] organism/core/observer.py:228 "js_match = re.match(r'//\s*(TODO|FIXME)[:\s]+(.*?)(?:\s*$)', stripped)"  context: "if stripped.startswith('//'):"
+#32 [TODO] organism/core/observer.py:234 "priority = match.group(1)  # 'TODO' or 'FIXME'"  context: "comment_text = match.group(2).strip()"
+#33 [TODO] organism/core/prioritizer.py:29 "text: str          # Original TODO/FIXME text"  context: "line: int          # Line number"
+#34 [TODO] organism/core/prioritizer.py:36 "priority: str      # 'TODO' or 'FIXME'"  context: "issue_url: str     # GitHub/issue tracker URL if present"
+#35 [FIXME] organism/core/prioritizer.py:61 "'FIXME': 1.0,"  context: "self.high_impact_keywords = {"
+#36 [TODO] organism/core/prioritizer.py:66 "'TODO': 0.6,"  context: "'performance': 0.7,"
+#37 [FIXME] organism/core/prioritizer.py:76 "- FIXME items: high impact (0.8-1.0)"  context: "- HEAVILY PENALIZE organism/ and other ignored dirs (-0.95 impact)"
+#38 [TODO] organism/core/prioritizer.py:129 "# Easy tasks: typo, doc, comment, rename, TODO cleanup"  context: "easy_keywords = ['typo', 'doc', 'comment', 'rename', 'clean up', 'remove', 'add docstring']"
+#39 [FIXME] organism/core/prioritizer.py:137 "elif 'fix' in text_combined and 'FIXME' not in task.text:"  context: "# Medium-easy: simple fixing"
+#40 [TODO] organism/core/prioritizer.py:139 "# Standard TODO"  context: "effort = 3"
+#41 [TODO] organism/core/prioritizer.py:140 "elif 'TODO' in task.text:"  context: "# Standard TODO"
+#42 [FIXME] organism/core/prioritizer.py:142 "# FIXME usually harder"  context: "effort = 4"
+#43 [FIXME] organism/core/prioritizer.py:143 "elif 'FIXME' in task.text:"  context: "# FIXME usually harder"
+#44 [FIXME] organism/core/prioritizer.py:195 "- If file contains \"/test/\" and FIXME: +0.15 bonus"  context: "- If issue_url present: ev = 0.65 (already discussed/tracked)"
+#45 [FIXME] organism/core/prioritizer.py:210 "# Test file FIXME = higher confidence"  context: "if '/test/' in task.file.lower() and task.metadata.get('priority') == 'FIXME':"
+#46 [FIXME] organism/core/prioritizer.py:211 "if '/test/' in task.file.lower() and task.metadata.get('priority') == 'FIXME':"  context: "# Test file FIXME = higher confidence"
+#47 [TODO] organism/core/prioritizer.py:225 "elif 'TODO' in task.text and 'verify' in text_combined:"  context: "ev = max(ev, 0.80)  # FIXMEs are usually proven issues"
+#48 [TODO] organism/core/prioritizer.py:562 "'priority': task.metadata.get('priority', 'TODO'),"  context: "'issue_url': task.issue_url,"
+#49 [FIXME] organism/core/proposer.py:303 "- FIXME + (timeout/connection) => config/refactor steps"  context: "Categories:"
+#50 [FIXME] organism/core/proposer.py:304 "- FIXME + (complicated/conditions/implement in future) => spec-first steps"  context: "- FIXME + (timeout/connection) => config/refactor steps"
+#51 [TODO] organism/core/proposer.py:305 "- TODO + (verify/test) => concrete test steps"  context: "- FIXME + (complicated/conditions/implement in future) => spec-first steps"
+#52 [FIXME] organism/core/proposer.py:306 "- Other FIXME => debug flow"  context: "- TODO + (verify/test) => concrete test steps"
+#53 [TODO] organism/core/proposer.py:307 "- Other TODO => implementation flow"  context: "- Other FIXME => debug flow"
+#54 [FIXME] organism/core/proposer.py:310 "is_fixme = task['priority'].upper() == 'FIXME'"  context: "text_combined = (task['text'] + " " + task['description']).lower()"
+#55 [FIXME] organism/core/proposer.py:312 "# ===== FIXME: TIMEOUT/CONNECTION ISSUES ====="  context: "if is_fixme and any(kw in text_combined for kw in ['timeout', 'connection']):"
+#56 [FIXME] organism/core/proposer.py:319 "# ===== FIXME: COMPLICATED CONDITIONS/FUTURE WORK ====="  context: "if is_fixme and any(kw in text_combined for kw in ['complicated', 'conditions', 'implement in the future']):"
+#57 [FIXME] organism/core/proposer.py:326 "# ===== FIXME: GENERAL DEBUGGING FLOW ====="  context: "if is_fixme:"
+#58 [FIXME] organism/core/proposer.py:328 "return (\"1. **Read FIXME context** — Review the comment and surrounding code\n\""  context: "if is_fixme:"
+#59 [TODO] organism/core/proposer.py:333 "# ===== TODO: VERIFICATION/TESTING ====="  context: "if 'verify' in text_combined or 'test' in text_combined:"
+#60 [TODO] organism/core/proposer.py:340 "# ===== TODO: REFACTORING ====="  context: "if 'refactor' in text_combined or 'rewrite' in text_combined:"
+#61 [TODO] organism/core/proposer.py:347 "# ===== TODO: PERFORMANCE/SECURITY ====="  context: "if any(kw in text_combined for kw in ['security', 'performance', 'optimize']):"
+#62 [TODO] organism/core/proposer.py:354 "# ===== TODO: DOCUMENTATION ====="  context: "if any(kw in text_combined for kw in ['doc', 'comment', 'clarify']):"
+#63 [TODO] organism/core/proposer.py:361 "# ===== TODO: GENERIC IMPLEMENTATION ====="  context: "return ("1. **Read the TODO context** — Understand the requirement\n""
+#64 [TODO] organism/core/proposer.py:362 "return (\"1. **Read the TODO context** — Understand the requirement\n\""  context: "# ===== TODO: GENERIC IMPLEMENTATION ====="
+#65 [TODO] organism/core/state_observer.py:7 "Cél: Az Organism ne csak TODO/FIXME/git diff/terminál-históriát lásson,"  context: "hanem a rendszer saját ismert hiányosságait (self_state.json) is."
+#66 [FIXME] organism/core/state_observer.py:26 "# => FIXME marker = high/medium gap-eknek az optimális jelölő"  context: "# A prioritizer.py ev: 'fixme' → ev >= 0.80"
+#67 [FIXME] organism/core/state_observer.py:28 "\"high\":   \"FIXME\","  context: "_PRIORITY_MARKER = {"
+#68 [FIXME] organism/core/state_observer.py:29 "\"medium\": \"FIXME\","  context: ""high":   "FIXME","
+#69 [TODO] organism/core/state_observer.py:30 "\"low\":    \"TODO\","  context: ""medium": "FIXME","
+#70 [TODO] organism/core/state_observer.py:69 "marker = _PRIORITY_MARKER.get(priority, \"TODO\")"
+#71 [FIXME] organism/core/state_observer.py:72 "# \"FIXME\" → impact +0.2, ev → 0.80 (prioritizer.py scoring)"  context: "# --- Description tervezés ---"
+#72 [TODO] organism/core/state_observer.py:95 "# text = az \"eredeti TODO szöveg\" ekvivalense (proposer title-hez és _generate_action-höz)"  context: "text = f"{marker}: {title}""
+#73 [FIXME] organism/core/state_observer.py:118 "# FONTOS: marker értéket ('FIXME'/'TODO') kell itt tárolni, NEM a priority szintet!"  context: ""gap_id": gap_id,"
+#74 [TODO] organism/core/state_observer.py:119 "# A prioritizer.py task.metadata.get('priority', 'TODO') alapján tölti be a"  context: "# FONTOS: marker értéket ('FIXME'/'TODO') kell itt tárolni, NEM a priority szintet!"
+#75 [FIXME] organism/core/state_observer.py:121 "# használ: task['priority'].upper() == 'FIXME'"  context: "# TaskScore['priority'] mezőt, amit a proposer._generate_action() is_fixme check-je"
+#76 [TODO] organism/core/state_observer.py:122 "# Ha itt 'medium'/'high' lenne, is_fixme=False → generikus TODO Steps (nem megfelelő)"  context: "# használ: task['priority'].upper() == 'FIXME'"
+#77 [TODO] tests/test_sai_tool_selection_file_list.py:129 "\"grep for TODO in source\","  context: ""search for errors in log","
+
+Required JSON structure for `single_prompt_output.json`:
+{
+  "prompt_id": 1,
+  "start_index": 1,
+  "end_index": 77,
+  "finding_count": 77,
+  "findings": [
+    {
+      "index": <number>,
+      "file": "<file path>",
+      "line": <number>,
+      "type": "<TODO|FIXME|XXX>",
+      "severity": "<LOW|MEDIUM|HIGH>",
+      "text": "<exact text>",
+      "context": "<context>"
+    }
+  ]
+}
+
+Every finding index from 1 to 77 MUST appear exactly once.
+Do not add findings that are not in the list above.

@@ -1,0 +1,54 @@
+Create a new file `chunk_02.json` in the current directory.
+The file must contain ONLY valid JSON — no preamble, no markdown, no explanation.
+
+Classify these 25 findings (indices 26 to 50) with severity:
+HIGH=security/data-loss/auth, MEDIUM=functionality/correctness/performance, LOW=docs/style/cleanup
+
+FINDINGS (include ALL, invent NONE):
+#26 [TODO] organism/core/observer.py:213 "# Python format: ^(\\s*)#\\s*(TODO|FIXME)"  context: "# Only match actual code comments (anchored to line start, after whitespace)"
+#27 [TODO] organism/core/observer.py:214 "# JavaScript format: ^(\\s*)//(TODO|FIXME)"  context: "# Python format: ^(\\s*)#\\s*(TODO|FIXME)"
+#28 [TODO] organism/core/observer.py:219 "# Check if line is a Python comment with TODO/FIXME"  context: "py_match = None"
+#29 [TODO] organism/core/observer.py:224 "py_match = re.match(r'#\\s*(TODO|FIXME)[:\\s]+(.*?)(?:\\s*$)', stripped)"  context: "if stripped.startswith('#'):"
+#30 [TODO] organism/core/observer.py:226 "# Check if line is a JavaScript/Solidity comment with TODO/FIXME"  context: "if stripped.startswith('//'):"
+#31 [TODO] organism/core/observer.py:228 "js_match = re.match(r'//\\s*(TODO|FIXME)[:\\s]+(.*?)(?:\\s*$)', stripped)"  context: "if stripped.startswith('//'):"
+#32 [TODO] organism/core/observer.py:234 "priority = match.group(1)  # 'TODO' or 'FIXME'"  context: "comment_text = match.group(2).strip()"
+#33 [TODO] organism/core/prioritizer.py:29 "text: str          # Original TODO/FIXME text"  context: "line: int          # Line number"
+#34 [TODO] organism/core/prioritizer.py:36 "priority: str      # 'TODO' or 'FIXME'"  context: "issue_url: str     # GitHub/issue tracker URL if present"
+#35 [FIXME] organism/core/prioritizer.py:61 "'FIXME': 1.0,"  context: "self.high_impact_keywords = {"
+#36 [TODO] organism/core/prioritizer.py:66 "'TODO': 0.6,"  context: "'performance': 0.7,"
+#37 [FIXME] organism/core/prioritizer.py:76 "- FIXME items: high impact (0.8-1.0)"  context: "- HEAVILY PENALIZE organism/ and other ignored dirs (-0.95 impact)"
+#38 [TODO] organism/core/prioritizer.py:129 "# Easy tasks: typo, doc, comment, rename, TODO cleanup"  context: "easy_keywords = ['typo', 'doc', 'comment', 'rename', 'clean up', 'remove', 'add docstring']"
+#39 [FIXME] organism/core/prioritizer.py:137 "elif 'fix' in text_combined and 'FIXME' not in task.text:"  context: "# Medium-easy: simple fixing"
+#40 [TODO] organism/core/prioritizer.py:139 "# Standard TODO"  context: "effort = 3"
+#41 [TODO] organism/core/prioritizer.py:140 "elif 'TODO' in task.text:"  context: "# Standard TODO"
+#42 [FIXME] organism/core/prioritizer.py:142 "# FIXME usually harder"  context: "effort = 4"
+#43 [FIXME] organism/core/prioritizer.py:143 "elif 'FIXME' in task.text:"  context: "# FIXME usually harder"
+#44 [FIXME] organism/core/prioritizer.py:195 "- If file contains \"/test/\" and FIXME: +0.15 bonus"  context: "- If issue_url present: ev = 0.65 (already discussed/tracked)"
+#45 [FIXME] organism/core/prioritizer.py:210 "# Test file FIXME = higher confidence"  context: "if '/test/' in task.file.lower() and task.metadata.get('priority') == 'FIXME':"
+#46 [FIXME] organism/core/prioritizer.py:211 "if '/test/' in task.file.lower() and task.metadata.get('priority') == 'FIXME':"  context: "# Test file FIXME = higher confidence"
+#47 [TODO] organism/core/prioritizer.py:225 "elif 'TODO' in task.text and 'verify' in text_combined:"  context: "ev = max(ev, 0.80)  # FIXMEs are usually proven issues"
+#48 [TODO] organism/core/prioritizer.py:562 "'priority': task.metadata.get('priority', 'TODO'),"  context: "'issue_url': task.issue_url,"
+#49 [FIXME] organism/core/proposer.py:303 "- FIXME + (timeout/connection) => config/refactor steps"  context: "Categories:"
+#50 [FIXME] organism/core/proposer.py:304 "- FIXME + (complicated/conditions/implement in future) => spec-first steps"  context: "- FIXME + (timeout/connection) => config/refactor steps"
+
+Required JSON structure for `chunk_02.json`:
+{
+  "chunk_id": 2,
+  "start_index": 26,
+  "end_index": 50,
+  "finding_count": 25,
+  "findings": [
+    {
+      "index": <number>,
+      "file": "<file path>",
+      "line": <number>,
+      "type": "<TODO|FIXME|XXX>",
+      "severity": "<LOW|MEDIUM|HIGH>",
+      "text": "<exact text>",
+      "context": "<context>"
+    }
+  ]
+}
+
+Every finding index from 26 to 50 MUST appear exactly once.
+Do not add findings that are not in the list above.

@@ -1,0 +1,54 @@
+Create a new file `chunk_01.json` in the current directory.
+The file must contain ONLY valid JSON — no preamble, no markdown, no explanation.
+
+Classify these 25 findings (indices 1 to 25) with severity:
+HIGH=security/data-loss/auth, MEDIUM=functionality/correctness/performance, LOW=docs/style/cleanup
+
+FINDINGS (include ALL, invent NONE):
+#1 [TODO] debug_kill_list.py:40 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#2 [TODO] debug_kill_list.py:73 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#3 [TODO] debug_rabbit_hole.py:37 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#4 [TODO] debug_rabbit_hole.py:63 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#5 [TODO] debug_rabbit_hole.py:89 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#6 [TODO] debug_rename_detailed.py:31 "metadata={'priority': todo.get('priority', 'TODO')}"  context: "issue_url=todo.get('issue_url', ''),"
+#7 [TODO] test_kill_detection_mock.py:29 "description=\"[TODO] Rename to EcdsLibStub (file:7)\","  context: "task_id=\"test_rename\","
+#8 [TODO] test_kill_detection_mock.py:34 "metadata={\"priority\": \"TODO\"}"  context: "text=\"Rename to EcdsLibStub\","
+#9 [TODO] test_protection_direct.py:18 "snippet=\"# TODO: Test with dust amounts (1 wei, etc.)\","  context: "text=\"Test with dust amounts (1 wei, etc.)\","
+#10 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:4 "Operator scans the repository for TODO/FIXME/XXX markers."  context: "Feeds raw scan data to Ornith 9B."
+#11 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:50 "TODO_PATTERN = re.compile(r\"\\b(TODO|FIXME|XXX)\\b\")"  context: "}"
+#12 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:117 "Scan all Python files under root for TODO/FIXME/XXX."  context: "\"\"\""
+#13 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:256 "print(\"\\n[PHASE 1] Scanning repository for TODO/FIXME/XXX in Python files...\")"  context: "# \u2500\u2500 PHASE 1: Operator scan \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
+#14 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:269 "print(f\"  By type: TODO={type_counts.get('TODO',0)} FIXME={type_counts.get('FIXME',0)} XXX={type_counts.get('XXX',0)}\")"  context: "print(f\"  Total findings: {scan_count}\")"
+#15 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:292 "# PROJECT-S TODO/FIXME/XXX AUDIT"
+#16 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:295 "State: date of scan ({scan_ts[:10]}), Python files scanned ({files_scanned}), files with findings ({files_with}), total findings ({scan_count}), breakdown by type (TODO: {type_counts.get('TODO',0)}, FIXME: {type_counts.get('FIXME',0)}, XXX: {type_counts.get('XXX',0)})."  context: "## 1. Summary"
+#17 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:298 "{\"If there are no findings, write: No TODO/FIXME/XXX markers were found.\" if scan_count == 0 else f\"For each of the {scan_count} findings above, list: file path, line number, type, the text, surrounding context, and severity classification.\"}"  context: "## 2. Findings"
+#18 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:349 "\"type\": \"<TODO|FIXME|XXX>\","  context: "\"line\": <line number as integer>,"
+#19 [TODO] orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py:434 "Findings by type: TODO={type_counts.get('TODO',0)}, FIXME={type_counts.get('FIXME',0)}, XXX={type_counts.get('XXX',0)}"  context: "Total findings from scan: {scan_count}"
+#20 [TODO] organism/core/loop.py:73 "text=todo['text'],  # Original TODO/FIXME text"  context: "metadata={'priority': todo['priority']},"
+#21 [TODO] organism/core/observer.py:6 "- Extract TODO/FIXME annotations"  context: "- Scan repository changes (git diff)"
+#22 [TODO] organism/core/observer.py:30 "\"\"\"TODO annotation found in source.\"\"\""  context: "class TodoItem(TypedDict):"
+#23 [TODO] organism/core/observer.py:34 "priority: str  # 'TODO', 'FIXME'"  context: "text: str"
+#24 [TODO] organism/core/observer.py:55 "text: str = \"\"  # Original TODO/FIXME text"  context: "line: int = 0"
+#25 [TODO] organism/core/observer.py:177 "Scan source files for TODO/FIXME annotations in actual code comments only."  context: "\"\"\""
+
+Required JSON structure for `chunk_01.json`:
+{
+  "chunk_id": 1,
+  "start_index": 1,
+  "end_index": 25,
+  "finding_count": 25,
+  "findings": [
+    {
+      "index": <number>,
+      "file": "<file path>",
+      "line": <number>,
+      "type": "<TODO|FIXME|XXX>",
+      "severity": "<LOW|MEDIUM|HIGH>",
+      "text": "<exact text>",
+      "context": "<context>"
+    }
+  ]
+}
+
+Every finding index from 1 to 25 MUST appear exactly once.
+Do not add findings that are not in the list above.

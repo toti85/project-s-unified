@@ -1,0 +1,121 @@
+{
+  "mission": "AO9_T7",
+  "timestamp": "2026-07-16T07:09:08.897158+00:00",
+  "preflight": {
+    "api_key_loaded": true,
+    "model": "deepseek/deepseek-v4-flash",
+    "aider_model_string": "openai/deepseek/deepseek-v4-flash",
+    "endpoint": "https://openrouter.ai/api/v1",
+    "preflight_test_ok": true,
+    "preflight_elapsed": 11.29,
+    "preflight_tokens": {
+      "tokens_sent": 614,
+      "tokens_received": 5,
+      "tokens_total": 619
+    }
+  },
+  "canonical": {
+    "files_scanned": 501,
+    "files_with_findings": 12,
+    "total_findings": 77
+  },
+  "chunks": [
+    {
+      "chunk_id": 1,
+      "start": 1,
+      "end": 25,
+      "n": 25,
+      "ok": true,
+      "exit_code": 0,
+      "elapsed": 144.54,
+      "file_created": true,
+      "parse_ok": true,
+      "validation_errors": [],
+      "token_info": {
+        "tokens_sent": null,
+        "tokens_received": null,
+        "tokens_total": null
+      }
+    },
+    {
+      "chunk_id": 2,
+      "start": 26,
+      "end": 50,
+      "n": 25,
+      "ok": true,
+      "exit_code": 0,
+      "elapsed": 126.08,
+      "file_created": true,
+      "parse_ok": true,
+      "validation_errors": [],
+      "token_info": {
+        "tokens_sent": null,
+        "tokens_received": null,
+        "tokens_total": null
+      }
+    },
+    {
+      "chunk_id": 3,
+      "start": 51,
+      "end": 77,
+      "n": 27,
+      "ok": true,
+      "exit_code": 0,
+      "elapsed": 183.68,
+      "file_created": true,
+      "parse_ok": true,
+      "validation_errors": [],
+      "token_info": {
+        "tokens_sent": null,
+        "tokens_received": null,
+        "tokens_total": null
+      }
+    }
+  ],
+  "merge": {
+    "merged_count": 77,
+    "duplicates": 0,
+    "missing_indices": [],
+    "extra_indices": [],
+    "json_parse_ok": true,
+    "json_total": 77,
+    "consistent": true
+  },
+  "tokens": {
+    "total_sent": 0,
+    "total_received": 0,
+    "preflight_sent": 614,
+    "preflight_received": 5
+  },
+  "cost_estimate_usd": 0.0,
+  "cost_per_finding_usd": 0.0,
+  "artifacts": {
+    "todo_inventory_json": {
+      "exists": true,
+      "size": 22688
+    },
+    "audit_md": {
+      "exists": true,
+      "size": 20254,
+      "finding_headings": 77
+    }
+  },
+  "checks": {
+    "canonical_loaded": true,
+    "preflight_ok": true,
+    "all_chunks_pass": true,
+    "no_timeout": true,
+    "json_exists": true,
+    "json_parses": true,
+    "count_consistent": true,
+    "md_exists": true,
+    "md_count_ok": true,
+    "zero_duplicates": true,
+    "no_missing_indices": true
+  },
+  "checks_passed": "11/11",
+  "classification": "PASS",
+  "scenario": "A",
+  "manual_content_intervention": false,
+  "fabricated_findings": false
+}

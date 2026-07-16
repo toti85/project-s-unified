@@ -1,0 +1,251 @@
+{
+  "chunk_id": 3,
+  "start_index": 51,
+  "end_index": 77,
+  "finding_count": 27,
+  "findings": [
+    {
+      "index": 51,
+      "file": "organism/core/proposer.py",
+      "line": 305,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "- TODO + (verify/test) => concrete test steps",
+      "context": "- FIXME + (complicated/conditions/implement in future) => spec-first steps"
+    },
+    {
+      "index": 52,
+      "file": "organism/core/proposer.py",
+      "line": 306,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "- Other FIXME => debug flow",
+      "context": "- TODO + (verify/test) => concrete test steps"
+    },
+    {
+      "index": 53,
+      "file": "organism/core/proposer.py",
+      "line": 307,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "- Other TODO => implementation flow",
+      "context": "- Other FIXME => debug flow"
+    },
+    {
+      "index": 54,
+      "file": "organism/core/proposer.py",
+      "line": 310,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "is_fixme = task['priority'].upper() == 'FIXME'",
+      "context": "text_combined = (task['text'] + \" \" + task['description']).lower()"
+    },
+    {
+      "index": 55,
+      "file": "organism/core/proposer.py",
+      "line": 312,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "# ===== FIXME: TIMEOUT/CONNECTION ISSUES =====",
+      "context": "if is_fixme and any(kw in text_combined for kw in ['timeout', 'connection']):"
+    },
+    {
+      "index": 56,
+      "file": "organism/core/proposer.py",
+      "line": 319,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "# ===== FIXME: COMPLICATED CONDITIONS/FUTURE WORK =====",
+      "context": "if is_fixme and any(kw in text_combined for kw in ['complicated', 'conditions', 'implement in the future']):"
+    },
+    {
+      "index": 57,
+      "file": "organism/core/proposer.py",
+      "line": 326,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "# ===== FIXME: GENERAL DEBUGGING FLOW =====",
+      "context": "if is_fixme:"
+    },
+    {
+      "index": 58,
+      "file": "organism/core/proposer.py",
+      "line": 328,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "return (\"1. **Read FIXME context** — Review the comment and surrounding code\\n\"",
+      "context": "if is_fixme:"
+    },
+    {
+      "index": 59,
+      "file": "organism/core/proposer.py",
+      "line": 333,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "# ===== TODO: VERIFICATION/TESTING =====",
+      "context": "if 'verify' in text_combined or 'test' in text_combined:"
+    },
+    {
+      "index": 60,
+      "file": "organism/core/proposer.py",
+      "line": 340,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "# ===== TODO: REFACTORING =====",
+      "context": "if 'refactor' in text_combined or 'rewrite' in text_combined:"
+    },
+    {
+      "index": 61,
+      "file": "organism/core/proposer.py",
+      "line": 347,
+      "type": "TODO",
+      "severity": "HIGH",
+      "text": "# ===== TODO: PERFORMANCE/SECURITY =====",
+      "context": "if any(kw in text_combined for kw in ['security', 'performance', 'optimize']):"
+    },
+    {
+      "index": 62,
+      "file": "organism/core/proposer.py",
+      "line": 354,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "# ===== TODO: DOCUMENTATION =====",
+      "context": "if any(kw in text_combined for kw in ['doc', 'comment', 'clarify']):"
+    },
+    {
+      "index": 63,
+      "file": "organism/core/proposer.py",
+      "line": 361,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "# ===== TODO: GENERIC IMPLEMENTATION =====",
+      "context": "return (\"1. **Read the TODO context** — Understand the requirement\\n\""
+    },
+    {
+      "index": 64,
+      "file": "organism/core/proposer.py",
+      "line": 362,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "return (\"1. **Read the TODO context** — Understand the requirement\\n\"",
+      "context": "# ===== TODO: GENERIC IMPLEMENTATION ====="
+    },
+    {
+      "index": 65,
+      "file": "organism/core/state_observer.py",
+      "line": 7,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "Cél: Az Organism ne csak TODO/FIXME/git diff/terminál-históriát lásson,",
+      "context": "hanem a rendszer saját ismert hiányosságait (self_state.json) is."
+    },
+    {
+      "index": 66,
+      "file": "organism/core/state_observer.py",
+      "line": 26,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "# => FIXME marker = high/medium gap-eknek az optimális jelölő",
+      "context": "# A prioritizer.py ev: 'fixme' → ev >= 0.80"
+    },
+    {
+      "index": 67,
+      "file": "organism/core/state_observer.py",
+      "line": 28,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "\"high\":   \"FIXME\",",
+      "context": "_PRIORITY_MARKER = {"
+    },
+    {
+      "index": 68,
+      "file": "organism/core/state_observer.py",
+      "line": 29,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "\"medium\": \"FIXME\",",
+      "context": "\"high\":   \"FIXME\","
+    },
+    {
+      "index": 69,
+      "file": "organism/core/state_observer.py",
+      "line": 30,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "\"low\":    \"TODO\",",
+      "context": "\"medium\": \"FIXME\","
+    },
+    {
+      "index": 70,
+      "file": "organism/core/state_observer.py",
+      "line": 69,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "marker = _PRIORITY_MARKER.get(priority, \"TODO\")",
+      "context": ""
+    },
+    {
+      "index": 71,
+      "file": "organism/core/state_observer.py",
+      "line": 72,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "# \"FIXME\" → impact +0.2, ev → 0.80 (prioritizer.py scoring)",
+      "context": "# --- Description tervezés ---"
+    },
+    {
+      "index": 72,
+      "file": "organism/core/state_observer.py",
+      "line": 95,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "# text = az \"eredeti TODO szöveg\" ekvivalense (proposer title-hez és _generate_action-höz)",
+      "context": "text = f\"{marker}: {title}\""
+    },
+    {
+      "index": 73,
+      "file": "organism/core/state_observer.py",
+      "line": 118,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "# FONTOS: marker értéket ('FIXME'/'TODO') kell itt tárolni, NEM a priority szintet!",
+      "context": "\"gap_id\": gap_id,"
+    },
+    {
+      "index": 74,
+      "file": "organism/core/state_observer.py",
+      "line": 119,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "# A prioritizer.py task.metadata.get('priority', 'TODO') alapján tölti be a",
+      "context": "# FONTOS: marker értéket ('FIXME'/'TODO') kell itt tárolni, NEM a priority szintet!"
+    },
+    {
+      "index": 75,
+      "file": "organism/core/state_observer.py",
+      "line": 121,
+      "type": "FIXME",
+      "severity": "MEDIUM",
+      "text": "# használ: task['priority'].upper() == 'FIXME'",
+      "context": "# TaskScore['priority'] mezőt, amit a proposer._generate_action() is_fixme check-je"
+    },
+    {
+      "index": 76,
+      "file": "organism/core/state_observer.py",
+      "line": 122,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "# Ha itt 'medium'/'high' lenne, is_fixme=False → generikus TODO Steps (nem megfelelő)",
+      "context": "# használ: task['priority'].upper() == 'FIXME'"
+    },
+    {
+      "index": 77,
+      "file": "tests/test_sai_tool_selection_file_list.py",
+      "line": 129,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "\"grep for TODO in source\",",
+      "context": "\"search for errors in log\","
+    }
+  ]
+}

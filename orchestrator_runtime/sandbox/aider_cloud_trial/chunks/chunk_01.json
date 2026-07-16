@@ -1,0 +1,233 @@
+{
+  "chunk_id": 1,
+  "start_index": 1,
+  "end_index": 25,
+  "finding_count": 25,
+  "findings": [
+    {
+      "index": 1,
+      "file": "debug_kill_list.py",
+      "line": 40,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context": "issue_url=todo.get('issue_url', ''),"
+    },
+    {
+      "index": 2,
+      "file": "debug_kill_list.py",
+      "line": 73,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context": "issue_url=todo.get('issue_url', ''),"
+    },
+    {
+      "index": 3,
+      "file": "debug_rabbit_hole.py",
+      "line": 37,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context": "issue_url=todo.get('issue_url', ''),"
+    },
+    {
+      "index": 4,
+      "file": "debug_rabbit_hole.py",
+      "line": 63,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context": "issue_url=todo.get('issue_url', ''),"
+    },
+    {
+      "index": 5,
+      "file": "debug_rabbit_hole.py",
+      "line": 89,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context": "issue_url=todo.get('issue_url', ''),"
+    },
+    {
+      "index": 6,
+      "file": "debug_rename_detailed.py",
+      "line": 31,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context": "issue_url=todo.get('issue_url', ''),"
+    },
+    {
+      "index": 7,
+      "file": "test_kill_detection_mock.py",
+      "line": 29,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "description=\"[TODO] Rename to EcdsLibStub (file:7)\",",
+      "context": "task_id=\"test_rename\","
+    },
+    {
+      "index": 8,
+      "file": "test_kill_detection_mock.py",
+      "line": 34,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "metadata={\"priority\": \"TODO\"}",
+      "context": "text=\"Rename to EcdsLibStub\","
+    },
+    {
+      "index": 9,
+      "file": "test_protection_direct.py",
+      "line": 18,
+      "type": "TODO",
+      "severity": "MEDIUM",
+      "text": "snippet=\"# TODO: Test with dust amounts (1 wei, etc.)\",",
+      "context": "text=\"Test with dust amounts (1 wei, etc.)\","
+    },
+    {
+      "index": 10,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 4,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "Operator scans the repository for TODO/FIXME/XXX markers.",
+      "context": "Feeds raw scan data to Ornith 9B."
+    },
+    {
+      "index": 11,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 50,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "TODO_PATTERN = re.compile(r\"\\\\b(TODO|FIXME|XXX)\\\\b\")",
+      "context": "}"
+    },
+    {
+      "index": 12,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 117,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "Scan all Python files under root for TODO/FIXME/XXX.",
+      "context": "\"\"\""
+    },
+    {
+      "index": 13,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 256,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "print(\"\\n[PHASE 1] Scanning repository for TODO/FIXME/XXX in Python files...\")",
+      "context": "# ── PHASE 1: Operator scan ────────────────────────────────────────────────"
+    },
+    {
+      "index": 14,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 269,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "print(f\"  By type: TODO={type_counts.get('TODO',0)} FIXME={type_counts.get('FIXME',0)} XXX={type_counts.get('XXX',0)}\")",
+      "context": "print(f\"  Total findings: {scan_count}\")"
+    },
+    {
+      "index": 15,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 292,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "# PROJECT-S TODO/FIXME/XXX AUDIT",
+      "context": ""
+    },
+    {
+      "index": 16,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 295,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "State: date of scan ({scan_ts[:10]}), Python files scanned ({files_scanned}), files with findings ({files_with}), total findings ({scan_count}), breakdown by type (TODO: {type_counts.get('TODO',0)}, FIXME: {type_counts.get('FIXME',0)}, XXX: {type_counts.get('XXX',0)}).",
+      "context": "## 1. Summary"
+    },
+    {
+      "index": 17,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 298,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "{\"If there are no findings, write: No TODO/FIXME/XXX markers were found.\" if scan_count == 0 else f\"For each of the {scan_count} findings above, list: file path, line number, type, the text, surrounding context, and severity classification.\"}",
+      "context": "## 2. Findings"
+    },
+    {
+      "index": 18,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 349,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "\"type\": \"<TODO|FIXME|XXX>\",",
+      "context": "\"line\": <line number as integer>,"
+    },
+    {
+      "index": 19,
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 434,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "Findings by type: TODO={type_counts.get('TODO',0)}, FIXME={type_counts.get('FIXME',0)}, XXX={type_counts.get('XXX',0)}",
+      "context": "Total findings from scan: {scan_count}"
+    },
+    {
+      "index": 20,
+      "file": "organism/core/loop.py",
+      "line": 73,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "text=todo['text'],  # Original TODO/FIXME text",
+      "context": "metadata={'priority': todo['priority']},"
+    },
+    {
+      "index": 21,
+      "file": "organism/core/observer.py",
+      "line": 6,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "- Extract TODO/FIXME annotations",
+      "context": "- Scan repository changes (git diff)"
+    },
+    {
+      "index": 22,
+      "file": "organism/core/observer.py",
+      "line": 30,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "\"\"\"TODO annotation found in source.\"\"\"",
+      "context": "class TodoItem(TypedDict):"
+    },
+    {
+      "index": 23,
+      "file": "organism/core/observer.py",
+      "line": 34,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "priority: str  # 'TODO', 'FIXME'",
+      "context": "text: str"
+    },
+    {
+      "index": 24,
+      "file": "organism/core/observer.py",
+      "line": 55,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "text: str = \"\"  # Original TODO/FIXME text",
+      "context": "line: int = 0"
+    },
+    {
+      "index": 25,
+      "file": "organism/core/observer.py",
+      "line": 177,
+      "type": "TODO",
+      "severity": "LOW",
+      "text": "Scan source files for TODO/FIXME annotations in actual code comments only.",
+      "context": "\"\"\""
+    }
+  ]
+}

@@ -1,0 +1,623 @@
+{
+  "files_scanned": 501,
+  "files_with_findings": 12,
+  "total_findings": 77,
+  "findings": [
+    {
+      "file": "debug_kill_list.py",
+      "line": 40,
+      "type": "TODO",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context_before": "issue_url=todo.get('issue_url', ''),",
+      "context_after": ")"
+    },
+    {
+      "file": "debug_kill_list.py",
+      "line": 73,
+      "type": "TODO",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context_before": "issue_url=todo.get('issue_url', ''),",
+      "context_after": ")"
+    },
+    {
+      "file": "debug_rabbit_hole.py",
+      "line": 37,
+      "type": "TODO",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context_before": "issue_url=todo.get('issue_url', ''),",
+      "context_after": ")"
+    },
+    {
+      "file": "debug_rabbit_hole.py",
+      "line": 63,
+      "type": "TODO",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context_before": "issue_url=todo.get('issue_url', ''),",
+      "context_after": ")"
+    },
+    {
+      "file": "debug_rabbit_hole.py",
+      "line": 89,
+      "type": "TODO",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context_before": "issue_url=todo.get('issue_url', ''),",
+      "context_after": ")"
+    },
+    {
+      "file": "debug_rename_detailed.py",
+      "line": 31,
+      "type": "TODO",
+      "text": "metadata={'priority': todo.get('priority', 'TODO')}",
+      "context_before": "issue_url=todo.get('issue_url', ''),",
+      "context_after": ")"
+    },
+    {
+      "file": "test_kill_detection_mock.py",
+      "line": 29,
+      "type": "TODO",
+      "text": "description=\"[TODO] Rename to EcdsLibStub (file:7)\",",
+      "context_before": "task_id=\"test_rename\",",
+      "context_after": "source=\"todo\","
+    },
+    {
+      "file": "test_kill_detection_mock.py",
+      "line": 34,
+      "type": "TODO",
+      "text": "metadata={\"priority\": \"TODO\"}",
+      "context_before": "text=\"Rename to EcdsLibStub\",",
+      "context_after": ")"
+    },
+    {
+      "file": "test_protection_direct.py",
+      "line": 18,
+      "type": "TODO",
+      "text": "snippet=\"# TODO: Test with dust amounts (1 wei, etc.)\",",
+      "context_before": "text=\"Test with dust amounts (1 wei, etc.)\",",
+      "context_after": "source_path='docs/archiv/testnet_fork_setup.py',"
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 4,
+      "type": "TODO",
+      "text": "Operator scans the repository for TODO/FIXME/XXX markers.",
+      "context_before": "",
+      "context_after": "Feeds raw scan data to Ornith 9B."
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 50,
+      "type": "TODO",
+      "text": "TODO_PATTERN = re.compile(r\"\\b(TODO|FIXME|XXX)\\b\")",
+      "context_before": "}",
+      "context_after": "MISSION_ID = \"AO9_T5\""
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 117,
+      "type": "TODO",
+      "text": "Scan all Python files under root for TODO/FIXME/XXX.",
+      "context_before": "\"\"\"",
+      "context_after": "Returns (findings, files_scanned, files_with_findings_count)."
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 256,
+      "type": "TODO",
+      "text": "print(\"\\n[PHASE 1] Scanning repository for TODO/FIXME/XXX in Python files...\")",
+      "context_before": "# \u2500\u2500 PHASE 1: Operator scan \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+      "context_after": "t_scan = time.time()"
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 269,
+      "type": "TODO",
+      "text": "print(f\"  By type: TODO={type_counts.get('TODO',0)} FIXME={type_counts.get('FIXME',0)} XXX={type_counts.get('XXX',0)}\")",
+      "context_before": "print(f\"  Total findings: {scan_count}\")",
+      "context_after": ""
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 292,
+      "type": "TODO",
+      "text": "# PROJECT-S TODO/FIXME/XXX AUDIT",
+      "context_before": "",
+      "context_after": ""
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 295,
+      "type": "TODO",
+      "text": "State: date of scan ({scan_ts[:10]}), Python files scanned ({files_scanned}), files with findings ({files_with}), total findings ({scan_count}), breakdown by type (TODO: {type_counts.get('TODO',0)}, FIXME: {type_counts.get('FIXME',0)}, XXX: {type_counts.get('XXX',0)}).",
+      "context_before": "## 1. Summary",
+      "context_after": ""
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 298,
+      "type": "TODO",
+      "text": "{\"If there are no findings, write: No TODO/FIXME/XXX markers were found.\" if scan_count == 0 else f\"For each of the {scan_count} findings above, list: file path, line number, type, the text, surrounding context, and severity classification.\"}",
+      "context_before": "## 2. Findings",
+      "context_after": ""
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 349,
+      "type": "TODO",
+      "text": "\"type\": \"<TODO|FIXME|XXX>\",",
+      "context_before": "\"line\": <line number as integer>,",
+      "context_after": "\"severity\": \"<LOW|MEDIUM|HIGH>\","
+    },
+    {
+      "file": "orchestrator_runtime/sandbox/ornith_executor_trial/run_ao9_t5.py",
+      "line": 434,
+      "type": "TODO",
+      "text": "Findings by type: TODO={type_counts.get('TODO',0)}, FIXME={type_counts.get('FIXME',0)}, XXX={type_counts.get('XXX',0)}",
+      "context_before": "Total findings from scan: {scan_count}",
+      "context_after": "PROJECT_S_TODO_AUDIT.md created: {audit_created} ({OUTPUT_AUDIT.stat().st_size if OUTPUT_AUDIT.exists() else 0} bytes)"
+    },
+    {
+      "file": "organism/core/loop.py",
+      "line": 73,
+      "type": "TODO",
+      "text": "text=todo['text'],  # Original TODO/FIXME text",
+      "context_before": "metadata={'priority': todo['priority']},",
+      "context_after": "snippet=todo['snippet'],  # 3-line code context"
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 6,
+      "type": "TODO",
+      "text": "- Extract TODO/FIXME annotations",
+      "context_before": "- Scan repository changes (git diff)",
+      "context_after": "- Read terminal command history"
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 30,
+      "type": "TODO",
+      "text": "\"\"\"TODO annotation found in source.\"\"\"",
+      "context_before": "class TodoItem(TypedDict):",
+      "context_after": "file: str"
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 34,
+      "type": "TODO",
+      "text": "priority: str  # 'TODO', 'FIXME'",
+      "context_before": "text: str",
+      "context_after": "snippet: str  # 3 lines before/after context"
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 55,
+      "type": "TODO",
+      "text": "text: str = \"\"  # Original TODO/FIXME text",
+      "context_before": "line: int = 0",
+      "context_after": "snippet: str = \"\"  # Code context (3 lines before/after)"
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 177,
+      "type": "TODO",
+      "text": "Scan source files for TODO/FIXME annotations in actual code comments only.",
+      "context_before": "\"\"\"",
+      "context_after": ""
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 213,
+      "type": "TODO",
+      "text": "# Python format: ^(\\s*)#\\s*(TODO|FIXME)",
+      "context_before": "# Only match actual code comments (anchored to line start, after whitespace)",
+      "context_after": "# JavaScript format: ^(\\s*)//(TODO|FIXME)"
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 214,
+      "type": "TODO",
+      "text": "# JavaScript format: ^(\\s*)//(TODO|FIXME)",
+      "context_before": "# Python format: ^(\\s*)#\\s*(TODO|FIXME)",
+      "context_after": ""
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 219,
+      "type": "TODO",
+      "text": "# Check if line is a Python comment with TODO/FIXME",
+      "context_before": "",
+      "context_after": "py_match = None"
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 224,
+      "type": "TODO",
+      "text": "py_match = re.match(r'#\\s*(TODO|FIXME)[:\\s]+(.*?)(?:\\s*$)', stripped)",
+      "context_before": "if stripped.startswith('#'):",
+      "context_after": ""
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 226,
+      "type": "TODO",
+      "text": "# Check if line is a JavaScript/Solidity comment with TODO/FIXME",
+      "context_before": "",
+      "context_after": "if stripped.startswith('//'):"
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 228,
+      "type": "TODO",
+      "text": "js_match = re.match(r'//\\s*(TODO|FIXME)[:\\s]+(.*?)(?:\\s*$)', stripped)",
+      "context_before": "if stripped.startswith('//'):",
+      "context_after": ""
+    },
+    {
+      "file": "organism/core/observer.py",
+      "line": 234,
+      "type": "TODO",
+      "text": "priority = match.group(1)  # 'TODO' or 'FIXME'",
+      "context_before": "",
+      "context_after": "comment_text = match.group(2).strip()"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 29,
+      "type": "TODO",
+      "text": "text: str          # Original TODO/FIXME text",
+      "context_before": "line: int          # Line number",
+      "context_after": "snippet: str       # Code context (3 lines before/after)"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 36,
+      "type": "TODO",
+      "text": "priority: str      # 'TODO' or 'FIXME'",
+      "context_before": "issue_url: str     # GitHub/issue tracker URL if present",
+      "context_after": "is_quick_win: bool  # Low effort, high impact"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 61,
+      "type": "FIXME",
+      "text": "'FIXME': 1.0,",
+      "context_before": "self.high_impact_keywords = {",
+      "context_after": "'security': 0.9,"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 66,
+      "type": "TODO",
+      "text": "'TODO': 0.6,",
+      "context_before": "'performance': 0.7,",
+      "context_after": "'refactor': 0.5,"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 76,
+      "type": "FIXME",
+      "text": "- FIXME items: high impact (0.8-1.0)",
+      "context_before": "- HEAVILY PENALIZE organism/ and other ignored dirs (-0.95 impact)",
+      "context_after": "- Critical file paths (core/*, ui/*): 0.7+ base impact"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 129,
+      "type": "TODO",
+      "text": "# Easy tasks: typo, doc, comment, rename, TODO cleanup",
+      "context_before": "",
+      "context_after": "easy_keywords = ['typo', 'doc', 'comment', 'rename', 'clean up', 'remove', 'add docstring']"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 137,
+      "type": "FIXME",
+      "text": "elif 'fix' in text_combined and 'FIXME' not in task.text:",
+      "context_before": "# Medium-easy: simple fixing",
+      "context_after": "effort = 3"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 139,
+      "type": "TODO",
+      "text": "# Standard TODO",
+      "context_before": "effort = 3",
+      "context_after": "elif 'TODO' in task.text:"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 140,
+      "type": "TODO",
+      "text": "elif 'TODO' in task.text:",
+      "context_before": "# Standard TODO",
+      "context_after": "effort = 4"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 142,
+      "type": "FIXME",
+      "text": "# FIXME usually harder",
+      "context_before": "effort = 4",
+      "context_after": "elif 'FIXME' in task.text:"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 143,
+      "type": "FIXME",
+      "text": "elif 'FIXME' in task.text:",
+      "context_before": "# FIXME usually harder",
+      "context_after": "effort = 6"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 195,
+      "type": "FIXME",
+      "text": "- If file contains \"/test/\" and FIXME: +0.15 bonus",
+      "context_before": "- If issue_url present: ev = 0.65 (already discussed/tracked)",
+      "context_after": "- If text has timeout|crash|broken|failing: +0.10"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 210,
+      "type": "FIXME",
+      "text": "# Test file FIXME = higher confidence",
+      "context_before": "",
+      "context_after": "if '/test/' in task.file.lower() and task.metadata.get('priority') == 'FIXME':"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 211,
+      "type": "FIXME",
+      "text": "if '/test/' in task.file.lower() and task.metadata.get('priority') == 'FIXME':",
+      "context_before": "# Test file FIXME = higher confidence",
+      "context_after": "ev += 0.15"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 225,
+      "type": "TODO",
+      "text": "elif 'TODO' in task.text and 'verify' in text_combined:",
+      "context_before": "ev = max(ev, 0.80)  # FIXMEs are usually proven issues",
+      "context_after": "ev = max(ev, 0.60)  # Verification is testable"
+    },
+    {
+      "file": "organism/core/prioritizer.py",
+      "line": 562,
+      "type": "TODO",
+      "text": "'priority': task.metadata.get('priority', 'TODO'),",
+      "context_before": "'issue_url': task.issue_url,",
+      "context_after": "'is_quick_win': is_quick_win,"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 303,
+      "type": "FIXME",
+      "text": "- FIXME + (timeout/connection) => config/refactor steps",
+      "context_before": "Categories:",
+      "context_after": "- FIXME + (complicated/conditions/implement in future) => spec-first steps"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 304,
+      "type": "FIXME",
+      "text": "- FIXME + (complicated/conditions/implement in future) => spec-first steps",
+      "context_before": "- FIXME + (timeout/connection) => config/refactor steps",
+      "context_after": "- TODO + (verify/test) => concrete test steps"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 305,
+      "type": "TODO",
+      "text": "- TODO + (verify/test) => concrete test steps",
+      "context_before": "- FIXME + (complicated/conditions/implement in future) => spec-first steps",
+      "context_after": "- Other FIXME => debug flow"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 306,
+      "type": "FIXME",
+      "text": "- Other FIXME => debug flow",
+      "context_before": "- TODO + (verify/test) => concrete test steps",
+      "context_after": "- Other TODO => implementation flow"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 307,
+      "type": "TODO",
+      "text": "- Other TODO => implementation flow",
+      "context_before": "- Other FIXME => debug flow",
+      "context_after": "\"\"\""
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 310,
+      "type": "FIXME",
+      "text": "is_fixme = task['priority'].upper() == 'FIXME'",
+      "context_before": "text_combined = (task['text'] + \" \" + task['description']).lower()",
+      "context_after": ""
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 312,
+      "type": "FIXME",
+      "text": "# ===== FIXME: TIMEOUT/CONNECTION ISSUES =====",
+      "context_before": "",
+      "context_after": "if is_fixme and any(kw in text_combined for kw in ['timeout', 'connection']):"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 319,
+      "type": "FIXME",
+      "text": "# ===== FIXME: COMPLICATED CONDITIONS/FUTURE WORK =====",
+      "context_before": "",
+      "context_after": "if is_fixme and any(kw in text_combined for kw in ['complicated', 'conditions', 'implement in the future']):"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 326,
+      "type": "FIXME",
+      "text": "# ===== FIXME: GENERAL DEBUGGING FLOW =====",
+      "context_before": "",
+      "context_after": "if is_fixme:"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 328,
+      "type": "FIXME",
+      "text": "return (\"1. **Read FIXME context** \u2014 Review the comment and surrounding code\\n\"",
+      "context_before": "if is_fixme:",
+      "context_after": "\"2. **Identify root cause** \u2014 Understand why it's broken or problematic\\n\""
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 333,
+      "type": "TODO",
+      "text": "# ===== TODO: VERIFICATION/TESTING =====",
+      "context_before": "",
+      "context_after": "if 'verify' in text_combined or 'test' in text_combined:"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 340,
+      "type": "TODO",
+      "text": "# ===== TODO: REFACTORING =====",
+      "context_before": "",
+      "context_after": "if 'refactor' in text_combined or 'rewrite' in text_combined:"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 347,
+      "type": "TODO",
+      "text": "# ===== TODO: PERFORMANCE/SECURITY =====",
+      "context_before": "",
+      "context_after": "if any(kw in text_combined for kw in ['security', 'performance', 'optimize']):"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 354,
+      "type": "TODO",
+      "text": "# ===== TODO: DOCUMENTATION =====",
+      "context_before": "",
+      "context_after": "if any(kw in text_combined for kw in ['doc', 'comment', 'clarify']):"
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 361,
+      "type": "TODO",
+      "text": "# ===== TODO: GENERIC IMPLEMENTATION =====",
+      "context_before": "",
+      "context_after": "return (\"1. **Read the TODO context** \u2014 Understand the requirement\\n\""
+    },
+    {
+      "file": "organism/core/proposer.py",
+      "line": 362,
+      "type": "TODO",
+      "text": "return (\"1. **Read the TODO context** \u2014 Understand the requirement\\n\"",
+      "context_before": "# ===== TODO: GENERIC IMPLEMENTATION =====",
+      "context_after": "\"2. **Plan the implementation** \u2014 Break down into steps\\n\""
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 7,
+      "type": "TODO",
+      "text": "C\u00e9l: Az Organism ne csak TODO/FIXME/git diff/termin\u00e1l-hist\u00f3ri\u00e1t l\u00e1sson,",
+      "context_before": "",
+      "context_after": "hanem a rendszer saj\u00e1t ismert hi\u00e1nyoss\u00e1gait (self_state.json) is."
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 26,
+      "type": "FIXME",
+      "text": "# => FIXME marker = high/medium gap-eknek az optim\u00e1lis jel\u00f6l\u0151",
+      "context_before": "# A prioritizer.py ev: 'fixme' \u2192 ev >= 0.80",
+      "context_after": "_PRIORITY_MARKER = {"
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 28,
+      "type": "FIXME",
+      "text": "\"high\":   \"FIXME\",",
+      "context_before": "_PRIORITY_MARKER = {",
+      "context_after": "\"medium\": \"FIXME\","
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 29,
+      "type": "FIXME",
+      "text": "\"medium\": \"FIXME\",",
+      "context_before": "\"high\":   \"FIXME\",",
+      "context_after": "\"low\":    \"TODO\","
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 30,
+      "type": "TODO",
+      "text": "\"low\":    \"TODO\",",
+      "context_before": "\"medium\": \"FIXME\",",
+      "context_after": "}"
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 69,
+      "type": "TODO",
+      "text": "marker = _PRIORITY_MARKER.get(priority, \"TODO\")",
+      "context_before": "",
+      "context_after": ""
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 72,
+      "type": "FIXME",
+      "text": "# \"FIXME\" \u2192 impact +0.2, ev \u2192 0.80 (prioritizer.py scoring)",
+      "context_before": "# --- Description tervez\u00e9s ---",
+      "context_after": "# \"tool\"  \u2192 strategic_score = 8.5"
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 95,
+      "type": "TODO",
+      "text": "# text = az \"eredeti TODO sz\u00f6veg\" ekvivalense (proposer title-hez \u00e9s _generate_action-h\u00f6z)",
+      "context_before": "",
+      "context_after": "text = f\"{marker}: {title}\""
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 118,
+      "type": "FIXME",
+      "text": "# FONTOS: marker \u00e9rt\u00e9ket ('FIXME'/'TODO') kell itt t\u00e1rolni, NEM a priority szintet!",
+      "context_before": "\"gap_id\": gap_id,",
+      "context_after": "# A prioritizer.py task.metadata.get('priority', 'TODO') alapj\u00e1n t\u00f6lti be a"
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 119,
+      "type": "TODO",
+      "text": "# A prioritizer.py task.metadata.get('priority', 'TODO') alapj\u00e1n t\u00f6lti be a",
+      "context_before": "# FONTOS: marker \u00e9rt\u00e9ket ('FIXME'/'TODO') kell itt t\u00e1rolni, NEM a priority szintet!",
+      "context_after": "# TaskScore['priority'] mez\u0151t, amit a proposer._generate_action() is_fixme check-je"
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 121,
+      "type": "FIXME",
+      "text": "# haszn\u00e1l: task['priority'].upper() == 'FIXME'",
+      "context_before": "# TaskScore['priority'] mez\u0151t, amit a proposer._generate_action() is_fixme check-je",
+      "context_after": "# Ha itt 'medium'/'high' lenne, is_fixme=False \u2192 generikus TODO Steps (nem megfelel\u0151)"
+    },
+    {
+      "file": "organism/core/state_observer.py",
+      "line": 122,
+      "type": "TODO",
+      "text": "# Ha itt 'medium'/'high' lenne, is_fixme=False \u2192 generikus TODO Steps (nem megfelel\u0151)",
+      "context_before": "# haszn\u00e1l: task['priority'].upper() == 'FIXME'",
+      "context_after": "\"priority\": marker,"
+    },
+    {
+      "file": "tests/test_sai_tool_selection_file_list.py",
+      "line": 129,
+      "type": "TODO",
+      "text": "\"grep for TODO in source\",",
+      "context_before": "\"search for errors in log\",",
+      "context_after": "]:"
+    }
+  ]
+}
