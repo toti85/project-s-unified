@@ -64,7 +64,7 @@ Verification search for `sk-or-v1-607b73034dd92a50` across all `.md` files retur
 ## REMAINING SECURITY ACTIONS REQUIRED
 
 1. **ROTATE the exposed OpenRouter key immediately** at https://openrouter.ai/keys
-   - The key `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` is now considered compromised
+   - The key `<OPENROUTER_API_KEY - kitakarva, lasd kornyezeti valtozo>` is now considered compromised
    - It was exposed in 9 files across both workspaces
 
 2. **Update scripts to use environment variables**

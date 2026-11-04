@@ -76,7 +76,7 @@ scraped_data = browser_result.get("result", "")
 cd c:\1225\project_s_super_core
 
 # Set API key
-$env:OPENROUTER_API_KEY="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"
+$env:OPENROUTER_API_KEY="<OPENROUTER_API_KEY - kitakarva, lasd kornyezeti valtozo>"
 
 # Run the script
 python meta_launcher_browser.py 2>&1 | Select-Object -Last 100

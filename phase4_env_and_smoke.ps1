@@ -60,7 +60,7 @@ Write-Host "[1/2] Creating server .env file..." -ForegroundColor Cyan
 
 $serverEnvContent = @"
 # Project-S V2 Configuration
-OPENROUTER_API_KEY=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
+OPENROUTER_API_KEY=<OPENROUTER_API_KEY - kitakarva, lasd kornyezeti valtozo>
 OPENAI_API_KEY=your_openai_api_key_here
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
 DEFAULT_MODEL_PROVIDER=openrouter

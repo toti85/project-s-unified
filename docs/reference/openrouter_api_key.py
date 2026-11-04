@@ -1,2 +1,8 @@
-# OpenRouter API Key for Project-S V2
-OPENROUTER_API_KEY = "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"
+"""OpenRouter API-kulcs – CSAK környezeti változóból.
+
+A korábban itt tárolt kulcsok nyilvánosságra kerültek (2026-11-04-i ellenőrzés); vissza kell vonni őket.
+Kulcs SOHA nem kerülhet a repóba. Beállítás: lásd config/openrouter.env.example.
+"""
+import os
+
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
